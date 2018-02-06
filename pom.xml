@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.fangdd</groupId>
+    <artifactId>tp-doclet</artifactId>
+    <version>1.1</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>doclet</module>
+        <module>doclet-pojo</module>
+        <module>doclet-render</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <fastjson.version>1.2.35</fastjson.version>
+        <dubbo.version>2.8.4</dubbo.version>
+        <zkclient.version>0.1</zkclient.version>
+        <curator-client.version>3.2.0</curator-client.version>
+        <guava.version>16.0.1</guava.version>
+        <commons-lang3.version>3.1</commons-lang3.version>
+        <logtrace-logtraceutil>1.0.16</logtrace-logtraceutil>
+        <common-mongodb-verion>2.3-SNAPSHOT</common-mongodb-verion>
+        <mongo-version>3.3.0</mongo-version>
+        <spring-boot-loader.version>1.2.3.RELEASE</spring-boot-loader.version>
+        <spring-boot.version>1.5.6.RELEASE</spring-boot.version>
+    </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <name>nexus-release</name>
+            <url>http://nexus.nh.fangdd.cn/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>nexus-snapshots</name>
+            <url>http://nexus.nh.fangdd.cn/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+</project>
