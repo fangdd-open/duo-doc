@@ -7,6 +7,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ public class EntityJsonMarkdownRender {
         SIMPLE_TYPE_DEFAULT_VALUES.put(Integer.class.getName(), "0");
         SIMPLE_TYPE_DEFAULT_VALUES.put(Double.class.getName(), "0.0");
         SIMPLE_TYPE_DEFAULT_VALUES.put(Float.class.getName(), "0.0");
+        SIMPLE_TYPE_DEFAULT_VALUES.put(BigDecimal.class.getSimpleName(), "0.0");
     }
 
     private static Set<Entity> entryRenderPath = Sets.newHashSet();
@@ -98,11 +100,14 @@ public class EntityJsonMarkdownRender {
                 if (i < fields.size() - 1) {
                     sb.append(",");
                 }
-                sb.append(" // @");
+                sb.append(" // ");
                 sb.append(renderTypeName(fieldRef.getEntityName()));
                 if (!Strings.isNullOrEmpty(fieldRef.getComment())) {
                     sb.append(" #");
                     sb.append(fieldRef.getComment());
+                }
+                if(fieldRef.isRequired()) {
+                    sb.append(" @NutNull");
                 }
                 if (i < fields.size() - 1) {
                     sb.append("\n");

@@ -29,6 +29,7 @@ public class TpDocletTest {
             "org/springframework/spring-beans/4.3.10.RELEASE/spring-beans-4.3.10.RELEASE.jar",
             "org/mongodb/mongo-java-driver/3.4.2/mongo-java-driver-3.4.2.jar",
             "com/google/guava/guava/19.0/guava-19.0.jar",
+            "javax/validation/validation-api/1.1.0.Final/validation-api-1.1.0.Final.jar",
             "com/fangdd/traffic/common-mongodb/2.3-SNAPSHOT/common-mongodb-2.3-SNAPSHOT.jar"
     };
     private static String projectPath;

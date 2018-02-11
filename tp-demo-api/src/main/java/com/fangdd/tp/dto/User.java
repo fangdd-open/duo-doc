@@ -2,6 +2,8 @@ package com.fangdd.tp.dto;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -46,8 +48,14 @@ public class User<T> extends Person {
     /**
      * 更新时间
      */
+    @NotNull
     @DateTimeFormat(pattern = "yyyy+MM+dd")
     private Date updateTime;
+
+    /**
+     * 财产
+     */
+    private BigDecimal money;
 
     public Long getId() {
         return id;
@@ -95,5 +103,13 @@ public class User<T> extends Person {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public BigDecimal getMoney() {
+        return money;
+    }
+
+    public void setMoney(BigDecimal money) {
+        this.money = money;
     }
 }

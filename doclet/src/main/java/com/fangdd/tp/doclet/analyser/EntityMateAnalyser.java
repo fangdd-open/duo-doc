@@ -1,19 +1,20 @@
 package com.fangdd.tp.doclet.analyser;
 
+import com.fangdd.tp.doclet.analyser.entity.DateTimeFormatFieldAnnotationAnalyser;
+import com.fangdd.tp.doclet.analyser.entity.EntityFieldAnnotationAnalyser;
+import com.fangdd.tp.doclet.analyser.entity.NotNullFieldAnnotationAnalyser;
 import com.fangdd.tp.doclet.constant.EntityConstant;
-import com.fangdd.tp.doclet.helper.AnnotationHelper;
 import com.fangdd.tp.doclet.helper.BookHelper;
 import com.fangdd.tp.doclet.helper.TagHelper;
 import com.fangdd.tp.doclet.pojo.Entity;
 import com.fangdd.tp.doclet.pojo.EntityRef;
 import com.fangdd.tp.doclet.render.EntityHandle;
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.sun.javadoc.*;
 
-import java.text.SimpleDateFormat;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -24,6 +25,13 @@ public class EntityMateAnalyser {
     public static final String Collection_CLASS_NAME = Collection.class.getName();
     public static final String MAP_CLASS_NAME = Map.class.getName();
     public static final String BOOLEAN = "boolean";
+    public static final Map<String, EntityFieldAnnotationAnalyser> FIELD_ANNOTATION_ANALYSER_MAP = Maps.newHashMap();
+
+    static {
+        FIELD_ANNOTATION_ANALYSER_MAP.put(EntityConstant.ANNOTATION_DATE_TIME_FORMAT, new DateTimeFormatFieldAnnotationAnalyser());
+        FIELD_ANNOTATION_ANALYSER_MAP.put(EntityConstant.JAVAX_VALIDATION_CONSTRAINTS_NOTNULL, new NotNullFieldAnnotationAnalyser());
+        FIELD_ANNOTATION_ANALYSER_MAP.put(EntityConstant.JAVAX_VALIDATION_CONSTRAINTS_NULL, new NotNullFieldAnnotationAnalyser());
+    }
 
     private static Set<String> CURRENT_CLASS_FIELD_NAMES = Sets.newHashSet();
 
@@ -171,42 +179,31 @@ public class EntityMateAnalyser {
 
     private static void readFieldAnnotation(EntityRef fieldRef, FieldDoc field) {
         AnnotationDesc[] annotations = field.annotations();
-        if(annotations == null || annotations.length == 0) {
+        if (annotations == null || annotations.length == 0) {
             return;
         }
 
-        if(Strings.isNullOrEmpty(fieldRef.getDemo())) {
-            //如果没指定 @deom，尝试从注解中取值
-
-        }
-        AnnotationDesc dateTimeFormatAnnotation = AnnotationHelper.getAnnotation(annotations, EntityConstant.ANNOTATION_DATE_TIME_FORMAT);
-        if(dateTimeFormatAnnotation != null) {
-            String pattern = null;
-            String iso = AnnotationHelper.getStringValue(dateTimeFormatAnnotation, "iso");
-            if(EntityConstant.DATE_TIME_FORMAT_ISO_DATE.equals(iso)) {
-                pattern = "yyyy-MM-dd";
-            }else if(EntityConstant.DATE_TIME_FORMAT_ISO_TIME.equals(iso)) {
-                pattern = "HH:mm:ss.SSSZ";
-            }else if(EntityConstant.DATE_TIME_FORMAT_ISO_DATE_TIME.equals(iso)) {
-                pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
-            }
-
-            String patternVal = AnnotationHelper.getStringValue(dateTimeFormatAnnotation, "pattern");
-            if(!Strings.isNullOrEmpty(patternVal)) {
-                pattern = patternVal;
-            }
-            if(!Strings.isNullOrEmpty(pattern)) {
-                SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-                fieldRef.setDemo(sdf.format(new Date()));
+        for (AnnotationDesc annotationDesc : annotations) {
+            EntityFieldAnnotationAnalyser analyser = FIELD_ANNOTATION_ANALYSER_MAP.get(annotationDesc.annotationType().qualifiedName());
+            if (analyser != null) {
+                analyser.analyse(annotationDesc, fieldRef, field);
             }
         }
     }
 
     private static boolean isPrimitive(Type type) {
-        if(type.qualifiedTypeName().equals(Date.class.getName())) {
+        if (type.isPrimitive()) {
             return true;
         }
-        return type.isPrimitive();
+        String typeName = type.qualifiedTypeName();
+        if (typeName.equals(Date.class.getName())) {
+            return true;
+        }
+        if (typeName.equals(BigDecimal.class.getName())) {
+            return true;
+        }
+
+        return false;
     }
 
     private static List<FieldDoc> getFields(ClassDoc classDoc) {
@@ -214,7 +211,7 @@ public class EntityMateAnalyser {
         FieldDoc[] fieldArray = classDoc.fields(false);
         for (int i = 0; i < fieldArray.length; i++) {
             FieldDoc field = fieldArray[i];
-            if(CURRENT_CLASS_FIELD_NAMES.contains(field.name())) {
+            if (CURRENT_CLASS_FIELD_NAMES.contains(field.name())) {
                 continue;
             }
             CURRENT_CLASS_FIELD_NAMES.add(field.name());
@@ -222,9 +219,9 @@ public class EntityMateAnalyser {
         }
 
         ClassDoc superClass = classDoc.superclass();
-        if(superClass != null && !superClass.qualifiedName().equals(Object.class.getName())) {
+        if (superClass != null && !superClass.qualifiedName().equals(Object.class.getName())) {
             List<FieldDoc> superClassFields = getFields(superClass);
-            if(!superClassFields.isEmpty()) {
+            if (!superClassFields.isEmpty()) {
                 fields.addAll(superClassFields);
             }
         }
@@ -270,9 +267,9 @@ public class EntityMateAnalyser {
         }
 
         ClassDoc superClass = classDoc.superclass();
-        if(superClass != null && !superClass.qualifiedName().equals(Object.class.getName())) {
+        if (superClass != null && !superClass.qualifiedName().equals(Object.class.getName())) {
             Set<String> superClassFields = getGetterFields(superClass);
-            if(!superClassFields.isEmpty()) {
+            if (!superClassFields.isEmpty()) {
                 pojoPropertySet.addAll(superClassFields);
             }
         }
