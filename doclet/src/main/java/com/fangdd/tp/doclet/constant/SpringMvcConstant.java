@@ -15,9 +15,9 @@ public class SpringMvcConstant {
 
     public static final String ANNOTATION_NOT_NULL = "javax.validation.constraints.NotNull";
 
-    public static final String ANNOTATION_PATHVARIABLE = "org.springframework.web.bind.annotation.PathVariable";
-    public static final String ANNOTATION_REQUESTBODY = "org.springframework.web.bind.annotation.RequestBody";
-    public static final String ANNOTATION_REQUESTPARAM = "org.springframework.web.bind.annotation.RequestParam";
+    public static final String ANNOTATION_PATH_VARIABLE = "org.springframework.web.bind.annotation.PathVariable";
+    public static final String ANNOTATION_REQUEST_BODY = "org.springframework.web.bind.annotation.RequestBody";
+    public static final String ANNOTATION_REQUEST_PARAM = "org.springframework.web.bind.annotation.RequestParam";
 
     private SpringMvcConstant(){}
 

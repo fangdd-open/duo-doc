@@ -85,15 +85,15 @@ public class BaseApiInfoHelper {
         AnnotationDesc[] paramAnnotations = parameter.annotations();
         for (AnnotationDesc annotationDesc : paramAnnotations) {
             String annotation = annotationDesc.annotationType().toString();
-            if (SpringMvcConstant.ANNOTATION_PATHVARIABLE.equals(annotation)) {
+            if (SpringMvcConstant.ANNOTATION_PATH_VARIABLE.equals(annotation)) {
                 // @PathVariable
                 param.setRequired(true);
                 param.setAnnotation("@PathVariable");
-            } else if (SpringMvcConstant.ANNOTATION_REQUESTBODY.equals(annotation)) {
+            } else if (SpringMvcConstant.ANNOTATION_REQUEST_BODY.equals(annotation)) {
                 // @RequestBody
                 param.setRequired(true);
                 param.setAnnotation("@RequestBody");
-            } else if (SpringMvcConstant.ANNOTATION_REQUESTPARAM.equals(annotation)) {
+            } else if (SpringMvcConstant.ANNOTATION_REQUEST_PARAM.equals(annotation)) {
                 // @RequestParam
                 Boolean required = (Boolean) AnnotationHelper.getValue(annotationDesc, "required").value();
                 String defalutValue = AnnotationHelper.getStringValue(annotationDesc, "defaultValue");

@@ -1,5 +1,8 @@
 package com.fangdd.tp.dto;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -40,6 +43,12 @@ public class User<T> extends Person {
      */
     private User<T> parent;
 
+    /**
+     * 更新时间
+     */
+    @DateTimeFormat(pattern = "yyyy+MM+dd")
+    private Date updateTime;
+
     public Long getId() {
         return id;
     }
@@ -78,5 +87,13 @@ public class User<T> extends Person {
 
     public void setParent(User<T> parent) {
         this.parent = parent;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

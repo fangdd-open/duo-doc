@@ -1,19 +1,20 @@
 package com.fangdd.tp.doclet.analyser;
 
+import com.fangdd.tp.doclet.constant.EntityConstant;
+import com.fangdd.tp.doclet.helper.AnnotationHelper;
 import com.fangdd.tp.doclet.helper.BookHelper;
 import com.fangdd.tp.doclet.helper.TagHelper;
 import com.fangdd.tp.doclet.pojo.Entity;
 import com.fangdd.tp.doclet.pojo.EntityRef;
 import com.fangdd.tp.doclet.render.EntityHandle;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.sun.javadoc.*;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @auth ycoe
@@ -39,7 +40,7 @@ public class EntityMateAnalyser {
     }
 
     private static Entity getEntity(Type type, Map<String, Type> parentParameterizedTypeMap) {
-        if (type.isPrimitive()) {
+        if (isPrimitive(type)) {
             //如果是原始数据类型
             return getPrimitiveTypeEntity(type);
         }
@@ -157,11 +158,55 @@ public class EntityMateAnalyser {
                 fieldRef.setName(field.name());
                 fieldRef.setRequired(required != null);
                 fieldRef.setDemo(demo);
+
+                //设置各属性的注解
+                readFieldAnnotation(fieldRef, field);
+
                 fieldItems.add(fieldRef);
             }
         }
 
         return entity;
+    }
+
+    private static void readFieldAnnotation(EntityRef fieldRef, FieldDoc field) {
+        AnnotationDesc[] annotations = field.annotations();
+        if(annotations == null || annotations.length == 0) {
+            return;
+        }
+
+        if(Strings.isNullOrEmpty(fieldRef.getDemo())) {
+            //如果没指定 @deom，尝试从注解中取值
+
+        }
+        AnnotationDesc dateTimeFormatAnnotation = AnnotationHelper.getAnnotation(annotations, EntityConstant.ANNOTATION_DATE_TIME_FORMAT);
+        if(dateTimeFormatAnnotation != null) {
+            String pattern = null;
+            String iso = AnnotationHelper.getStringValue(dateTimeFormatAnnotation, "iso");
+            if(EntityConstant.DATE_TIME_FORMAT_ISO_DATE.equals(iso)) {
+                pattern = "yyyy-MM-dd";
+            }else if(EntityConstant.DATE_TIME_FORMAT_ISO_TIME.equals(iso)) {
+                pattern = "HH:mm:ss.SSSZ";
+            }else if(EntityConstant.DATE_TIME_FORMAT_ISO_DATE_TIME.equals(iso)) {
+                pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+            }
+
+            String patternVal = AnnotationHelper.getStringValue(dateTimeFormatAnnotation, "pattern");
+            if(!Strings.isNullOrEmpty(patternVal)) {
+                pattern = patternVal;
+            }
+            if(!Strings.isNullOrEmpty(pattern)) {
+                SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+                fieldRef.setDemo(sdf.format(new Date()));
+            }
+        }
+    }
+
+    private static boolean isPrimitive(Type type) {
+        if(type.qualifiedTypeName().equals(Date.class.getName())) {
+            return true;
+        }
+        return type.isPrimitive();
     }
 
     private static List<FieldDoc> getFields(ClassDoc classDoc) {

@@ -23,8 +23,8 @@ import java.util.List;
  * @auth ycoe
  * @date 18/1/18
  */
-//@RestController
-//@RequestMapping("/api/doc")
+@RestController
+@RequestMapping("/api/doc")
 public class DocApiController {
     @Autowired
     private DocImportService docImportService;

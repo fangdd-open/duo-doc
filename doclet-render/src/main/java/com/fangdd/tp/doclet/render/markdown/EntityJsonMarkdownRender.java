@@ -1,12 +1,13 @@
 package com.fangdd.tp.doclet.render.markdown;
 
-import com.fangdd.tp.doclet.render.EntityHandle;
 import com.fangdd.tp.doclet.pojo.Entity;
 import com.fangdd.tp.doclet.pojo.EntityRef;
+import com.fangdd.tp.doclet.render.EntityHandle;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -62,7 +63,7 @@ public class EntityJsonMarkdownRender {
 
         }
 
-        if(isPrimitive(entity)) {
+        if (isPrimitive(entity)) {
             //是基础类型
             sb.append(Strings.repeat("\t", level));
             sb.append(renderDefaultBaseTypeDemo(entity.getName()));
@@ -99,7 +100,7 @@ public class EntityJsonMarkdownRender {
                 }
                 sb.append(" // @");
                 sb.append(renderTypeName(fieldRef.getEntityName()));
-                if(!Strings.isNullOrEmpty(fieldRef.getComment())) {
+                if (!Strings.isNullOrEmpty(fieldRef.getComment())) {
                     sb.append(" #");
                     sb.append(fieldRef.getComment());
                 }
@@ -137,8 +138,13 @@ public class EntityJsonMarkdownRender {
             demoVal = fieldRef.getDemo();
             if (demoVal == null) {
                 return renderDefaultBaseTypeDemo(fieldRef.getEntityName());
-            } else if (entityName.startsWith("java.lang.String")) {
+            } else if (entityName.startsWith(String.class.getName())) {
                 demoVal = "\"" + demoVal + "\"";
+            } else if (entityName.startsWith(Date.class.getSimpleName())) {
+                if(!demoVal.matches("^\\d+$")) {
+                    //如果不是数值型
+                    demoVal = "\"" + demoVal + "\"";
+                }
             }
         } else {
             demoVal = renderEntity(entity, level + 1);
