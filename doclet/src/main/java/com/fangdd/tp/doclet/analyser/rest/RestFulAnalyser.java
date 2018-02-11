@@ -2,9 +2,11 @@ package com.fangdd.tp.doclet.analyser.rest;
 
 import com.fangdd.tp.doclet.constant.DocletConstant;
 import com.fangdd.tp.doclet.constant.SpringMvcConstant;
+import com.fangdd.tp.doclet.enums.ApiTypeEnum;
 import com.fangdd.tp.doclet.helper.*;
 import com.fangdd.tp.doclet.pojo.Api;
 import com.fangdd.tp.doclet.pojo.Chapter;
+import com.fangdd.tp.doclet.pojo.EntityRef;
 import com.fangdd.tp.doclet.pojo.Section;
 import com.google.common.collect.Lists;
 import com.sun.javadoc.AnnotationDesc;
@@ -66,21 +68,21 @@ public class RestFulAnalyser {
 
         //@RequestMapping
         AnnotationDesc requestMappingAnnotation = AnnotationHelper.getAnnotation(methodDoc.annotations(), SpringMvcConstant.ANNOTATION_REQUEST_MAPPING);
-        if(requestMappingAnnotation != null) {
+        if (requestMappingAnnotation != null) {
             vs = requestMappingAnnotation.elementValues();
             methods = RequestMappingAnnotationHelper.getRequestMappingAnnotationValues(vs, "method");
         }
 
         //@GetMapping
         requestMappingAnnotation = AnnotationHelper.getAnnotation(methodDoc.annotations(), SpringMvcConstant.ANNOTATION_GET_MAPPING);
-        if(requestMappingAnnotation != null) {
+        if (requestMappingAnnotation != null) {
             vs = requestMappingAnnotation.elementValues();
             methods = Lists.newArrayList("GET");
         }
 
         //@PostMapping
         requestMappingAnnotation = AnnotationHelper.getAnnotation(methodDoc.annotations(), SpringMvcConstant.ANNOTATION_POST_MAPPING);
-        if(requestMappingAnnotation != null) {
+        if (requestMappingAnnotation != null) {
             vs = requestMappingAnnotation.elementValues();
             methods = Lists.newArrayList("POST");
         }
@@ -113,10 +115,27 @@ public class RestFulAnalyser {
         }
 
         Api api = BaseApiInfoHelper.getApiBase(methodDoc, section);
-        if (!methods.isEmpty()) {
+        api.setPaths(apiPaths);
+        api.setType(ApiTypeEnum.RESTFUL.getType());
+        if (methods != null && !methods.isEmpty()) {
             api.setMethods(methods);
         }
-        api.setPaths(apiPaths);
-        api.setType(0);
+        //如果是RestFul接口，且参数有@RequestBody时，强制为 POST
+        if (hasRequestBodyParam(api)) {
+            api.setMethods(Lists.newArrayList("POST"));
+        }
+    }
+
+    private static boolean hasRequestBodyParam(Api api) {
+        List<EntityRef> params = api.getRequestParams();
+        if (params == null || params.isEmpty()) {
+            return false;
+        }
+        for (EntityRef er : params) {
+            if ("@RequestBody".equals(er.getAnnotation())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

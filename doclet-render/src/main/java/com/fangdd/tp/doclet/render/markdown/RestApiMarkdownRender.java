@@ -58,8 +58,8 @@ public class RestApiMarkdownRender {
 
         if (paramLen > 0) {
             sb.append("#### 参数\n\n");
-            sb.append("| 参数 | 类型 | 是否必填 | 备注 |\n");
-            sb.append("| :-- | :-- | :-- | :-- |\n");
+            sb.append("| 参数 | 类型 | 来源 | 是否必填 | 备注 |\n");
+            sb.append("| :-- | :-- | :-- | :-- | :-- |\n");
 
             for (int i = 0; i < paramLen; i++) {
                 EntityRef er = params.get(i);
@@ -67,6 +67,8 @@ public class RestApiMarkdownRender {
                 sb.append(er.getName());
                 sb.append(" | ");
                 sb.append(er.getEntityName());
+                sb.append(" | ");
+                sb.append(er.getAnnotation());
                 sb.append(" | ");
                 sb.append(er.isRequired() ? "Y" : "N");
                 sb.append(" | ");

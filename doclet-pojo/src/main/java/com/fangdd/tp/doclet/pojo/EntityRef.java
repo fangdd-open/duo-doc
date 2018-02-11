@@ -30,6 +30,11 @@ public class EntityRef {
      */
     private String demo;
 
+    /**
+     * 参数注解，在RestFul参数中有，比如@PathVariable / @RequestBody等
+     */
+    private String annotation;
+
     public String getEntityName() {
         return entityName;
     }
@@ -68,5 +73,13 @@ public class EntityRef {
 
     public String getDemo() {
         return demo;
+    }
+
+    public String getAnnotation() {
+        return annotation;
+    }
+
+    public void setAnnotation(String annotation) {
+        this.annotation = annotation;
     }
 }

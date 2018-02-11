@@ -1,17 +1,15 @@
 package com.fangdd.tp.doclet.helper;
 
 import com.fangdd.tp.doclet.analyser.EntityMateAnalyser;
+import com.fangdd.tp.doclet.constant.SpringMvcConstant;
+import com.fangdd.tp.doclet.enums.ApiPositionEnum;
+import com.fangdd.tp.doclet.enums.ApiTypeEnum;
 import com.fangdd.tp.doclet.pojo.Api;
 import com.fangdd.tp.doclet.pojo.EntityRef;
 import com.fangdd.tp.doclet.pojo.Section;
-import com.fangdd.tp.doclet.enums.ApiPositionEnum;
-import com.fangdd.tp.doclet.enums.ApiTypeEnum;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.sun.javadoc.MethodDoc;
-import com.sun.javadoc.ParamTag;
-import com.sun.javadoc.Parameter;
-import com.sun.javadoc.Tag;
+import com.sun.javadoc.*;
 
 import java.util.List;
 
@@ -56,12 +54,15 @@ public class BaseApiInfoHelper {
         if (paramList != null && paramList.length > 0) {
             BookHelper.setApiPosition(ApiPositionEnum.PARAMETER);
             for (Parameter parameter : paramList) {
+
                 EntityRef param = EntityMateAnalyser.analyse(parameter.type());
                 if (paramTags != null) {
                     String paramComment = TagHelper.getStringValue(paramTags, parameter.name(), null);
                     param.setComment(paramComment);
                 }
                 param.setName(parameter.name());
+                setParamAnnotations(param, parameter);
+
                 params.add(param);
             }
         }
@@ -78,5 +79,29 @@ public class BaseApiInfoHelper {
         api.setRequestParams(params);
         api.setCode(apiCode);
         return api;
+    }
+
+    private static void setParamAnnotations(EntityRef param, Parameter parameter) {
+        AnnotationDesc[] paramAnnotations = parameter.annotations();
+        for (AnnotationDesc annotationDesc : paramAnnotations) {
+            String annotation = annotationDesc.annotationType().toString();
+            if (SpringMvcConstant.ANNOTATION_PATHVARIABLE.equals(annotation)) {
+                // @PathVariable
+                param.setRequired(true);
+                param.setAnnotation("@PathVariable");
+            } else if (SpringMvcConstant.ANNOTATION_REQUESTBODY.equals(annotation)) {
+                // @RequestBody
+                param.setRequired(true);
+                param.setAnnotation("@RequestBody");
+            } else if (SpringMvcConstant.ANNOTATION_REQUESTPARAM.equals(annotation)) {
+                // @RequestParam
+                Boolean required = (Boolean) AnnotationHelper.getValue(annotationDesc, "required").value();
+                String defalutValue = AnnotationHelper.getStringValue(annotationDesc, "defaultValue");
+                param.setRequired(required);
+                param.setDemo(defalutValue);
+                param.setAnnotation("@RequestParam");
+            }
+        }
+
     }
 }

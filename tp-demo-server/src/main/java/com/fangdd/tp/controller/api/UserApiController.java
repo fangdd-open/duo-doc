@@ -23,7 +23,7 @@ public class UserApiController {
      * @return 用户基本信息
      */
     @GetMapping(value = "/{id:\\d+}")
-    public BaseResponse<User<Admin>> get(@PathVariable Long id, UserFilter filter) {
+    public BaseResponse<User<Admin>> get(@PathVariable Long id, @RequestParam(required = true, defaultValue = "") UserFilter filter, @RequestBody String a) {
 
         return BaseResponse.success(null);
     }
