@@ -95,7 +95,11 @@ public class BaseApiInfoHelper {
                 param.setAnnotation("@RequestBody");
             } else if (SpringMvcConstant.ANNOTATION_REQUEST_PARAM.equals(annotation)) {
                 // @RequestParam
-                Boolean required = (Boolean) AnnotationHelper.getValue(annotationDesc, "required").value();
+                AnnotationValue requiredVal = AnnotationHelper.getValue(annotationDesc, "required");
+                Boolean required = true;
+                if (requiredVal != null) {
+                    required = (Boolean) requiredVal.value();
+                }
                 String defalutValue = AnnotationHelper.getStringValue(annotationDesc, "defaultValue");
                 param.setRequired(required);
                 param.setDemo(defalutValue);

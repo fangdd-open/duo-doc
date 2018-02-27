@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.fangdd</groupId>
-    <artifactId>tp-doclet</artifactId>
+    <artifactId>tp-doc</artifactId>
     <version>1.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -13,7 +13,6 @@
         <module>doclet</module>
         <module>doclet-pojo</module>
         <module>doclet-render</module>
-        <module>doclet-proxy</module>
     </modules>
 
     <properties>

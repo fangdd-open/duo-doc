@@ -5,19 +5,70 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.fangdd</groupId>
-        <artifactId>tp-doclet</artifactId>
+        <artifactId>tp-doc</artifactId>
         <version>1.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>doclet</artifactId>
-    <version>1.2</version>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom</artifactId>
+            <version>2.0.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun</groupId>
+            <artifactId>tools</artifactId>
+            <version>1.8</version>
+            <scope>system</scope>
+            <systemPath>${java.home}/../lib/tools.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>19.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.29</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.5</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.fangdd</groupId>
-            <artifactId>doclet-proxy</artifactId>
+            <artifactId>doclet-render</artifactId>
             <version>1.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fangdd</groupId>
+            <artifactId>doclet-pojo</artifactId>
+            <version>1.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>2.7.1</version>
         </dependency>
     </dependencies>
 </project>
