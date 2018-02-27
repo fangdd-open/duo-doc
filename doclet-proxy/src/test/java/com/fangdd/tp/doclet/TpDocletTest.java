@@ -50,7 +50,7 @@ public class TpDocletTest {
                 projectSrcDirs
         };
 
-        Main.execute("myJavadoc", TpDoclet.class.getName(), docArgs);
+        Main.execute("myJavadoc", TpDocletProxy.class.getName(), docArgs);
     }
 
     private static String getLibs() {

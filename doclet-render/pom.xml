@@ -17,7 +17,7 @@
         <dependency>
             <groupId>com.fangdd</groupId>
             <artifactId>doclet-pojo</artifactId>
-            <version>1.1</version>
+            <version>1.2-SNAPSHOT</version>
         </dependency>
 
         <dependency>

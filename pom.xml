@@ -13,6 +13,7 @@
         <module>doclet</module>
         <module>doclet-pojo</module>
         <module>doclet-render</module>
+        <module>doclet-proxy</module>
     </modules>
 
     <properties>
