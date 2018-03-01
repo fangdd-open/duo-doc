@@ -14,7 +14,9 @@
                                 <#assign liNo=(chapter?index + 1) + '.' + (section?index + 1) + '.' + (api?index + 1) />
                             </#if>
                             <li class="chapter${(api.code==code)?string(' active', '')}" id="${api.code}">
-                                <a href="/doc/${docId}/?code=${api.code}<#if version??>&version=${version?c}</#if>">${chapter?index + 1}.${section?index + 1}.${api?index + 1} ${api.name}</a>
+                                <a href="/doc/${docId}/?code=${api.code}<#if version??>&version=${version?c}</#if>">
+                                ${chapter?index + 1}.${section?index + 1}.${api?index + 1} [${(api.type == 0)?string('Rest', 'Dubbo')}]${api.name}
+                                </a>
                             </li>
                         </#list>
                     </ul>
