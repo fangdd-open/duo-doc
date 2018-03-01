@@ -1,6 +1,8 @@
 package com.fangdd.tp.controller.web;
 
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.view.RedirectView;
 
 /**
  * @auth ycoe
@@ -28,5 +30,15 @@ public class BaseWebController {
         view.setViewName(viewPath);
         modelAndViewThreadLocal.remove();
         return view;
+    }
+
+    /**
+     * 301跳转
+     *
+     * @param url
+     * @return
+     */
+    public View redirect302(String url) {
+        return new RedirectView(url);
     }
 }

@@ -70,6 +70,19 @@ public class DocApiController {
     }
 
     /**
+     * 获取某个文档的所有版本列表
+     *
+     * @param query 查询条件
+     * @return 此文档的所有版本信息
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "/history")
+    public List<DocLog> listVersion(
+            @RequestBody DocLogQuery query
+    ) {
+        return docService.getDocLogList(query);
+    }
+
+    /**
      * 获取所有的文档
      *
      * @param query 查询条件
@@ -90,4 +103,21 @@ public class DocApiController {
     public List<DocLog> listDocLogs(DocLogQuery query) {
         return docService.getDocLogList(query);
     }
+
+    /**
+     * 删除某个历史文档
+     *
+     * @param id 查询条件
+     * @param version  版本号
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}/")
+    public String del(
+            @PathVariable String id,
+            @RequestParam long version
+    ) {
+        return docService.delete(id, version);
+    }
+
+
 }

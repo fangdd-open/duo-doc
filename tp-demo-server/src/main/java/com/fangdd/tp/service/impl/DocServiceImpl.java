@@ -14,16 +14,16 @@ import com.fangdd.tp.dto.request.DocQuery;
 import com.fangdd.tp.service.DocService;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.mongodb.Block;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Projections;
+import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @auth ycoe
@@ -36,6 +36,7 @@ public class DocServiceImpl implements DocService {
     private static final String NAME = "name";
     private static final String DESCRIPTION = "description";
     private static final String ARTIFACT_ID = "artifactId";
+    private static final String ID = "_id";
 
     @Autowired
     private DocDao docDao;
@@ -66,7 +67,7 @@ public class DocServiceImpl implements DocService {
         List<Chapter> chapters = Lists.newArrayList();
         Bson versionFilter = Filters.and(
                 Filters.eq(DOC_ID, id),
-                Filters.eq(DOC_VERSION, version != null && version > 0 ? version : doc.getDocVersion())
+                Filters.eq(DOC_VERSION, doc.getDocVersion())
         );
         docChapterDao
                 .find(versionFilter)
@@ -87,6 +88,7 @@ public class DocServiceImpl implements DocService {
     public List<DocLog> getDocLogList(DocLogQuery query) {
         return docLogDao
                 .find(Filters.eq(DOC_ID, query.getDocId()))
+                .sort(Sorts.descending(DOC_VERSION))
                 .skip((query.getPageNo() - 1) * query.getPageSize())
                 .limit(query.getPageSize())
                 .into(Lists.newArrayList());
@@ -114,5 +116,38 @@ public class DocServiceImpl implements DocService {
                 .skip((query.getPageNo() - 1) * query.getPageSize())
                 .limit(query.getPageSize())
                 .into(Lists.newArrayList());
+    }
+
+    @Override
+    public Artifact getDocArtifact(String docId) {
+        return docDao.getEntityById(docId);
+    }
+
+    @Override
+    public int getTotal(String docId) {
+        return (int) docLogDao.count(Filters.eq(DOC_ID, docId));
+    }
+
+    @Override
+    public String delete(String id, long version) {
+        //获取当前版本
+        Artifact artifact = docDao
+                .find(Filters.eq(ID, id))
+                .projection(Projections.include(DOC_VERSION))
+                .first();
+        if (artifact == null) {
+            return "文档不存在：" + id;
+        }
+        if (artifact.getDocVersion() != null && artifact.getDocVersion() == version) {
+            return "无法删除最新文档！";
+        }
+        Bson filter = Filters.and(
+                Filters.eq(DOC_ID, id),
+                Filters.eq(DOC_VERSION, version)
+        );
+        docLogDao.deleteMany(filter);
+        docChapterDao.deleteMany(filter);
+        docEntityDao.deleteMany(filter);
+        return "成功";
     }
 }

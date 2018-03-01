@@ -37,4 +37,29 @@ public interface DocService {
      * @return
      */
     List<Artifact> getDocList(DocQuery query);
+
+    /**
+     * 获取文档基本信息
+     *
+     * @param docId 文档ID
+     * @return
+     */
+    Artifact getDocArtifact(String docId);
+
+    /**
+     * 获取某个文档历史版本总数
+     *
+     * @param docId 文档ID
+     * @return
+     */
+    int getTotal(String docId);
+
+    /**
+     * 删除某个历史文档
+     *
+     * @param id      文档ID
+     * @param version 文档版本{docVersion}
+     * @return
+     */
+    String delete(String id, long version);
 }

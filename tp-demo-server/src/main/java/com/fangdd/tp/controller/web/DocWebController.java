@@ -1,9 +1,11 @@
 package com.fangdd.tp.controller.web;
 
 import com.fangdd.tp.doclet.pojo.*;
+import com.fangdd.tp.doclet.pojo.entity.DocLog;
 import com.fangdd.tp.doclet.render.EntityHandle;
 import com.fangdd.tp.doclet.render.markdown.DubboApiMarkdownRender;
 import com.fangdd.tp.doclet.render.markdown.EntityJsonMarkdownRender;
+import com.fangdd.tp.dto.request.DocLogQuery;
 import com.fangdd.tp.dto.request.DocQuery;
 import com.fangdd.tp.service.DocService;
 import com.google.common.base.Strings;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 
 import java.util.List;
 import java.util.Map;
@@ -57,8 +60,34 @@ public class DocWebController extends BaseWebController {
         Map<String, Entity> entityMap = Maps.newHashMap();
         doc.getEntities().forEach(entity -> entityMap.put(entity.getName(), entity));
         addData("entityMap", entityMap);
+        addData("version", version);
 
         return view("doc");
+    }
+
+    @RequestMapping("/doc/{docId}/history")
+    public ModelAndView docHistory(
+            @PathVariable String docId,
+            @RequestParam(required = false, defaultValue = "1") int pageNo,
+            @RequestParam(required = false, defaultValue = "20") int pageSize
+    ) {
+        Artifact doc = docService.getDocArtifact(docId);
+
+        DocLogQuery query = new DocLogQuery();
+        query.setDocId(docId);
+        query.setPageNo(pageNo);
+        query.setPageSize(pageSize);
+        List<DocLog> docLogList = docService.getDocLogList(query);
+        int total = docService.getTotal(docId);
+
+        addData("pageNo", pageNo);
+        addData("pageSize", pageSize);
+
+        addData("total", total);
+        addData("doc", doc);
+        addData("docLogList", docLogList);
+
+        return view("history");
     }
 
     private void loadApiData(DocDto doc, Api apiData) {
@@ -68,7 +97,7 @@ public class DocWebController extends BaseWebController {
         String response = EntityJsonMarkdownRender.render(apiData.getResponse());
         addData("response", response);
 
-        if(apiData.getType() != null && apiData.getType() == 1) {
+        if (apiData.getType() != null && apiData.getType() == 1) {
             //Dubbo接口
             String dubboApi = DubboApiMarkdownRender.getDubboApi(apiData);
             addData("dubboApi", dubboApi);

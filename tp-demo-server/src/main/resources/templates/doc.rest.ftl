@@ -44,7 +44,7 @@
         <tr>
             <td>${param.name}</td>
             <td>${param.entityName}</td>
-            <td style="text-align:center">--</td>
+            <td style="text-align:center">${param.annotation!'--'}</td>
             <td style="text-align:center">${param.required?string('Y', 'N')}</td>
             <td>${param.comment!}</td>
         </tr>
