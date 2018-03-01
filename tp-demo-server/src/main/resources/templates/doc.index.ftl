@@ -1,7 +1,7 @@
+<#if version??>
+<li style="color:red;">当前文档版本：${version?number_to_datetime}</li>
+</#if>
 <#list chapters as chapter>
-    <#if version??>
-    <li style="color:red;">当前文档版本：${version?number_to_datetime}</li>
-    </#if>
     <li class="chapter " data-level="${chapter?index}" data-path="/">
         <a href="javascript:;" class="no-link">${chapter?index + 1}. ${chapter.name}</a>
         <ul class="chapter">

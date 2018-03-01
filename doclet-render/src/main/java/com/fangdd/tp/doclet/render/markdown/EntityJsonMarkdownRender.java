@@ -107,7 +107,7 @@ public class EntityJsonMarkdownRender {
                     sb.append(fieldRef.getComment());
                 }
                 if(fieldRef.isRequired()) {
-                    sb.append(" @NutNull");
+                    sb.append(" @NotNull");
                 }
                 if (i < fields.size() - 1) {
                     sb.append("\n");

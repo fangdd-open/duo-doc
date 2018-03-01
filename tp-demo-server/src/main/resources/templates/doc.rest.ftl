@@ -53,6 +53,11 @@
 </table>
 
     <#include "./doc.param.table.ftl" />
+
+    JavaScript Ajax RequestBody Demo:<br>
+    <#if requestBody??>
+    <pre><code class="lang-javascript">${requestBody?html}</code></pre>
+    </#if>
 </#if>
 
 <#if api.response??>

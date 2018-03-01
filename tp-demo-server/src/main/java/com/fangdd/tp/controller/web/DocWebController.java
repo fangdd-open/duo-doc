@@ -97,6 +97,13 @@ public class DocWebController extends BaseWebController {
         String response = EntityJsonMarkdownRender.render(apiData.getResponse());
         addData("response", response);
 
+        apiData.getRequestParams().forEach(param -> {
+            if("@RequestBody".equals(param.getAnnotation())) {
+                String body = EntityJsonMarkdownRender.render(param);
+                addData("requestBody", body);
+            }
+        });
+
         if (apiData.getType() != null && apiData.getType() == 1) {
             //Dubbo接口
             String dubboApi = DubboApiMarkdownRender.getDubboApi(apiData);

@@ -4,7 +4,6 @@
     <tr>
         <th>名称</th>
         <th>类型</th>
-        <th style="text-align:center">来源</th>
         <th style="text-align:center">必填</th>
         <th>DEMO</th>
         <th>备注</th>
@@ -15,7 +14,6 @@
     <tr>
         <td>${field.name}</td>
         <td>${field.entityName}</td>
-        <td style="text-align:center">--</td>
         <td style="text-align:center">${field.required?string('Y', 'N')}</td>
         <td>${field.demo!}</td>
         <td>${field.comment}</td>
