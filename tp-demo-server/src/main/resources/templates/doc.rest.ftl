@@ -54,8 +54,8 @@
 
     <#include "./doc.param.table.ftl" />
 
-    JavaScript Ajax RequestBody Demo:<br>
     <#if requestBody??>
+    JavaScript Ajax RequestBody Demo:<br>
     <pre><code class="lang-javascript">${requestBody?html}</code></pre>
     </#if>
 </#if>
