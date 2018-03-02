@@ -40,7 +40,7 @@ public class TpDocletTest {
         String projectSrcDirs = getProjectSrcDirs();
         String[] docArgs = new String[]{
 //                "-public",
-                "com.fangdd.tp.controller.api",
+                "com.fangdd.tp.service.dubbo",
 //                "com.fangdd.tp.service.impl.test",
                 "-subpackages",
                 projectPath + "/server/target/tp-server.jar",

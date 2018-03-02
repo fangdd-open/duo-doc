@@ -6,9 +6,14 @@ import java.util.List;
 
 public class Api {
     /**
-     * API编码，全局唯一
+     * API编码，即{className}.{methodName}
      */
     private String code;
+
+    /**
+     * API编码，全局唯一
+     */
+    private String key;
 
     /**
      * 接口类型：0=RestFul, 1=Dubbo
@@ -92,6 +97,14 @@ public class Api {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getName() {

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
 
 import java.util.List;
 import java.util.Map;
@@ -42,17 +41,25 @@ public class DocWebController extends BaseWebController {
     public ModelAndView doc(
             @PathVariable String docId,
             @RequestParam(required = false) String code,
+            @RequestParam(required = false) String key,
             @RequestParam(required = false) Long version
     ) {
         DocDto doc = docService.get(docId, version);
 
         addData("code", code == null ? "" : code);
-        if (!Strings.isNullOrEmpty(code)) {
-            Api apiData = getApi(code, doc);
+        addData("key", key == null ? "" : key);
+        if (!Strings.isNullOrEmpty(key)) {
+            Api apiData = getApiByKey(key, doc);
             if (apiData != null) {
                 loadApiData(doc, apiData);
             }
-
+        } else {
+            if (!Strings.isNullOrEmpty(code)) {
+                Api apiData = getApi(code, doc);
+                if (apiData != null) {
+                    loadApiData(doc, apiData);
+                }
+            }
         }
 
         addData("artifact", doc.getArtifact());
@@ -98,7 +105,7 @@ public class DocWebController extends BaseWebController {
         addData("response", response);
 
         apiData.getRequestParams().forEach(param -> {
-            if("@RequestBody".equals(param.getAnnotation())) {
+            if ("@RequestBody".equals(param.getAnnotation())) {
                 String body = EntityJsonMarkdownRender.render(param);
                 addData("requestBody", body);
             }
@@ -123,6 +130,19 @@ public class DocWebController extends BaseWebController {
             for (Section section : chapter.getSections()) {
                 for (Api api : section.getApis()) {
                     if (api.getCode().equals(code)) {
+                        return api;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private Api getApiByKey(String key, DocDto doc) {
+        for (Chapter chapter : doc.getChapters()) {
+            for (Section section : chapter.getSections()) {
+                for (Api api : section.getApis()) {
+                    if (api.getKey().equals(key)) {
                         return api;
                     }
                 }

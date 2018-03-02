@@ -1,10 +1,12 @@
 package com.fangdd.tp.doclet.analyser;
 
 import com.fangdd.tp.doclet.analyser.dubbo.DubboServiceImplAnalyser;
+import com.fangdd.tp.doclet.analyser.dubbo.XmlDubboServiceAnalyser;
 import com.fangdd.tp.doclet.analyser.rest.RestFulAnalyser;
 import com.fangdd.tp.doclet.constant.DubboConstant;
 import com.fangdd.tp.doclet.constant.SpringMvcConstant;
 import com.fangdd.tp.doclet.helper.AnnotationHelper;
+import com.fangdd.tp.doclet.helper.BookHelper;
 import com.fangdd.tp.doclet.helper.Logger;
 import com.sun.javadoc.AnnotationDesc;
 import com.sun.javadoc.ClassDoc;
@@ -23,7 +25,14 @@ public class ApiAnalyser {
         } else if (isAvailableDubboApi(classDoc)) {
             logger.info("Dubbo接口: " + classDoc);
             DubboServiceImplAnalyser.analyse(classDoc);
+        } else if (isXmlDubboApi(classDoc)) {
+            XmlDubboServiceAnalyser.analyse(classDoc);
         }
+    }
+
+    private static boolean isXmlDubboApi(ClassDoc classDoc) {
+        String className = classDoc.qualifiedName();
+        return BookHelper.getDubboInterface(className) != null;
     }
 
     private static boolean isAvailableDubboApi(ClassDoc classDoc) {

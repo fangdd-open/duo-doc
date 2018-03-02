@@ -1,6 +1,7 @@
 package com.fangdd.tp.doclet;
 
 import com.fangdd.tp.doclet.analyser.ApiAnalyser;
+import com.fangdd.tp.doclet.analyser.dubbo.DubboXmlAnalyser;
 import com.fangdd.tp.doclet.analyser.dubbo.PomXmlAnalyser;
 import com.fangdd.tp.doclet.export.ExportMarkdownToConsole;
 import com.fangdd.tp.doclet.export.ExportToMongoDB;
@@ -26,8 +27,8 @@ public class TpDoclet extends Doclet {
     public static boolean start(RootDoc root) {
         String baseDir = System.getProperty("basedir", "/Users/ycoe/Projects/fdd/tp/tp-doc/tp-demo-server");
         //下面在开发测试时把注释打开
-//        String exportType = System.getProperty("exportType", "console");
 //        String exportType = System.getProperty("exportType", "mongodb");
+//        String exportType = System.getProperty("exportType", "console");
 //        String server = System.getProperty("server", "http://127.0.0.1:17010");
 
         String exportType = System.getProperty("exportType", "web");
@@ -41,6 +42,12 @@ public class TpDoclet extends Doclet {
             if (artifact != null) {
                 BookHelper.setArtifact(artifact);
             }
+        }
+
+        //尝试读取xml配置的dubbo服务配置
+        File dubboXmlFile = new File(baseDir + "/src/main/resources/applicationContext-dubbo.xml");
+        if(dubboXmlFile.exists()) {
+            DubboXmlAnalyser.analyse(dubboXmlFile);
         }
 
         for (ClassDoc doc : root.classes()) {

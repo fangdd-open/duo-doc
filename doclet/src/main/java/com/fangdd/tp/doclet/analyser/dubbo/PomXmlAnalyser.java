@@ -1,6 +1,7 @@
 package com.fangdd.tp.doclet.analyser.dubbo;
 
 import com.fangdd.tp.doclet.exception.DocletException;
+import com.fangdd.tp.doclet.helper.XmlHelper;
 import com.fangdd.tp.doclet.pojo.Artifact;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -48,21 +49,21 @@ public class PomXmlAnalyser {
             throw new DocletException("解析pom.xml出错！", e);
         }
         Element project = jdomDocument.getRootElement();
-        String artifactId = getChildElementText(project, "artifactId");
-        String version = getChildElementText(project, "version");
-        String groupId = getChildElementText(project, "groupId");
-        String name = getChildElementText(project, "name");
-        String description = getChildElementText(project, "description");
+        String artifactId = XmlHelper.getChildElementText(project, "artifactId");
+        String version = XmlHelper.getChildElementText(project, "version");
+        String groupId = XmlHelper.getChildElementText(project, "groupId");
+        String name = XmlHelper.getChildElementText(project, "name");
+        String description = XmlHelper.getChildElementText(project, "description");
         if (Strings.isNullOrEmpty(groupId)) {
             //尝试从parent中获取
-            Element parentElement = getChildElement(project, "parent");
-            groupId = getChildElementText(parentElement, "groupId");
+            Element parentElement = XmlHelper.getChildElement(project, "parent");
+            groupId = XmlHelper.getChildElementText(parentElement, "groupId");
         }
 
         if(Strings.isNullOrEmpty(version)) {
             //尝试从parent中获取
-            Element parentElement = getChildElement(project, "parent");
-            version = getChildElementText(parentElement, "version");
+            Element parentElement = XmlHelper.getChildElement(project, "parent");
+            version = XmlHelper.getChildElementText(parentElement, "version");
         }
         info.setId(groupId + ":" + artifactId);
         info.setArtifactId(artifactId);
@@ -71,34 +72,6 @@ public class PomXmlAnalyser {
         info.setName(name);
         info.setDescription(description);
         return info;
-    }
-
-    private static Element getChildElement(Element element, String childName) {
-        Element parentElement = null;
-        List<Element> contents = element.getContent(Filters.element());
-        for (Element el : contents) {
-            if (el.getName().equals(childName)) {
-                parentElement = el;
-                break;
-            }
-        }
-        if (parentElement == null) {
-            throw new DocletException("未找到<groupId>!");
-        }
-        return parentElement;
-    }
-
-    private static String getChildElementText(Element element, String childrenName) {
-        List<Element> es = element.getContent(Filters.element());
-        if (es == null || es.isEmpty()) {
-            return null;
-        }
-        for (Element e : es) {
-            if (e.getName().equals(childrenName)) {
-                return e.getTextTrim();
-            }
-        }
-        return null;
     }
 
     private static Artifact getPomXml(File file) {

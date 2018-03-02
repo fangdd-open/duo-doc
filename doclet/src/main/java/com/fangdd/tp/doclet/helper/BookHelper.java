@@ -1,6 +1,5 @@
 package com.fangdd.tp.doclet.helper;
 
-import com.fangdd.tp.doclet.constant.DocletConstant;
 import com.fangdd.tp.doclet.enums.ApiPositionEnum;
 import com.fangdd.tp.doclet.exception.DocletException;
 import com.fangdd.tp.doclet.pojo.*;
@@ -19,6 +18,7 @@ import java.util.Map;
 public class BookHelper {
     private static final Map<String, Chapter> CHAPTER_MAP = Maps.newHashMap();
     private static final Map<Chapter, List<Section>> SECTIONS_MAP = Maps.newHashMap();
+    private static final Map<String, DubboInfo> INTERFACE_CLASS_MAP = Maps.newHashMap();
     private static Artifact artifact = null;
 
     /**
@@ -73,20 +73,20 @@ public class BookHelper {
         return CHAPTER_MAP;
     }
 
-    public static Api getApi(Section section, String apiName) {
-        if (Strings.isNullOrEmpty(apiName)) {
-            throw new DocletException(section.getChapter().getName() + ">" + section.getName() + "， apiName不能为空！");
+    public static Api getApi(Section section, String key) {
+        if (Strings.isNullOrEmpty(key)) {
+            throw new DocletException(section.getChapter().getName() + ">" + section.getName() + "， code不能为空！");
         }
         List<Api> apis = section.getApis();
         for (Api api : apis) {
-            if (api.getName().equals(apiName)) {
+            if (api.getKey().equals(key)) {
                 return api;
             }
         }
 
         //没有找到，则新创建
         Api api = new Api();
-        api.setName(apiName);
+        api.setKey(key);
         api.setSection(section);
 
         apis.add(api);
@@ -117,7 +117,7 @@ public class BookHelper {
         BookHelper.artifact = artifact;
     }
 
-    public static Artifact getArtifact(){
+    public static Artifact getArtifact() {
         return BookHelper.artifact;
     }
 
@@ -127,5 +127,17 @@ public class BookHelper {
 
     public static String getServer() {
         return server;
+    }
+
+    public static void addDubboInterface(String interfaceClass, DubboInfo dubboInfo) {
+        INTERFACE_CLASS_MAP.put(interfaceClass, dubboInfo);
+    }
+
+    public static Map<String, DubboInfo> getDubboInterfaceSet() {
+        return INTERFACE_CLASS_MAP;
+    }
+
+    public static DubboInfo getDubboInterface(String interfaceClass) {
+        return INTERFACE_CLASS_MAP.get(interfaceClass);
     }
 }

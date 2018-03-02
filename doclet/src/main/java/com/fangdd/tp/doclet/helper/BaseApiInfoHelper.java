@@ -68,7 +68,9 @@ public class BaseApiInfoHelper {
         }
         String apiCode = section.getCode() + "." + method.name();
 
-        Api api = BookHelper.getApi(section, apiName);
+        String key = MD5Utils.md5(method.toString());
+        Api api = BookHelper.getApi(section, key);
+        api.setName(apiName);
         api.setType(ApiTypeEnum.DUBBO.getType());
         api.setComment(comment);
         api.setSince(since);
