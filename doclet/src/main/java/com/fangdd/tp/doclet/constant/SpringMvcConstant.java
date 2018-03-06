@@ -18,6 +18,7 @@ public class SpringMvcConstant {
     public static final String ANNOTATION_PATH_VARIABLE = "org.springframework.web.bind.annotation.PathVariable";
     public static final String ANNOTATION_REQUEST_BODY = "org.springframework.web.bind.annotation.RequestBody";
     public static final String ANNOTATION_REQUEST_PARAM = "org.springframework.web.bind.annotation.RequestParam";
+    public static final String ANNOTATION_REQUEST_ATTRIBUTE = "org.springframework.web.bind.annotation.RequestAttribute";
 
     private SpringMvcConstant(){}
 

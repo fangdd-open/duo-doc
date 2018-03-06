@@ -61,9 +61,9 @@ public class BaseApiInfoHelper {
                     param.setComment(paramComment);
                 }
                 param.setName(parameter.name());
-                setParamAnnotations(param, parameter);
-
-                params.add(param);
+                if(!setParamAnnotations(param, parameter)) {
+                    params.add(param);
+                }
             }
         }
         String apiCode = section.getCode() + "." + method.name();
@@ -83,7 +83,7 @@ public class BaseApiInfoHelper {
         return api;
     }
 
-    private static void setParamAnnotations(EntityRef param, Parameter parameter) {
+    private static boolean setParamAnnotations(EntityRef param, Parameter parameter) {
         AnnotationDesc[] paramAnnotations = parameter.annotations();
         for (AnnotationDesc annotationDesc : paramAnnotations) {
             String annotation = annotationDesc.annotationType().toString();
@@ -95,6 +95,11 @@ public class BaseApiInfoHelper {
                 // @RequestBody
                 param.setRequired(true);
                 param.setAnnotation("@RequestBody");
+            } else if (SpringMvcConstant.ANNOTATION_REQUEST_ATTRIBUTE.equals(annotation)) {
+                // @RequestAttribute， 由此注解的属性一般是由统一拦截器或Filter中设置进去的，所以不添加进参数列表中
+                param.setRequired(true);
+                param.setAnnotation("@RequestAttribute");
+                return false;
             } else if (SpringMvcConstant.ANNOTATION_REQUEST_PARAM.equals(annotation)) {
                 // @RequestParam
                 AnnotationValue requiredVal = AnnotationHelper.getValue(annotationDesc, "required");
@@ -109,5 +114,6 @@ public class BaseApiInfoHelper {
             }
         }
 
+        return true;
     }
 }
