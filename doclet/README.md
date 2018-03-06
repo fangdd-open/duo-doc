@@ -5,6 +5,7 @@ TP-DOC是在公司spring boot种子项目上，依赖代码注释，自动生成
 1. spring mvc提供的  `@ResController`注解的类和由`@RequestMapping` / `@GetMapping` / `@PostMapping` 注解的方法
 
 2. @com.alibaba.dubbo.config.annotation.Service注解的Dubbo接口
+3. 使用xml配置的dubbo服务接口
 
 本工具以maven插件方式提供，除了限制了特定的注解外，没有任何代码入侵，所有信息都不是必填。
 
@@ -34,10 +35,9 @@ TP-DOC是在公司spring boot种子项目上，依赖代码注释，自动生成
      <configuration>
          <doclet>com.fangdd.tp.doclet.TpDoclet</doclet>
          <docletArtifact>
-             <!-- 因发布系统无法拉取到SNAPSHOT包，所以这里改成了正式包 -->
              <groupId>com.fangdd</groupId>
              <artifactId>doclet</artifactId>
-             <version>1.1</version>
+             <version>1.2-SNAPSHOT</version>
          </docletArtifact>
          <sourcepath>
              <!-- 指定源码路径，如果多个模块，需要包含进去 -->
@@ -52,7 +52,7 @@ TP-DOC是在公司spring boot种子项目上，依赖代码注释，自动生成
      <executions>
          <execution>
              <id>attach-javadocs</id>
-             <!-- package可以在提交代码后由CI自动触发，如果不需要自动触发，可以设置为site，届时需要手工执行：mvn clean package -->
+             <!-- package可以在提交代码后由CI自动触发，如果不需要自动触发，可以设置为site，届时需要手工执行：mvn clean site -->
              <phase>package</phase>
              <goals>
                  <goal>javadoc</goal>
@@ -152,15 +152,24 @@ Controller里面的方法，只要被注解为`@RequestMapping`，就会被当�
 
 `@return` 响应的注释
 
-### 4. 方法参数和响应体
+### 4. 方法参数
 
 请求参数的说明可以在方法注释的`@param`里写，但如果请求参数是一个`bean`，则可以在类属性里写更丰富的信息
+
+支持`spring mvc`的参数注解：
+
+`@PathVariable` `@RequestBody` `@RequestParam`
+
+使用 `@RequestAttribute`注解的，一般是由Filter或拦截器注入的，所以不把它当成是请求参数
+
+
+### 5. 响应体
 
 响应体的说明可以在`@return`里写，同时，如果是个`bean`时也可以在类里面写更多的信息
 
 
 
-### 5. Bean
+### 6. Bean
 
 请求参数与响应体都可以是一个`Bean`，看下面的案例：
 
@@ -248,24 +257,28 @@ public class User<T> {
 
 ## 四、Dubbo文档
 
-@com.alibaba.dubbo.config.annotation.Service注解的Dubbo接口，文档的说明以接口的注释为准，实现里的注释暂时未采用，后继将使用上
-
 dubbo文档的生成规则与RestFul的完全一致，请参考上面RestFul说明
 
+注意，dubbo接口的文档以接口的注释为准，实现类的注释暂未采集！
+
+### 1. 注解方式声明
+@com.alibaba.dubbo.config.annotation.Service注解的Dubbo接口，文档的说明以接口的注释为准，实现里的注释暂时未采用，后继将使用上
+
+### 2. 配置方式声明
+
+目前仅支持配置文件名且目录为：`/src/main/resources/applicationContext-dubbo.xml`
 
 <br>
 ## 五、已知问题
 
-1. FastJson的注解的格式化还不支持
-2. @NotNull 此类注解还不支持
-3. dubbo使用xml声明的服务还不支持
-4. 历史版本文档暂时还未开发
+1. 暂对html标签的注释支持不好
+
+2. 暂不支持README.md文件
 
 
 ## Next Step
 
+1.  支持markdown文档
 
-1.  dubbo使用xml声明的服务支持
-2.  历史版本文档查看
 
 
