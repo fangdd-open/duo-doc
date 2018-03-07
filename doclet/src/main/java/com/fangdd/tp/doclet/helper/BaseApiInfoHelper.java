@@ -61,7 +61,7 @@ public class BaseApiInfoHelper {
                     param.setComment(paramComment);
                 }
                 param.setName(parameter.name());
-                if(!setParamAnnotations(param, parameter)) {
+                if(setParamAnnotations(param, parameter)) {
                     params.add(param);
                 }
             }
