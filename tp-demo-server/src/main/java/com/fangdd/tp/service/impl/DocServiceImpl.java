@@ -1,9 +1,6 @@
 package com.fangdd.tp.service.impl;
 
-import com.fangdd.tp.dao.DocChapterDao;
-import com.fangdd.tp.dao.DocDao;
-import com.fangdd.tp.dao.DocEntityDao;
-import com.fangdd.tp.dao.DocLogDao;
+import com.fangdd.tp.dao.*;
 import com.fangdd.tp.doclet.pojo.Artifact;
 import com.fangdd.tp.doclet.pojo.Chapter;
 import com.fangdd.tp.doclet.pojo.DocDto;
@@ -49,6 +46,9 @@ public class DocServiceImpl implements DocService {
 
     @Autowired
     private DocChapterDao docChapterDao;
+
+    @Autowired
+    private MarkdownDocDao markdownDocDao;
 
     public DocDto get(String id, Long version) {
         DocDto docDto = new DocDto();
@@ -148,6 +148,7 @@ public class DocServiceImpl implements DocService {
         docLogDao.deleteMany(filter);
         docChapterDao.deleteMany(filter);
         docEntityDao.deleteMany(filter);
+        markdownDocDao.deleteMany(filter);
         return "成功";
     }
 }

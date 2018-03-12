@@ -1,11 +1,9 @@
 package com.fangdd.tp.service.impl;
 
-import com.fangdd.tp.dao.DocChapterDao;
-import com.fangdd.tp.dao.DocDao;
-import com.fangdd.tp.dao.DocEntityDao;
-import com.fangdd.tp.dao.DocLogDao;
+import com.fangdd.tp.dao.*;
 import com.fangdd.tp.doclet.pojo.*;
 import com.fangdd.tp.doclet.pojo.entity.DocLog;
+import com.fangdd.tp.doclet.pojo.entity.MarkdownDoc;
 import com.fangdd.tp.service.DocImportService;
 import com.fangdd.traffic.common.mongo.utils.UUIDUtils;
 import com.google.common.collect.Lists;
@@ -16,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * @auth ycoe
@@ -36,12 +34,16 @@ public class DocImportServiceImpl implements DocImportService {
     @Autowired
     private DocLogDao docLogDao;
 
+    @Autowired
+    private MarkdownDocDao markdownDocDao;
+
     @Override
     public String save(DocDto docRequest) {
         Artifact artifact = docRequest.getArtifact();
         artifact.setDocVersion(System.currentTimeMillis());
         List<Chapter> chapters = docRequest.getChapters();
         List<Entity> entities = docRequest.getEntities();
+        Map<String, String> markdownDocMaps = docRequest.getMarkdownMaps();
 
         String md5 = artifact.getMd5();
         //检查是否一致
@@ -62,6 +64,17 @@ public class DocImportServiceImpl implements DocImportService {
         //保存chapter
         chapters.forEach(chapter -> addBulkWriteList(artifact, bulkWriteList, chapter));
 
+        //保存markdown文档
+        if (!markdownDocMaps.isEmpty()) {
+            List markdownDocBulkWriteList = Lists.newArrayList();
+            for (Map.Entry<String, String> markdown : markdownDocMaps.entrySet()) {
+                saveMarkdownDoc(artifact, markdown.getKey(), markdown.getValue(), markdownDocBulkWriteList);
+            }
+            if (!markdownDocBulkWriteList.isEmpty()) {
+                markdownDocDao.bulkWrite(markdownDocBulkWriteList);
+            }
+        }
+
         docChapterDao.bulkWrite(bulkWriteList);
         bulkWriteList.clear();
 
@@ -76,6 +89,17 @@ public class DocImportServiceImpl implements DocImportService {
         docDao.upsertEntity(artifact);
 
         return "/doc/" + artifact.getId() + "/";
+    }
+
+    private void saveMarkdownDoc(Artifact artifact, String docName, String markdownStr, List markdownDocBulkWriteList) {
+        MarkdownDoc doc = new MarkdownDoc();
+        doc.setId(UUIDUtils.generateUUID());
+        doc.setName(docName);
+        doc.setId(UUIDUtils.generateUUID());
+        doc.setDocId(artifact.getId());
+        doc.setDocVersion(artifact.getDocVersion());
+        doc.setMarkdown(markdownStr);
+        markdownDocBulkWriteList.add(new InsertOneModel<>(doc));
     }
 
     private void addBulkWriteList(Artifact artifact, List bulkWriteList, MongoDbEntity entity) {

@@ -36,11 +36,17 @@ public class ExportToMongoDB {
             entitySet.add(entry.getValue());
         }
 
+
         DocDto request = new DocDto();
         request.setArtifact(BookHelper.getArtifact());
         request.setChapters(chapterSet);
         request.setEntities(entitySet);
         request.setDocletVersion(DocletConstant.DOCLET_VERTION);
+
+        Map<String, String> markdownMap = BookHelper.getMarkdownDocMap();
+        if(!markdownMap.isEmpty()) {
+            request.setMarkdownMaps(markdownMap);
+        }
 
         String docData = JSONObject.toJSONString(request);
         try {

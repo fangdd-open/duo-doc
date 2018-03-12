@@ -19,6 +19,7 @@ public class BookHelper {
     private static final Map<String, Chapter> CHAPTER_MAP = Maps.newHashMap();
     private static final Map<Chapter, List<Section>> SECTIONS_MAP = Maps.newHashMap();
     private static final Map<String, DubboInfo> INTERFACE_CLASS_MAP = Maps.newHashMap();
+    private static final Map<String, String> MARKDOWN_MAP = Maps.newHashMap();
     private static Artifact artifact = null;
 
     /**
@@ -139,5 +140,13 @@ public class BookHelper {
 
     public static DubboInfo getDubboInterface(String interfaceClass) {
         return INTERFACE_CLASS_MAP.get(interfaceClass);
+    }
+
+    public static void addMarkdownDoc(String key, String markdown) {
+        MARKDOWN_MAP.put(key, markdown);
+    }
+
+    public static Map<String, String> getMarkdownDocMap() {
+        return MARKDOWN_MAP;
     }
 }

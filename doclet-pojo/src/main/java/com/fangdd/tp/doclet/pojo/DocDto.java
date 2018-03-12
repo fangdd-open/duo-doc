@@ -2,6 +2,7 @@ package com.fangdd.tp.doclet.pojo;
 
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @auth ycoe
@@ -15,6 +16,8 @@ public class DocDto {
     private List<Entity> entities;
 
     private String docletVersion;
+
+    private Map<String, String> markdownMaps;
 
     public Artifact getArtifact() {
         return artifact;
@@ -46,5 +49,13 @@ public class DocDto {
 
     public void setDocletVersion(String docletVersion) {
         this.docletVersion = docletVersion;
+    }
+
+    public Map<String, String> getMarkdownMaps() {
+        return markdownMaps;
+    }
+
+    public void setMarkdownMaps(Map<String, String> markdownMaps) {
+        this.markdownMaps = markdownMaps;
     }
 }
