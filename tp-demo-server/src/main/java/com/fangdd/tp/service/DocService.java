@@ -7,6 +7,7 @@ import com.fangdd.tp.dto.request.DocLogQuery;
 import com.fangdd.tp.dto.request.DocQuery;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @auth ycoe
@@ -62,4 +63,13 @@ public interface DocService {
      * @return
      */
     String delete(String id, long version);
+
+    /**
+     * 加载Markdown文档列表
+     *
+     * @param docId   文档ID
+     * @param version 文档版本{docVersion}
+     * @return
+     */
+    Map<String, String> getMarkdownDocs(String docId, Long version);
 }

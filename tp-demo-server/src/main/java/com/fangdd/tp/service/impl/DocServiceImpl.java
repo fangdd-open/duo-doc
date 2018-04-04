@@ -6,11 +6,13 @@ import com.fangdd.tp.doclet.pojo.Chapter;
 import com.fangdd.tp.doclet.pojo.DocDto;
 import com.fangdd.tp.doclet.pojo.Entity;
 import com.fangdd.tp.doclet.pojo.entity.DocLog;
+import com.fangdd.tp.doclet.pojo.entity.MarkdownDoc;
 import com.fangdd.tp.dto.request.DocLogQuery;
 import com.fangdd.tp.dto.request.DocQuery;
 import com.fangdd.tp.service.DocService;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.mongodb.Block;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
@@ -21,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @auth ycoe
@@ -150,5 +153,26 @@ public class DocServiceImpl implements DocService {
         docEntityDao.deleteMany(filter);
         markdownDocDao.deleteMany(filter);
         return "成功";
+    }
+
+    @Override
+    public Map<String, String> getMarkdownDocs(String docId, Long version) {
+        Map<String, String> markdownDocMap = Maps.newHashMap();
+        Bson filter;
+        if (version == null || version == 0) {
+            //未指定版本号
+            filter = Filters.eq(DOC_ID, docId);
+        } else {
+            filter = Filters.and(
+                    Filters.eq(DOC_ID, docId),
+                    Filters.eq(DOC_VERSION, version)
+            );
+        }
+
+        markdownDocDao
+                .find(filter)
+                .projection(Projections.include(NAME))
+                .forEach((Block<? super MarkdownDoc>) doc -> markdownDocMap.put(doc.getName(), doc.getId()));
+        return markdownDocMap;
     }
 }

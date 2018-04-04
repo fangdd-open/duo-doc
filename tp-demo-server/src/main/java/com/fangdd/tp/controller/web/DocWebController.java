@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @auth ycoe
@@ -68,6 +69,9 @@ public class DocWebController extends BaseWebController {
         doc.getEntities().forEach(entity -> entityMap.put(entity.getName(), entity));
         addData("entityMap", entityMap);
         addData("version", version);
+
+        Map<String, String> markdownDocMap = docService.getMarkdownDocs(docId, version);
+        addData("markdownDocMap", markdownDocMap);
 
         return view("doc");
     }

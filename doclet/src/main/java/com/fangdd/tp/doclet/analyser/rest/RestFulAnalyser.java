@@ -87,6 +87,9 @@ public class RestFulAnalyser {
             methods = Lists.newArrayList("POST");
         }
 
+        if(vs == null) {
+            return;
+        }
         List<String> paths = RequestMappingAnnotationHelper.getRequestMappingAnnotationValues(vs, "value");
         if (paths.isEmpty()) {
             paths.add("");

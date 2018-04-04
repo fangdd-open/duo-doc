@@ -1,14 +1,11 @@
 package com.fangdd.tp.doclet.helper;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.sun.javadoc.AnnotationDesc;
 import com.sun.javadoc.AnnotationValue;
 import com.sun.javadoc.FieldDoc;
-import com.sun.tools.javadoc.AnnotationValueImpl;
 
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
