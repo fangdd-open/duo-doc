@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/9
  */
 public class EntityMateAnalyser {
@@ -31,6 +31,8 @@ public class EntityMateAnalyser {
         FIELD_ANNOTATION_ANALYSER_MAP.put(EntityConstant.ANNOTATION_DATE_TIME_FORMAT, new DateTimeFormatFieldAnnotationAnalyser());
         FIELD_ANNOTATION_ANALYSER_MAP.put(EntityConstant.JAVAX_VALIDATION_CONSTRAINTS_NOTNULL, new NotNullFieldAnnotationAnalyser());
         FIELD_ANNOTATION_ANALYSER_MAP.put(EntityConstant.JAVAX_VALIDATION_CONSTRAINTS_NULL, new NotNullFieldAnnotationAnalyser());
+        FIELD_ANNOTATION_ANALYSER_MAP.put(EntityConstant.HIBERNATE_VALIDATOR_ANNOTATION_NOT_BLANK, new NotNullFieldAnnotationAnalyser());
+        FIELD_ANNOTATION_ANALYSER_MAP.put(EntityConstant.HIBERNATE_VALIDATOR_ANNOTATION_NOT_EMPTY, new NotNullFieldAnnotationAnalyser());
     }
 
     private static Set<String> CURRENT_CLASS_FIELD_NAMES = Sets.newHashSet();
@@ -61,19 +63,19 @@ public class EntityMateAnalyser {
             //有泛型
             ParameterizedType parameterizedType = type.asParameterizedType();
             if (parameterizedType != null) {
-                TypeVariable[] typeParameters = classDoc.typeParameters(); // E
+                TypeVariable[] typeParameters = classDoc.typeParameters();
                 Type[] typeArguments = parameterizedType.typeArguments();
                 if (typeArguments != null && typeArguments.length > 0) {
                     List<Type> parameterizedTypeList = Lists.newArrayList();
                     for (int i = 0; i < typeArguments.length; i++) {
                         Type typeArgument = typeArguments[i];
-                        String typePararameterName = typeParameters[i].typeName();
+                        String typeParameterName = typeParameters[i].typeName();
                         Type parameterType = typeArgument;
                         if (typeArgument.asTypeVariable() != null) {
                             parameterType = parentParameterizedTypeMap.get(typeArgument.toString());
                             parameterizedTypeMap.put(typeArgument.toString(), parameterType);
                         } else {
-                            parameterizedTypeMap.put(typePararameterName, typeArgument);
+                            parameterizedTypeMap.put(typeParameterName, typeArgument);
                         }
                         if (parameterType != null) {
                             parameterizedTypeList.add(parameterType);

@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/2/11
  */
 public class DateTimeFormatFieldAnnotationAnalyser extends EntityFieldAnnotationAnalyser {
@@ -20,6 +20,7 @@ public class DateTimeFormatFieldAnnotationAnalyser extends EntityFieldAnnotation
         return Strings.isNullOrEmpty(fieldRef.getDemo());
     }
 
+    @Override
     public void analyse(AnnotationDesc dateTimeFormatAnnotation, EntityRef fieldRef, FieldDoc fieldDoc) {
         String pattern = null;
         String iso = AnnotationHelper.getStringValue(dateTimeFormatAnnotation, "iso");

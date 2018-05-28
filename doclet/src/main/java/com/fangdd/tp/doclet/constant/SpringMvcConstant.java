@@ -13,7 +13,7 @@ public class SpringMvcConstant {
     public static final String ANNOTATION_GET_MAPPING = "org.springframework.web.bind.annotation.GetMapping";
     public static final String ANNOTATION_POST_MAPPING = "org.springframework.web.bind.annotation.PostMapping";
 
-    public static final String ANNOTATION_NOT_NULL = "javax.validation.constraints.NotNull";
+
 
     public static final String ANNOTATION_PATH_VARIABLE = "org.springframework.web.bind.annotation.PathVariable";
     public static final String ANNOTATION_REQUEST_BODY = "org.springframework.web.bind.annotation.RequestBody";

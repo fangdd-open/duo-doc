@@ -5,7 +5,7 @@ import com.sun.javadoc.AnnotationDesc;
 import com.sun.javadoc.FieldDoc;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/2/11
  */
 public abstract class EntityFieldAnnotationAnalyser {
@@ -22,7 +22,7 @@ public abstract class EntityFieldAnnotationAnalyser {
 
     /**
      * 解析注解
-     *
+     * @param annotationDesc 当前属性字段上的注解信息
      * @param fieldRef 当前属性的信息
      * @param fieldDoc 当前属性的javadoc信息
      */

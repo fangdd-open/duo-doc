@@ -5,10 +5,11 @@ import com.sun.javadoc.AnnotationDesc;
 import com.sun.javadoc.FieldDoc;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/2/11
  */
 public class NotNullFieldAnnotationAnalyser extends EntityFieldAnnotationAnalyser {
+    @Override
     public void analyse(AnnotationDesc annotationDesc, EntityRef fieldRef, FieldDoc fieldDoc) {
         //被标注了  @Null
         fieldRef.setRequired(true);

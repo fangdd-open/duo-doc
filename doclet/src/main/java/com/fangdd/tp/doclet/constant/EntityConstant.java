@@ -1,7 +1,7 @@
 package com.fangdd.tp.doclet.constant;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/2/11
  */
 public class EntityConstant {
@@ -11,4 +11,7 @@ public class EntityConstant {
     public static final String DATE_TIME_FORMAT_ISO_DATE_TIME = "org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME";
     public static final String JAVAX_VALIDATION_CONSTRAINTS_NOTNULL = "javax.validation.constraints.NotNull";
     public static final String JAVAX_VALIDATION_CONSTRAINTS_NULL = "javax.validation.constraints.Null";
+
+    public static final String HIBERNATE_VALIDATOR_ANNOTATION_NOT_BLANK = "org.hibernate.validator.constraints.NotBlank";
+    public static final String HIBERNATE_VALIDATOR_ANNOTATION_NOT_EMPTY = "org.hibernate.validator.constraints.EMPTY";
 }
