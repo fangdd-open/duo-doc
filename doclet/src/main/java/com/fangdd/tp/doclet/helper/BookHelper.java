@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/9
  */
 public class BookHelper {
@@ -25,7 +25,7 @@ public class BookHelper {
     /**
      * 当前分析的接口方法
      */
-    private static MethodDoc currentMathod;
+    private static MethodDoc currentMethod;
 
     /**
      * 当前分析的接口位置
@@ -95,15 +95,15 @@ public class BookHelper {
     }
 
     public static void setApiMethod(MethodDoc method) {
-        currentMathod = method;
+        currentMethod = method;
     }
 
-    public static MethodDoc getCurrentMathod() {
-        return currentMathod;
+    public static MethodDoc getCurrentMethod() {
+        return currentMethod;
     }
 
-    public static void setCurrentMathod(MethodDoc currentMathod) {
-        BookHelper.currentMathod = currentMathod;
+    public static void setCurrentMethod(MethodDoc currentMethod) {
+        BookHelper.currentMethod = currentMethod;
     }
 
     public static void setApiPosition(ApiPositionEnum apiPosition) {

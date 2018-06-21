@@ -81,7 +81,7 @@ public class EntityMateAnalyser {
                             parameterizedTypeList.add(parameterType);
                         } else {
                             System.out.println("接口"
-                                    + BookHelper.getCurrentMathod()
+                                    + BookHelper.getCurrentMethod()
                                     + " " + BookHelper.getApiPosition().getTitle()
                                     + " " + className + "<===未指定泛型类型");
                             parameterizedTypeList.add(null);

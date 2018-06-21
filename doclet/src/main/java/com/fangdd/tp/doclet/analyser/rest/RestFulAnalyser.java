@@ -17,7 +17,7 @@ import com.sun.javadoc.Tag;
 import java.util.List;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/9
  */
 public class RestFulAnalyser {
@@ -44,7 +44,8 @@ public class RestFulAnalyser {
                 comment = StringHelper.deleteFirstLine(comment);
             }
         }
-        String classFullName = classDoc.qualifiedTypeName(); //类全名
+        //类全名
+        String classFullName = classDoc.qualifiedTypeName();
         if (StringHelper.isEmpty(sectionName)) {
             sectionName = classFullName;
         }
@@ -87,6 +88,27 @@ public class RestFulAnalyser {
             methods = Lists.newArrayList("POST");
         }
 
+        //@PutMapping
+        requestMappingAnnotation = AnnotationHelper.getAnnotation(methodDoc.annotations(), SpringMvcConstant.ANNOTATION_PUT_MAPPING);
+        if (requestMappingAnnotation != null) {
+            vs = requestMappingAnnotation.elementValues();
+            methods = Lists.newArrayList("PUT");
+        }
+
+        //@PatchMapping
+        requestMappingAnnotation = AnnotationHelper.getAnnotation(methodDoc.annotations(), SpringMvcConstant.ANNOTATION_PATCH_MAPPING);
+        if (requestMappingAnnotation != null) {
+            vs = requestMappingAnnotation.elementValues();
+            methods = Lists.newArrayList("PATCH");
+        }
+
+        //@DELETE
+        requestMappingAnnotation = AnnotationHelper.getAnnotation(methodDoc.annotations(), SpringMvcConstant.ANNOTATION_DELETE_MAPPING);
+        if (requestMappingAnnotation != null) {
+            vs = requestMappingAnnotation.elementValues();
+            methods = Lists.newArrayList("DELETE");
+        }
+
         if(vs == null) {
             return;
         }
@@ -123,8 +145,9 @@ public class RestFulAnalyser {
         if (methods != null && !methods.isEmpty()) {
             api.setMethods(methods);
         }
-        //如果是RestFul接口，且参数有@RequestBody时，强制为 POST
-        if (hasRequestBodyParam(api)) {
+        //如果是RestFul接口，且参数有@RequestBody时，强制为 POST ??
+        // TODO 这里应该是加了个默认
+        if (hasRequestBodyParam(api) && (api.getMethods()==null||api.getMethods().size()==0)) {
             api.setMethods(Lists.newArrayList("POST"));
         }
     }

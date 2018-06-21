@@ -11,7 +11,7 @@ import com.sun.javadoc.Tag;
 
 /**
  * 分析Dubbo接口
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/12
  */
 public class ChapterDubboAnalyser {
@@ -29,7 +29,8 @@ public class ChapterDubboAnalyser {
                 comment = StringHelper.deleteFirstLine(comment);
             }
         }
-        String classFullName = classDoc.qualifiedTypeName(); //类全名
+        //类全名
+        String classFullName = classDoc.qualifiedTypeName();
         if (StringHelper.isEmpty(sectionName)) {
             sectionName = classFullName;
         }

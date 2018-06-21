@@ -1,7 +1,7 @@
 package com.fangdd.tp.doclet.constant;
 
 /**
- * @author ycoe
+ * @auth ycoe
  * @date 18/2/11
  */
 public class EntityConstant {
@@ -13,5 +13,5 @@ public class EntityConstant {
     public static final String JAVAX_VALIDATION_CONSTRAINTS_NULL = "javax.validation.constraints.Null";
 
     public static final String HIBERNATE_VALIDATOR_ANNOTATION_NOT_BLANK = "org.hibernate.validator.constraints.NotBlank";
-    public static final String HIBERNATE_VALIDATOR_ANNOTATION_NOT_EMPTY = "org.hibernate.validator.constraints.EMPTY";
+    public static final String HIBERNATE_VALIDATOR_ANNOTATION_NOT_EMPTY = "org.hibernate.validator.constraints.NotEMPTY";
 }

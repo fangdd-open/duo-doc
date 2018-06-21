@@ -14,7 +14,7 @@ import com.sun.javadoc.*;
 import java.util.List;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/18
  */
 public class BaseApiInfoHelper {
@@ -100,16 +100,20 @@ public class BaseApiInfoHelper {
                 param.setRequired(true);
                 param.setAnnotation("@RequestAttribute");
                 return false;
-            } else if (SpringMvcConstant.ANNOTATION_REQUEST_PARAM.equals(annotation)) {
+            } else if (SpringMvcConstant.ANNOTATION_REQUEST_HEADER.equals(annotation)){
+                param.setRequired(true);
+                param.setAnnotation("@RequestHeader");
+                return false;
+            }else if (SpringMvcConstant.ANNOTATION_REQUEST_PARAM.equals(annotation)) {
                 // @RequestParam
                 AnnotationValue requiredVal = AnnotationHelper.getValue(annotationDesc, "required");
                 Boolean required = true;
                 if (requiredVal != null) {
                     required = (Boolean) requiredVal.value();
                 }
-                String defalutValue = AnnotationHelper.getStringValue(annotationDesc, "defaultValue");
+                String defaultValue = AnnotationHelper.getStringValue(annotationDesc, "defaultValue");
                 param.setRequired(required);
-                param.setDemo(defalutValue);
+                param.setDemo(defaultValue);
                 param.setAnnotation("@RequestParam");
             }
         }
