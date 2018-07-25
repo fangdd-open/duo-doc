@@ -55,7 +55,6 @@ public class DocServiceImpl implements DocService {
 
     public DocDto get(String id, Long version) {
         DocDto docDto = new DocDto();
-
         Artifact doc;
         if (version != null && version > 0) {
             //有指定版本号，从历史变更中查询
@@ -81,9 +80,15 @@ public class DocServiceImpl implements DocService {
                 .find(versionFilter)
                 .forEach((Block<? super Entity>) entities::add);
 
+        Map<String, String> markdownMap = Maps.newHashMap();
+        markdownDocDao
+                .find(versionFilter)
+                .forEach((Block<? super MarkdownDoc>) markdownDoc -> markdownMap.put(markdownDoc.getName(), markdownDoc.getMarkdown()));
+
         docDto.setArtifact(doc);
         docDto.setChapters(chapters);
         docDto.setEntities(entities);
+        docDto.setMarkdownMaps(markdownMap);
         return docDto;
     }
 
@@ -174,5 +179,14 @@ public class DocServiceImpl implements DocService {
                 .projection(Projections.include(NAME))
                 .forEach((Block<? super MarkdownDoc>) doc -> markdownDocMap.put(doc.getName(), doc.getId()));
         return markdownDocMap;
+    }
+
+    @Override
+    public DocDto fetch(String id, long version) {
+        Artifact doc = docDao.getEntityById(id);
+        if (doc.getDocVersion() != null && doc.getDocVersion().equals(version)) {
+            return null;
+        }
+        return get(id, null);
     }
 }

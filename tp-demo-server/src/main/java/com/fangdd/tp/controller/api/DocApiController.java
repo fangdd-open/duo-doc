@@ -70,6 +70,21 @@ public class DocApiController {
     }
 
     /**
+     * 查询某文档版本号是否最新
+     *
+     * @param id      文档ID
+     * @param version 文档版本
+     * @return 是最新，则返回空，否则返回当前最新的文档
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/fetch/{id}")
+    public DocDto testFetch(
+            @PathVariable String id,
+            @RequestParam(required = false) Long version
+    ) {
+        return docService.fetch(id, version);
+    }
+
+    /**
      * 获取某个文档的所有版本列表
      *
      * @param query 查询条件
@@ -118,6 +133,4 @@ public class DocApiController {
     ) {
         return docService.delete(id, version);
     }
-
-
 }

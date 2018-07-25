@@ -40,6 +40,8 @@ public class TpDocletTest {
         String projectSrcDirs = getProjectSrcDirs();
         String[] docArgs = new String[]{
 //                "-public",
+                "-d",
+                "/Users/ycoe/Projects/fdd/tp/tp-doc/tp-demo-server/target/docs",
                 "com.fangdd.tp.service.dubbo",
 //                "com.fangdd.tp.service.impl.test",
                 "-subpackages",

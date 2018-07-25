@@ -72,4 +72,13 @@ public interface DocService {
      * @return
      */
     Map<String, String> getMarkdownDocs(String docId, Long version);
+
+    /**
+     * 尝试获取更新文档
+     *
+     * @param id      文档ID
+     * @param version 文档版本
+     * @return 如果有更新则返回最新文档，否则返回null
+     */
+    DocDto fetch(String id, long version);
 }
