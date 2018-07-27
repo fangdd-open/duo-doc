@@ -65,7 +65,7 @@ public class DocImportServiceImpl implements DocImportService {
         chapters.forEach(chapter -> addBulkWriteList(artifact, bulkWriteList, chapter));
 
         //保存markdown文档
-        if (!markdownDocMaps.isEmpty()) {
+        if (markdownDocMaps != null && !markdownDocMaps.isEmpty()) {
             List markdownDocBulkWriteList = Lists.newArrayList();
             for (Map.Entry<String, String> markdown : markdownDocMaps.entrySet()) {
                 saveMarkdownDoc(artifact, markdown.getKey(), markdown.getValue(), markdownDocBulkWriteList);

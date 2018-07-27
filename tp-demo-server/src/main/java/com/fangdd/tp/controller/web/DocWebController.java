@@ -9,17 +9,15 @@ import com.fangdd.tp.dto.request.DocLogQuery;
 import com.fangdd.tp.dto.request.DocQuery;
 import com.fangdd.tp.service.DocService;
 import com.google.common.base.Strings;
-import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @auth ycoe
@@ -32,48 +30,57 @@ public class DocWebController extends BaseWebController {
     private DocService docService;
 
     @RequestMapping({"/index.html", ""})
-    public ModelAndView index(DocQuery query) {
-        List<Artifact> docs = docService.getDocList(query);
-        addData("docs", docs);
-        return view("index");
+    public View index(DocQuery query) {
+        return redirect302("http://tp-doc.fangdd.net/doc/");
+//        List<Artifact> docs = docService.getDocList(query);
+//        addData("docs", docs);
+//        return view("index");
     }
 
     @RequestMapping("/doc/{docId}/")
-    public ModelAndView doc(
+    public View doc(
             @PathVariable String docId,
             @RequestParam(required = false) String code,
             @RequestParam(required = false) String key,
             @RequestParam(required = false) Long version
     ) {
-        DocDto doc = docService.get(docId, version);
-
-        addData("code", code == null ? "" : code);
-        addData("key", key == null ? "" : key);
+        String url = "http://tp-doc.fangdd.net/doc/" + docId + "/";
         if (!Strings.isNullOrEmpty(key)) {
-            Api apiData = getApiByKey(key, doc);
-            if (apiData != null) {
-                loadApiData(doc, apiData);
-            }
-        } else {
-            if (!Strings.isNullOrEmpty(code)) {
-                Api apiData = getApi(code, doc);
-                if (apiData != null) {
-                    loadApiData(doc, apiData);
-                }
-            }
+            url += key + "/";
         }
-
-        addData("artifact", doc.getArtifact());
-        addData("chapters", doc.getChapters());
-        Map<String, Entity> entityMap = Maps.newHashMap();
-        doc.getEntities().forEach(entity -> entityMap.put(entity.getName(), entity));
-        addData("entityMap", entityMap);
-        addData("version", version);
-
-        Map<String, String> markdownDocMap = docService.getMarkdownDocs(docId, version);
-        addData("markdownDocMap", markdownDocMap);
-
-        return view("doc");
+        if (version != null && version > 0) {
+            url += "v/" + version;
+        }
+        return redirect302(url);
+//        DocDto doc = docService.get(docId, version);
+//
+//        addData("code", code == null ? "" : code);
+//        addData("key", key == null ? "" : key);
+//        if (!Strings.isNullOrEmpty(key)) {
+//            Api apiData = getApiByKey(key, doc);
+//            if (apiData != null) {
+//                loadApiData(doc, apiData);
+//            }
+//        } else {
+//            if (!Strings.isNullOrEmpty(code)) {
+//                Api apiData = getApi(code, doc);
+//                if (apiData != null) {
+//                    loadApiData(doc, apiData);
+//                }
+//            }
+//        }
+//
+//        addData("artifact", doc.getArtifact());
+//        addData("chapters", doc.getChapters());
+//        Map<String, Entity> entityMap = Maps.newHashMap();
+//        doc.getEntities().forEach(entity -> entityMap.put(entity.getName(), entity));
+//        addData("entityMap", entityMap);
+//        addData("version", version);
+//
+//        Map<String, String> markdownDocMap = docService.getMarkdownDocs(docId, version);
+//        addData("markdownDocMap", markdownDocMap);
+//
+//        return view("doc");
     }
 
     @RequestMapping("/doc/{docId}/history")
