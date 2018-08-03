@@ -1,5 +1,6 @@
 package com.fangdd.tp.dto;
 
+import com.fangdd.tp.enums.BillStatus;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
@@ -27,6 +28,12 @@ public class User<T> extends Person {
      * @demo 张三
      */
     private String name;
+
+    /**
+     * 业务状态
+     *
+     */
+    private BillStatus status;
 
     /**
      * 地址
@@ -111,5 +118,13 @@ public class User<T> extends Person {
 
     public void setMoney(BigDecimal money) {
         this.money = money;
+    }
+
+    public BillStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(BillStatus status) {
+        this.status = status;
     }
 }

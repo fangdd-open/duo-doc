@@ -58,6 +58,11 @@ public class Entity extends MongoDbEntity {
      */
     private Boolean primitive;
 
+    /**
+     * 是否枚举
+     */
+    private Boolean enumerate;
+
     public String getName() {
         return name;
     }
@@ -144,5 +149,13 @@ public class Entity extends MongoDbEntity {
 
     public void setPrimitive(Boolean primitive) {
         this.primitive = primitive;
+    }
+
+    public Boolean getEnumerate() {
+        return enumerate;
+    }
+
+    public void setEnumerate(Boolean enumerate) {
+        this.enumerate = enumerate;
     }
 }

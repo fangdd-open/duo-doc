@@ -9,10 +9,13 @@ import com.fangdd.tp.doclet.helper.TagHelper;
 import com.fangdd.tp.doclet.pojo.Entity;
 import com.fangdd.tp.doclet.pojo.EntityRef;
 import com.fangdd.tp.doclet.render.EntityHandle;
+import com.google.common.base.Enums;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.sun.javadoc.*;
+import com.sun.tools.javadoc.ClassDocImpl;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -22,10 +25,10 @@ import java.util.*;
  * @date 18/1/9
  */
 public class EntityMateAnalyser {
-    public static final String Collection_CLASS_NAME = Collection.class.getName();
-    public static final String MAP_CLASS_NAME = Map.class.getName();
-    public static final String BOOLEAN = "boolean";
-    public static final Map<String, EntityFieldAnnotationAnalyser> FIELD_ANNOTATION_ANALYSER_MAP = Maps.newHashMap();
+    private static final String COLLECTION_CLASS_NAME = Collection.class.getName();
+    private static final String MAP_CLASS_NAME = Map.class.getName();
+    private static final String BOOLEAN = "boolean";
+    private static final Map<String, EntityFieldAnnotationAnalyser> FIELD_ANNOTATION_ANALYSER_MAP = Maps.newHashMap();
 
     static {
         FIELD_ANNOTATION_ANALYSER_MAP.put(EntityConstant.ANNOTATION_DATE_TIME_FORMAT, new DateTimeFormatFieldAnnotationAnalyser());
@@ -35,7 +38,7 @@ public class EntityMateAnalyser {
         FIELD_ANNOTATION_ANALYSER_MAP.put(EntityConstant.HIBERNATE_VALIDATOR_ANNOTATION_NOT_EMPTY, new NotNullFieldAnnotationAnalyser());
     }
 
-    private static Set<String> CURRENT_CLASS_FIELD_NAMES = Sets.newHashSet();
+    private static final Set<String> CURRENT_CLASS_FIELD_NAMES = Sets.newHashSet();
 
     public static EntityRef analyse(Type type) {
         return getEntityRef(type, null);
@@ -110,6 +113,7 @@ public class EntityMateAnalyser {
         entity = new Entity();
         entity.setName(fullName);
         entity.setPrimitive(false);
+        entity.setEnumerate(classDoc.isEnum());
 
         Tag[] tags = classDoc.tags();
         String since = TagHelper.getStringValue(tags, "@since", null);
@@ -161,6 +165,13 @@ public class EntityMateAnalyser {
                 Tag[] fieldTags = field.tags();
                 String required = TagHelper.getStringValue(fieldTags, "@required", null);
                 String demo = TagHelper.getStringValue(fieldTags, "@demo", null);
+                if (Strings.isNullOrEmpty(demo) && fieldEntity.getEnumerate() != null && fieldEntity.getEnumerate()) {
+                    //如果是枚举，且@demo为空
+                    FieldDoc[] enumConstants = ((ClassDocImpl) fieldType).enumConstants();
+                    if (enumConstants != null && enumConstants.length > 0) {
+                        demo = enumConstants[0].name();
+                    }
+                }
 
                 EntityRef fieldRef = new EntityRef();
                 fieldRef.setEntityName(fieldEntity.getName());
@@ -313,14 +324,14 @@ public class EntityMateAnalyser {
 
     private static boolean isCollection(Type type) {
         String typeName = type.toString();
-        if ((typeName.contains("[") && typeName.contains("]")) || typeName.startsWith(Collection_CLASS_NAME)) {
+        if ((typeName.contains("[") && typeName.contains("]")) || typeName.startsWith(COLLECTION_CLASS_NAME)) {
             return true;
         }
         ClassDoc classDoc = type.asClassDoc();
         ClassDoc[] interfaces = classDoc.interfaces();
         if (interfaces != null) {
             for (ClassDoc interfaceClassDoc : interfaces) {
-                if (Collection_CLASS_NAME.equals(interfaceClassDoc.qualifiedName())) {
+                if (COLLECTION_CLASS_NAME.equals(interfaceClassDoc.qualifiedName())) {
                     return true;
                 }
             }

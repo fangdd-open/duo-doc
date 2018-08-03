@@ -7,7 +7,7 @@
     <groupId>com.fangdd</groupId>
     <artifactId>tp-demo-server</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>TP-DOC</name>
+    <name>TP-DOC-API-Server</name>
     <description>自动化文档</description>
     <packaging>jar</packaging>
 

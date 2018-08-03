@@ -30,7 +30,8 @@ public class TpDocletTest {
             "org/mongodb/mongo-java-driver/3.4.2/mongo-java-driver-3.4.2.jar",
             "com/google/guava/guava/19.0/guava-19.0.jar",
             "javax/validation/validation-api/1.1.0.Final/validation-api-1.1.0.Final.jar",
-            "com/fangdd/traffic/common-mongodb/2.3-SNAPSHOT/common-mongodb-2.3-SNAPSHOT.jar"
+            "com/fangdd/traffic/common-mongodb/2.3-SNAPSHOT/common-mongodb-2.3-SNAPSHOT.jar",
+            "com/fasterxml/jackson/core/jackson-annotations/2.8.4/jackson-annotations-2.8.4.jar"
     };
     private static String projectPath;
 
@@ -40,8 +41,8 @@ public class TpDocletTest {
         String projectSrcDirs = getProjectSrcDirs();
         String[] docArgs = new String[]{
 //                "-public",
-                "-d",
-                "/Users/ycoe/Projects/fdd/tp/tp-doc/tp-demo-server/target/docs",
+//                "-d",
+//                "/Users/ycoe/Projects/fdd/tp/tp-doc/tp-demo-server/target/docs",
                 "com.fangdd.tp.service.dubbo",
 //                "com.fangdd.tp.service.impl.test",
                 "-subpackages",
