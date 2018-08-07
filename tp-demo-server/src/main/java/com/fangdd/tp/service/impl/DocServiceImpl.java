@@ -189,4 +189,12 @@ public class DocServiceImpl implements DocService {
         }
         return get(id, null);
     }
+
+    @Override
+    public List<Artifact> getDocListCheck(long lastDocVersion) {
+        if (docDao.exists(Filters.gt(DOC_VERSION, lastDocVersion))) {
+            return this.getDocList(new DocQuery());
+        }
+        return null;
+    }
 }

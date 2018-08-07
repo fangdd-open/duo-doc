@@ -58,8 +58,10 @@ public class DocImportServiceImpl implements DocImportService {
         List bulkWriteList = Lists.newArrayList();
         entities.forEach(entity -> addBulkWriteList(artifact, bulkWriteList, entity));
 
-        docEntityDao.bulkWrite(bulkWriteList);
-        bulkWriteList.clear();
+        if (!bulkWriteList.isEmpty()) {
+            docEntityDao.bulkWrite(bulkWriteList);
+            bulkWriteList.clear();
+        }
 
         //保存chapter
         chapters.forEach(chapter -> addBulkWriteList(artifact, bulkWriteList, chapter));
@@ -75,8 +77,10 @@ public class DocImportServiceImpl implements DocImportService {
             }
         }
 
-        docChapterDao.bulkWrite(bulkWriteList);
-        bulkWriteList.clear();
+        if (!bulkWriteList.isEmpty()) {
+            docChapterDao.bulkWrite(bulkWriteList);
+            bulkWriteList.clear();
+        }
 
         //写入日志
         DocLog log = new DocLog();

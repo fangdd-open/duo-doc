@@ -109,6 +109,17 @@ public class DocApiController {
     }
 
     /**
+     * 检查文档是否有更新
+     *
+     * @param v 最新的文档版本
+     * @return 文档列表
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/docs-check")
+    public List<Artifact> listDocCheck(@RequestParam long v) {
+        return docService.getDocListCheck(v);
+    }
+
+    /**
      * 获取某个文档的所有变更历史
      *
      * @param query 查询条件

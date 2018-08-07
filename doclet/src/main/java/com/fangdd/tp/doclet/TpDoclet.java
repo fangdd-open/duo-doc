@@ -32,6 +32,7 @@ public class TpDoclet extends Doclet {
 //        String exportType = System.getProperty("exportType", "mongodb");
 //        String exportType = System.getProperty("exportType", "console");
 //        String server = System.getProperty("server", "http://127.0.0.1:17010");
+//        String server = System.getProperty("server", "http://127.0.0.1:17010"); //提交到本地，用于测试
 
         String exportType = System.getProperty("exportType", "web");
         String server = System.getProperty("server", "http://tp-doc.fangdd.net");

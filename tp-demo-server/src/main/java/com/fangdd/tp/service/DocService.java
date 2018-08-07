@@ -81,4 +81,11 @@ public interface DocService {
      * @return 如果有更新则返回最新文档，否则返回null
      */
     DocDto fetch(String id, long version);
+
+    /**
+     * 检查文档列表是否有更新
+     * @param lastDocVersion 最新的版本号
+     * @return
+     */
+    List<Artifact> getDocListCheck(long lastDocVersion);
 }
