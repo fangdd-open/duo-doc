@@ -11,6 +11,8 @@ import com.fangdd.tp.helper.GzipHelper;
 import com.fangdd.tp.helper.MD5Utils;
 import com.fangdd.tp.service.DocImportService;
 import com.fangdd.tp.service.DocService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +28,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/doc")
 public class DocApiController {
+    private static final Logger logger = LoggerFactory.getLogger(DocApiController.class);
+
     @Autowired
     private DocImportService docImportService;
 
@@ -45,6 +49,7 @@ public class DocApiController {
         try {
             docStr = GzipHelper.decompress(request);
         } catch (IOException e) {
+            logger.error("gzip解压失败！", e);
             return BaseResponse.error(501, "发生未知错误！");
         }
 

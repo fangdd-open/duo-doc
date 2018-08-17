@@ -8,6 +8,7 @@ import com.fangdd.tp.doclet.pojo.Api;
 import com.fangdd.tp.doclet.pojo.Chapter;
 import com.fangdd.tp.doclet.pojo.EntityRef;
 import com.fangdd.tp.doclet.pojo.Section;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.sun.javadoc.AnnotationDesc;
 import com.sun.javadoc.ClassDoc;
@@ -21,6 +22,15 @@ import java.util.List;
  * @date 18/1/9
  */
 public class RestFulAnalyser {
+    private static final String[][] METHOD_MAPPINGS = new String[][]{
+            new String[] {SpringMvcConstant.ANNOTATION_REQUEST_MAPPING, ""},
+            new String[] {SpringMvcConstant.ANNOTATION_GET_MAPPING, "GET"},
+            new String[] {SpringMvcConstant.ANNOTATION_POST_MAPPING, "POST"},
+            new String[] {SpringMvcConstant.ANNOTATION_PUT_MAPPING, "PUT"},
+            new String[] {SpringMvcConstant.ANNOTATION_PATCH_MAPPING, "PUTCH"},
+            new String[] {SpringMvcConstant.ANNOTATION_DELETE_MAPPING, "DELETE"},
+            new String[] {SpringMvcConstant.ANNOTATION_POST_MAPPING, "POST"}
+    };
 
     public static void analyse(ClassDoc classDoc) {
         //@RequestMapping
@@ -33,7 +43,7 @@ public class RestFulAnalyser {
 
         Tag[] tags = classDoc.tags();
         String chapterName = TagHelper.getStringValue(tags, "@chapter", DocletConstant.DEFAULT_CHAPTER_NAME);
-        Chapter chapter = BookHelper.getChapter(chapterName);
+        Chapter chapter = BookHelper.getChapter(StringHelper.firstLine(chapterName));
 
         String sectionName = TagHelper.getStringValue(tags, "@section", null);
         String comment = classDoc.commentText();
@@ -57,60 +67,36 @@ public class RestFulAnalyser {
         section.setRank(Integer.parseInt(rankStr));
         section.setComment(comment);
 
+        String deprecated = TagHelper.getStringValue(tags, "@deprecated", null);
+
         MethodDoc[] methods = classDoc.methods();
         for (MethodDoc method : methods) {
-            analyseApi(method, section, basePaths);
+            Api api = analyseApi(method, section, basePaths);
+            if(api != null && !Strings.isNullOrEmpty(deprecated) && Strings.isNullOrEmpty(api.getDeprecated())) {
+                api.setDeprecated(deprecated);
+            }
         }
     }
 
-    private static void analyseApi(MethodDoc methodDoc, Section section, List<String> basePaths) {
+    private static Api analyseApi(MethodDoc methodDoc, Section section, List<String> basePaths) {
         List<String> methods = null;
         AnnotationDesc.ElementValuePair[] vs = null;
 
-        //@RequestMapping
-        AnnotationDesc requestMappingAnnotation = AnnotationHelper.getAnnotation(methodDoc.annotations(), SpringMvcConstant.ANNOTATION_REQUEST_MAPPING);
-        if (requestMappingAnnotation != null) {
-            vs = requestMappingAnnotation.elementValues();
-            methods = RequestMappingAnnotationHelper.getRequestMappingAnnotationValues(vs, "method");
+        for (String[] methodMap : METHOD_MAPPINGS) {
+            AnnotationDesc requestMappingAnnotation = AnnotationHelper.getAnnotation(methodDoc.annotations(), methodMap[0]);
+            if (requestMappingAnnotation != null) {
+                vs = requestMappingAnnotation.elementValues();
+                if (Strings.isNullOrEmpty(methodMap[1])) {
+                    methods = RequestMappingAnnotationHelper.getRequestMappingAnnotationValues(vs, "method");
+                } else {
+                    methods = Lists.newArrayList(methodMap[1]);
+                }
+                break;
+            }
         }
 
-        //@GetMapping
-        requestMappingAnnotation = AnnotationHelper.getAnnotation(methodDoc.annotations(), SpringMvcConstant.ANNOTATION_GET_MAPPING);
-        if (requestMappingAnnotation != null) {
-            vs = requestMappingAnnotation.elementValues();
-            methods = Lists.newArrayList("GET");
-        }
-
-        //@PostMapping
-        requestMappingAnnotation = AnnotationHelper.getAnnotation(methodDoc.annotations(), SpringMvcConstant.ANNOTATION_POST_MAPPING);
-        if (requestMappingAnnotation != null) {
-            vs = requestMappingAnnotation.elementValues();
-            methods = Lists.newArrayList("POST");
-        }
-
-        //@PutMapping
-        requestMappingAnnotation = AnnotationHelper.getAnnotation(methodDoc.annotations(), SpringMvcConstant.ANNOTATION_PUT_MAPPING);
-        if (requestMappingAnnotation != null) {
-            vs = requestMappingAnnotation.elementValues();
-            methods = Lists.newArrayList("PUT");
-        }
-
-        //@PatchMapping
-        requestMappingAnnotation = AnnotationHelper.getAnnotation(methodDoc.annotations(), SpringMvcConstant.ANNOTATION_PATCH_MAPPING);
-        if (requestMappingAnnotation != null) {
-            vs = requestMappingAnnotation.elementValues();
-            methods = Lists.newArrayList("PATCH");
-        }
-
-        //@DELETE
-        requestMappingAnnotation = AnnotationHelper.getAnnotation(methodDoc.annotations(), SpringMvcConstant.ANNOTATION_DELETE_MAPPING);
-        if (requestMappingAnnotation != null) {
-            vs = requestMappingAnnotation.elementValues();
-            methods = Lists.newArrayList("DELETE");
-        }
-
-        if(vs == null) {
-            return;
+        if (vs == null) {
+            return null;
         }
         List<String> paths = RequestMappingAnnotationHelper.getRequestMappingAnnotationValues(vs, "value");
         if (paths.isEmpty()) {
@@ -133,6 +119,9 @@ public class RestFulAnalyser {
                         apiPath = basePath + "/" + path;
                     }
                 }
+                if (apiPath.length() > 0 && !apiPath.startsWith("/")) {
+                    apiPath = "/" + apiPath;
+                }
                 if (!apiPaths.contains(apiPath)) {
                     apiPaths.add(apiPath);
                 }
@@ -146,10 +135,10 @@ public class RestFulAnalyser {
             api.setMethods(methods);
         }
         //如果是RestFul接口，且参数有@RequestBody时，强制为 POST ??
-        // TODO 这里应该是加了个默认
-        if (hasRequestBodyParam(api) && (api.getMethods()==null||api.getMethods().size()==0)) {
+        if (hasRequestBodyParam(api) && (api.getMethods() == null || api.getMethods().isEmpty())) {
             api.setMethods(Lists.newArrayList("POST"));
         }
+        return api;
     }
 
     private static boolean hasRequestBodyParam(Api api) {
