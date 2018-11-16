@@ -65,10 +65,5 @@
             <artifactId>doclet-pojo</artifactId>
             <version>1.2-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>com.squareup.okhttp</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>2.7.1</version>
-        </dependency>
     </dependencies>
 </project>

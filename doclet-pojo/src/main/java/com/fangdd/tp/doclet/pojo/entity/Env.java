@@ -13,6 +13,11 @@ public class Env {
     private String id;
 
     /**
+     * 测试URL，用于检测链接是否可用，仅支持GET请求
+     */
+    private String restTest;
+
+    /**
      * 环境列表
      */
     private List<EnvItem> envs;
@@ -31,5 +36,13 @@ public class Env {
 
     public void setEnvs(List<EnvItem> envs) {
         this.envs = envs;
+    }
+
+    public String getRestTest() {
+        return restTest;
+    }
+
+    public void setRestTest(String restTest) {
+        this.restTest = restTest;
     }
 }

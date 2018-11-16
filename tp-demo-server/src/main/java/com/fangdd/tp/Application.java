@@ -1,6 +1,6 @@
 package com.fangdd.tp;
 
-import com.fangdd.tp.config.PidFileSync;
+import com.fangdd.tp.core.config.PidFileSync;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;

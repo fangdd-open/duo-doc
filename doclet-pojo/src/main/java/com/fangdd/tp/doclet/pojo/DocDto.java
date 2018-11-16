@@ -23,6 +23,11 @@ public class DocDto {
 
     private List<EnvItem> envs;
 
+    /**
+     * 各环境的restful测试接口
+     */
+    private String restTest;
+
     public Artifact getArtifact() {
         return artifact;
     }
@@ -69,5 +74,13 @@ public class DocDto {
 
     public void setEnvs(List<EnvItem> envs) {
         this.envs = envs;
+    }
+
+    public String getRestTest() {
+        return restTest;
+    }
+
+    public void setRestTest(String restTest) {
+        this.restTest = restTest;
     }
 }

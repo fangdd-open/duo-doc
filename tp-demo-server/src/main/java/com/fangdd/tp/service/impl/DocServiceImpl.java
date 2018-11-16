@@ -93,6 +93,7 @@ public class DocServiceImpl implements DocService {
         Env env = envDao.getEntityById(id);
         if(env != null && !CollectionUtils.isEmpty(env.getEnvs())) {
             docDto.setEnvs(env.getEnvs());
+            docDto.setRestTest(env.getRestTest());
         }
 
         docDto.setArtifact(doc);

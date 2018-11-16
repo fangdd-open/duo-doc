@@ -1,7 +1,7 @@
 package com.fangdd.tp.service.dubbo;
 
 import com.fangdd.tp.dto.Admin;
-import com.fangdd.tp.dto.User;
+import com.fangdd.tp.dto.TestUser;
 
 /**
  * 用户服务
@@ -17,7 +17,7 @@ public interface UserDubboService {
      * @param client 客户端信息
      * @return 用户基本信息
      */
-    User<Admin> get(Long id, String client);
+    TestUser<Admin> get(Long id, String client);
 
     /**
      * 通过用户ID获取用户信息
@@ -26,5 +26,5 @@ public interface UserDubboService {
      * @param id     用户ID
      * @return 用户基本信息
      */
-    User<Admin> get(Long id);
+    TestUser<Admin> get(Long id);
 }

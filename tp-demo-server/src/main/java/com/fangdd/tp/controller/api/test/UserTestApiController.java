@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 18/11/8
  */
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/test/user")
 public class UserTestApiController {
     @GetMapping("/{id:\\d+}")
     public BaseResponse<Seoer> getAdmin2(@PathVariable Long id) {

@@ -5,7 +5,8 @@ import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.config.utils.ReferenceConfigCache;
 import com.alibaba.dubbo.rpc.service.GenericService;
-import com.fangdd.tp.config.DubboConfig;
+import com.fangdd.tp.core.config.DubboConfig;
+import com.fangdd.tp.core.exceptions.DocletException;
 import com.fangdd.tp.doclet.enums.EnvEnum;
 import com.google.common.collect.Maps;
 
