@@ -6,7 +6,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 用户基本信息
@@ -14,7 +13,7 @@ import java.util.List;
  * @auth ycoe
  * @date 18/1/5
  */
-public class User<T> extends Person {
+public class User<T> {
     /**
      * 用户ID
      *
@@ -31,7 +30,6 @@ public class User<T> extends Person {
 
     /**
      * 业务状态
-     *
      */
     private BillStatus status;
 
@@ -43,14 +41,9 @@ public class User<T> extends Person {
     private String address;
 
     /**
-     * 角色
-     */
-    private List<T> roles;
-
-    /**
      * 上级用户
      */
-    private User<T> parent;
+    private T parent;
 
     /**
      * 更新时间
@@ -88,22 +81,6 @@ public class User<T> extends Person {
         this.address = address;
     }
 
-    public List<T> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<T> roles) {
-        this.roles = roles;
-    }
-
-    public User<T> getParent() {
-        return parent;
-    }
-
-    public void setParent(User<T> parent) {
-        this.parent = parent;
-    }
-
     public Date getUpdateTime() {
         return updateTime;
     }
@@ -126,5 +103,13 @@ public class User<T> extends Person {
 
     public void setStatus(BillStatus status) {
         this.status = status;
+    }
+
+    public T getParent() {
+        return parent;
+    }
+
+    public void setParent(T parent) {
+        this.parent = parent;
     }
 }

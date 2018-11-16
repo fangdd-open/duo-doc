@@ -1,6 +1,8 @@
 package com.fangdd.tp.doclet.pojo;
 
 
+import com.fangdd.tp.doclet.pojo.entity.EnvItem;
+
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +20,8 @@ public class DocDto {
     private String docletVersion;
 
     private Map<String, String> markdownMaps;
+
+    private List<EnvItem> envs;
 
     public Artifact getArtifact() {
         return artifact;
@@ -57,5 +61,13 @@ public class DocDto {
 
     public void setMarkdownMaps(Map<String, String> markdownMaps) {
         this.markdownMaps = markdownMaps;
+    }
+
+    public List<EnvItem> getEnvs() {
+        return envs;
+    }
+
+    public void setEnvs(List<EnvItem> envs) {
+        this.envs = envs;
     }
 }

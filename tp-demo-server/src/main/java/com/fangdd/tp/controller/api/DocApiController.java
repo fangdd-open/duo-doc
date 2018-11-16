@@ -50,7 +50,7 @@ public class DocApiController {
             docStr = GzipHelper.decompress(request);
         } catch (IOException e) {
             logger.error("gzip解压失败！", e);
-            return BaseResponse.error(501, "发生未知错误！");
+            return BaseResponse.error(501, "gzip解压失败！");
         }
 
         String md5 = MD5Utils.md5(docStr);

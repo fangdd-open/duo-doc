@@ -39,11 +39,12 @@ public class TpDocletTest {
         projectPath = System.getProperty("user.dir");
 
         String projectSrcDirs = getProjectSrcDirs();
+        System.out.println("扫描目录：" + projectSrcDirs);
         String[] docArgs = new String[]{
 //                "-public",
 //                "-d",
 //                "/Users/ycoe/Projects/fdd/tp/tp-doc/tp-demo-server/target/docs",
-                "com.fangdd.tp.controller.api",
+                "com.fangdd.tp.controller.api.test",
 //                "com.fangdd.tp.service.impl.test",
                 "-subpackages",
                 projectPath + "/server/target/tp-server.jar",

@@ -30,12 +30,12 @@ public class TpDoclet extends Doclet {
         String baseDir = System.getProperty("basedir", "/Users/ycoe/Projects/fdd/tp/tp-doc/tp-demo-server");
         //下面在开发测试时把注释打开`
 //        String exportType = System.getProperty("exportType", "mongodb");
-//        String exportType = System.getProperty("exportType", "console");
-//        String server = System.getProperty("server", "http://127.0.0.1:17010");
+        String exportType = System.getProperty("exportType", "console");
+        String server = System.getProperty("server", "http://127.0.0.1:17010");
 //        String server = System.getProperty("server", "http://127.0.0.1:17010"); //提交到本地，用于测试
 
-        String exportType = System.getProperty("exportType", "web");
-        String server = System.getProperty("server", "http://tp-doc.fangdd.net");
+//        String exportType = System.getProperty("exportType", "web");
+//        String server = System.getProperty("server", "http://tp-doc.fangdd.net");
         BookHelper.setServer(server);
 
         //读取主服务的信息
