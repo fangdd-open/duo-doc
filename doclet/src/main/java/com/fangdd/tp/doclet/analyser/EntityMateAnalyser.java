@@ -9,7 +9,6 @@ import com.fangdd.tp.doclet.helper.TagHelper;
 import com.fangdd.tp.doclet.pojo.Entity;
 import com.fangdd.tp.doclet.pojo.EntityRef;
 import com.fangdd.tp.doclet.render.EntityHandle;
-import com.google.common.base.Enums;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -48,7 +47,6 @@ public class EntityMateAnalyser {
         Entity entity = getEntity(type, parameterizedTypeMap);
         EntityRef entityRef = new EntityRef();
         entityRef.setEntityName(entity.getName());
-
         return entityRef;
     }
 
@@ -62,7 +60,7 @@ public class EntityMateAnalyser {
 
         List<EntityRef> parameterizedEntityRefList = Lists.newArrayList();
         Map<String, Type> parameterizedTypeMap = Maps.newHashMap();
-        if (className.contains("<") || className.contains(">")) {
+        if (className.contains("<") || className.contains(">") && parentParameterizedTypeMap != null) {
             //有泛型
             ParameterizedType parameterizedType = type.asParameterizedType();
             if (parameterizedType != null) {
