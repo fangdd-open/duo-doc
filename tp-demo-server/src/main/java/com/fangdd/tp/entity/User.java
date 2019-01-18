@@ -21,9 +21,9 @@ public class User {
     private String name;
 
     /**
-     * 所属团队
+     * 所属网站
      */
-    private List<String> teams;
+    private List<String> sites;
 
     /**
      * 文档所有者（管理员）
@@ -71,9 +71,9 @@ public class User {
     private List<AuthInfo> auths;
 
     /**
-     * 当前团队
+     * 当前网站
      */
-    private Team currentTeam;
+    private Site currentSite;
 
     /**
      * 用户可用的登录授权服务代码s
@@ -96,12 +96,12 @@ public class User {
         this.name = name;
     }
 
-    public List<String> getTeams() {
-        return teams;
+    public List<String> getSites() {
+        return sites;
     }
 
-    public void setTeams(List<String> teams) {
-        this.teams = teams;
+    public void setSites(List<String> sites) {
+        this.sites = sites;
     }
 
     public List<String> getDocsOwner() {
@@ -176,12 +176,12 @@ public class User {
         this.auths = auths;
     }
 
-    public Team getCurrentTeam() {
-        return currentTeam;
+    public Site getCurrentSite() {
+        return currentSite;
     }
 
-    public void setCurrentTeam(Team currentTeam) {
-        this.currentTeam = currentTeam;
+    public void setCurrentSite(Site currentSite) {
+        this.currentSite = currentSite;
     }
 
     public List<String> getAuthCodes() {

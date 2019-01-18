@@ -18,9 +18,14 @@ public class Env {
     private String restTest;
 
     /**
-     * 环境列表
+     * restful环境列表
      */
-    private List<EnvItem> envs;
+    private List<EnvItem> restEnvs;
+
+    /**
+     * dubbo环境列表
+     */
+    private List<EnvItem> dubboEnvs;
 
     public String getId() {
         return id;
@@ -30,12 +35,20 @@ public class Env {
         this.id = id;
     }
 
-    public List<EnvItem> getEnvs() {
-        return envs;
+    public List<EnvItem> getRestEnvs() {
+        return restEnvs;
     }
 
-    public void setEnvs(List<EnvItem> envs) {
-        this.envs = envs;
+    public void setRestEnvs(List<EnvItem> restEnvs) {
+        this.restEnvs = restEnvs;
+    }
+
+    public List<EnvItem> getDubboEnvs() {
+        return dubboEnvs;
+    }
+
+    public void setDubboEnvs(List<EnvItem> dubboEnvs) {
+        this.dubboEnvs = dubboEnvs;
     }
 
     public String getRestTest() {

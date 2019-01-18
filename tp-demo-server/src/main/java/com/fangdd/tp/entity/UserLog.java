@@ -17,7 +17,7 @@ public class UserLog {
     /**
      * 团队代码
      */
-    private String team;
+    private String site;
 
     /**
      * 用户ID
@@ -63,12 +63,12 @@ public class UserLog {
         this.id = id;
     }
 
-    public String getTeam() {
-        return team;
+    public String getSite() {
+        return site;
     }
 
-    public void setTeam(String team) {
-        this.team = team;
+    public void setSite(String site) {
+        this.site = site;
     }
 
     public Long getUserId() {

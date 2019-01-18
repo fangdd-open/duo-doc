@@ -7,6 +7,8 @@ import com.fangdd.tp.service.EvnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+
 /**
  * @chapter 文档接口
  * @section 环境接口
@@ -38,8 +40,7 @@ public class EnvApiController {
      * @return
      */
     @GetMapping("/{id}")
-    public BaseResponse<Env> get(@PathVariable String id) {
-        Env env = evnService.get(id);
-        return BaseResponse.success(env);
+    public Env get(@PathVariable String id) {
+        return evnService.get(id);
     }
 }

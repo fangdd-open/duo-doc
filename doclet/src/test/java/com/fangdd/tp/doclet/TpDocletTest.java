@@ -19,7 +19,7 @@ public class TpDocletTest {
      * 需要引入的包
      */
     private static final String[] jars = new String[]{
-            "com/alibaba/dubbo/2.8.4/dubbo-2.8.4.jar",
+            "com/alibaba/dubbo/2.8.5/dubbo-2.8.5.jar",
             "org/springframework/boot/spring-boot/1.5.6.RELEASE/spring-boot-1.5.6.RELEASE.jar",
             "org/springframework/boot/spring-boot-autoconfigure/1.5.6.RELEASE/spring-boot-autoconfigure-1.5.6.RELEASE.jar",
             "org/springframework/spring-web/4.3.10.RELEASE/spring-web-4.3.10.RELEASE.jar",
@@ -44,8 +44,8 @@ public class TpDocletTest {
 //                "-public",
 //                "-d",
 //                "/Users/ycoe/Projects/fdd/tp/tp-doc/tp-demo-server/target/docs",
-                "com.fangdd.tp.controller.api.test",
-//                "com.fangdd.tp.service.impl.test",
+                "com.fangdd.doclet.test.service.impl",
+
                 "-subpackages",
                 projectPath + "/server/target/tp-server.jar",
                 "-cp",
@@ -78,6 +78,10 @@ public class TpDocletTest {
         for (File f : fs) {
             if (f.isFile())
                 continue;
+
+            if (!f.getName().contains("test")) {
+                continue;
+            }
 
             File srcDir = new File(f.getAbsolutePath() + "/src/main/java");
             if (!srcDir.exists())

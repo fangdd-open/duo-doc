@@ -8,14 +8,14 @@ import java.util.Map;
  */
 public class OAuth2Conf {
     /**
-     * ID： {team}-{oauth}
+     * ID： {site}-{oauth}
      */
     private String id;
 
     /**
-     * 团队名称
+     * 网站名称
      */
-    private String team;
+    private String site;
 
     /**
      * OAuth2服务名称
@@ -35,12 +35,12 @@ public class OAuth2Conf {
         this.id = id;
     }
 
-    public String getTeam() {
-        return team;
+    public String getSite() {
+        return site;
     }
 
-    public void setTeam(String team) {
-        this.team = team;
+    public void setSite(String site) {
+        this.site = site;
     }
 
     public String getOauth() {

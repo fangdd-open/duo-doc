@@ -8,7 +8,7 @@ public class OAuth2TokenReq {
     /**
      * 团队代码
      */
-    private String team;
+    private String site;
 
     /**
      * 三方平台回调返回的token
@@ -25,12 +25,12 @@ public class OAuth2TokenReq {
      */
     private String returnUrl;
 
-    public String getTeam() {
-        return team;
+    public String getSite() {
+        return site;
     }
 
-    public void setTeam(String team) {
-        this.team = team;
+    public void setSite(String site) {
+        this.site = site;
     }
 
     public String getToken() {

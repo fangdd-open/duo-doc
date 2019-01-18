@@ -21,7 +21,7 @@ public class TokenInfo {
 
     private String userId;
 
-    private String team;
+    private String site;
 
     public String getAccessToken() {
         return accessToken;
@@ -63,11 +63,11 @@ public class TokenInfo {
         this.userId = userId;
     }
 
-    public String getTeam() {
-        return team;
+    public String getSite() {
+        return site;
     }
 
-    public void setTeam(String team) {
-        this.team = team;
+    public void setSite(String site) {
+        this.site = site;
     }
 }

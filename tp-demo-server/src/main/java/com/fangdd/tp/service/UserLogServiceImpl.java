@@ -24,7 +24,7 @@ public class UserLogServiceImpl implements UserLogService {
             return null;
         }
         UserLog userLog = new UserLog();
-        userLog.setTeam(user.getCurrentTeam().getId());
+        userLog.setSite(user.getCurrentSite().getId());
         userLog.setUserId(user.getId());
         userLog.setAction(log.getAction().getAction());
         userLog.setTitle(log.getAction().getActionName());

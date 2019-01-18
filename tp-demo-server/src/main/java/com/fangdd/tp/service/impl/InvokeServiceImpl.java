@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 
 /**
@@ -30,9 +32,8 @@ public class InvokeServiceImpl implements InvokeService {
     /**
      * 接口调用
      *
-     *
      * @param user
-     * @param req 接口参数
+     * @param req  接口参数
      * @return
      */
     @Override
@@ -70,7 +71,9 @@ public class InvokeServiceImpl implements InvokeService {
         } catch (IOException e) {
             InvokeResultDto result = new InvokeResultDto();
             result.setStatus(0);
+            result.setResponseAtMillis(System.currentTimeMillis() - t1);
             logger.warn("调用发生错误，query:{}", request.toString(), e);
+            result.setResponseBody(e.getMessage());
             return result;
         }
     }

@@ -21,13 +21,6 @@ public class DocDto {
 
     private Map<String, String> markdownMaps;
 
-    private List<EnvItem> envs;
-
-    /**
-     * 各环境的restful测试接口
-     */
-    private String restTest;
-
     public Artifact getArtifact() {
         return artifact;
     }
@@ -66,21 +59,5 @@ public class DocDto {
 
     public void setMarkdownMaps(Map<String, String> markdownMaps) {
         this.markdownMaps = markdownMaps;
-    }
-
-    public List<EnvItem> getEnvs() {
-        return envs;
-    }
-
-    public void setEnvs(List<EnvItem> envs) {
-        this.envs = envs;
-    }
-
-    public String getRestTest() {
-        return restTest;
-    }
-
-    public void setRestTest(String restTest) {
-        this.restTest = restTest;
     }
 }

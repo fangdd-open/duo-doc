@@ -4,13 +4,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.fangdd.tp.core.exceptions.Http401Exception;
 import com.fangdd.tp.core.exceptions.TpServerException;
 import com.fangdd.tp.dao.OAuth2ConfDao;
-import com.fangdd.tp.dto.oauth.OAuth2UserInfo;
-import com.fangdd.tp.dto.request.InvokeData;
 import com.fangdd.tp.dto.oauth.OAuth2ServiceInfo;
 import com.fangdd.tp.dto.oauth.OAuth2TokenReq;
+import com.fangdd.tp.dto.oauth.OAuth2UserInfo;
+import com.fangdd.tp.dto.oauth.TokenInfo;
+import com.fangdd.tp.dto.request.InvokeData;
 import com.fangdd.tp.dto.request.RequestParam;
 import com.fangdd.tp.dto.response.InvokeResultDto;
-import com.fangdd.tp.dto.oauth.TokenInfo;
 import com.fangdd.tp.entity.OAuth2Conf;
 import com.fangdd.tp.entity.User;
 import com.fangdd.tp.service.InvokeService;
@@ -54,13 +54,13 @@ public abstract class BaseOAuth2Service implements OAuth2Service {
     /**
      * 获取登录链接
      *
-     * @param team      团队代码
+     * @param site      网站代码
      * @param returnUrl 登录成功后跳转的链接
      * @return
      */
     @Override
-    public String getLoginUrl(String team, String returnUrl) {
-        OAuth2ServiceInfo serverInfo = getOAuth2ServiceInfo(team);
+    public String getLoginUrl(String site, String returnUrl) {
+        OAuth2ServiceInfo serverInfo = getOAuth2ServiceInfo(site);
         return getOAuth2LoginUrl(serverInfo, returnUrl);
     }
 
@@ -79,7 +79,7 @@ public abstract class BaseOAuth2Service implements OAuth2Service {
             throw new TpServerException(502, INVALID_REQUEST);
         }
 
-        OAuth2ServiceInfo serviceInfo = getOAuth2ServiceInfo(request.getTeam());
+        OAuth2ServiceInfo serviceInfo = getOAuth2ServiceInfo(request.getSite());
         InvokeData invokeRequest = new InvokeData();
         invokeRequest.setUrl(serviceInfo.getAccessTokenApi());
         invokeRequest.setMethod(HttpMethod.GET.name());
@@ -97,7 +97,7 @@ public abstract class BaseOAuth2Service implements OAuth2Service {
         logger.info("tokenInfo:{}", body);
 
         TokenInfo tokenInfo = JSONObject.parseObject(body, TokenInfo.class);
-        tokenInfo.setTeam(request.getTeam());
+        tokenInfo.setSite(request.getSite());
 
         User user = userService.getByAccessToken(getOAuth2ServiceCode(), tokenInfo);
         if (user != null) {
@@ -192,8 +192,8 @@ public abstract class BaseOAuth2Service implements OAuth2Service {
         return param;
     }
 
-    private OAuth2ServiceInfo getOAuth2ServiceInfo(String team) {
-        String key = team + "-" + getOAuth2ServiceCode();
+    private OAuth2ServiceInfo getOAuth2ServiceInfo(String site) {
+        String key = site + "-" + getOAuth2ServiceCode();
         OAuth2ServiceInfo info = AUTH_SERVICE_INFO_MAP.get(key);
         if (info != null) {
             return info;

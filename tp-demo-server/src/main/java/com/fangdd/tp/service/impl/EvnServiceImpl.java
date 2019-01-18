@@ -70,7 +70,7 @@ public class EvnServiceImpl implements EvnService {
             //新增
             env = new Env();
             env.setId(id);
-            env.setEnvs(items);
+            env.setRestEnvs(items);
             envDao.insertOne(env);
         } else {
             envDao.updateEntity(env);

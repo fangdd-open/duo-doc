@@ -40,7 +40,12 @@ public class InvokeApiController {
     @PostMapping
     public BaseResponse<InvokeResultDto> invoke(@RequestBody InvokeData request) {
         User user = UserContextHelper.getUser();
-        return BaseResponse.success(invokeService.invoke(user, request));
+        InvokeResultDto invokeResult = invokeService.invoke(user, request);
+        if (invokeResult.getStatus() != 200) {
+            return BaseResponse.error(invokeResult.getStatus(), "调用失败!", invokeResult);
+        } else {
+            return BaseResponse.success(invokeResult);
+        }
     }
 
     /**

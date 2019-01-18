@@ -1,7 +1,7 @@
 package com.fangdd.tp.helper;
 
 import com.fangdd.tp.dto.UserContent;
-import com.fangdd.tp.entity.Team;
+import com.fangdd.tp.entity.Site;
 import com.fangdd.tp.entity.User;
 
 /**
@@ -27,7 +27,7 @@ public class UserContextHelper {
         return content.getUser();
     }
 
-    public static Team getTeam() {
-        return USER_CONTEXT_THREAD_LOCAL.get().getTeam();
+    public static Site getSite() {
+        return USER_CONTEXT_THREAD_LOCAL.get().getSite();
     }
 }

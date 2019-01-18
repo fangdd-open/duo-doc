@@ -6,7 +6,6 @@ import com.fangdd.tp.doclet.pojo.Chapter;
 import com.fangdd.tp.doclet.pojo.DocDto;
 import com.fangdd.tp.doclet.pojo.Entity;
 import com.fangdd.tp.doclet.pojo.entity.DocLog;
-import com.fangdd.tp.doclet.pojo.entity.Env;
 import com.fangdd.tp.doclet.pojo.entity.MarkdownDoc;
 import com.fangdd.tp.dto.request.DocLogQuery;
 import com.fangdd.tp.dto.request.DocQuery;
@@ -22,7 +21,6 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -89,12 +87,6 @@ public class DocServiceImpl implements DocService {
         markdownDocDao
                 .find(versionFilter)
                 .forEach((Block<? super MarkdownDoc>) markdownDoc -> markdownMap.put(markdownDoc.getName(), markdownDoc.getMarkdown()));
-
-        Env env = envDao.getEntityById(id);
-        if(env != null && !CollectionUtils.isEmpty(env.getEnvs())) {
-            docDto.setEnvs(env.getEnvs());
-            docDto.setRestTest(env.getRestTest());
-        }
 
         docDto.setArtifact(doc);
         docDto.setChapters(chapters);

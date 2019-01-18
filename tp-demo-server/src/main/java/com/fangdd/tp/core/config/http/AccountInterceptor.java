@@ -5,11 +5,11 @@ import com.fangdd.tp.core.exceptions.Http401Exception;
 import com.fangdd.tp.core.exceptions.Http403Exception;
 import com.fangdd.tp.core.exceptions.TpServerException;
 import com.fangdd.tp.dto.UserContent;
-import com.fangdd.tp.entity.Team;
+import com.fangdd.tp.entity.Site;
 import com.fangdd.tp.entity.User;
 import com.fangdd.tp.enums.RoleEnum;
 import com.fangdd.tp.helper.UserContextHelper;
-import com.fangdd.tp.service.TeamService;
+import com.fangdd.tp.service.SiteService;
 import com.fangdd.tp.service.UserService;
 import com.google.common.base.Strings;
 import com.google.common.cache.Cache;
@@ -34,7 +34,7 @@ public class AccountInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(AccountInterceptor.class);
     private static final String AUTH_TOKEN = "auth-token";
 
-    private static final Cache<String, Team> CACHE = CacheBuilder.newBuilder()
+    private static final Cache<String, Site> CACHE = CacheBuilder.newBuilder()
             .expireAfterWrite(1, TimeUnit.MINUTES) //5分钟后过期
             .maximumSize(10000) //最多1万个key
             .build();
@@ -42,15 +42,15 @@ public class AccountInterceptor implements HandlerInterceptor {
 
     private UserService userService;
 
-    private TeamService teamService;
+    private SiteService siteService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         UserContent userContent = new UserContent();
 
         String host = request.getHeader(HOST);
-        Team team = getTeam(host);
-        userContent.setTeam(team);
+        Site site = getSite(host);
+        userContent.setSite(site);
 
         User user = null;
         String authToken = request.getHeader(AUTH_TOKEN);
@@ -62,7 +62,7 @@ public class AccountInterceptor implements HandlerInterceptor {
                     authInfo.setRefreshToken(null);
                     authInfo.setGid(null);
                 });
-                user.setCurrentTeam(team);
+                user.setCurrentSite(site);
                 userContent.setUser(user);
             }
         }
@@ -81,19 +81,19 @@ public class AccountInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    private Team getTeam(String domain) {
-        Team team;
+    private Site getSite(String domain) {
+        Site site;
         try {
-            team = CACHE.get(domain, () -> teamService.getByHost(domain));
+            site = CACHE.get(domain, () -> siteService.getByHost(domain));
         } catch (ExecutionException e) {
-            logger.error("获取team信息失败：domain={}", domain, e);
-            throw new TpServerException(500, "获取team信息失败");
+            logger.error("获取site信息失败：domain={}", domain, e);
+            throw new TpServerException(500, "获取site信息失败");
         } catch (CacheLoader.InvalidCacheLoadException e) {
             //返回了空对象
             throw new TpServerException(404, "无效域名！", e);
         }
         
-        return team;
+        return site;
     }
 
     private boolean checkAccount(User user, Account account) {
@@ -122,7 +122,7 @@ public class AccountInterceptor implements HandlerInterceptor {
         this.userService = userService;
     }
 
-    public void setTeamService(TeamService teamService) {
-        this.teamService = teamService;
+    public void setSiteService(SiteService siteService) {
+        this.siteService = siteService;
     }
 }

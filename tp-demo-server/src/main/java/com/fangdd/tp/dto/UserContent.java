@@ -1,6 +1,6 @@
 package com.fangdd.tp.dto;
 
-import com.fangdd.tp.entity.Team;
+import com.fangdd.tp.entity.Site;
 import com.fangdd.tp.entity.User;
 
 /**
@@ -10,7 +10,7 @@ import com.fangdd.tp.entity.User;
 public class UserContent {
     private User user;
 
-    private Team team;
+    private Site site;
 
     public User getUser() {
         return user;
@@ -20,11 +20,11 @@ public class UserContent {
         this.user = user;
     }
 
-    public Team getTeam() {
-        return team;
+    public Site getSite() {
+        return site;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
+    public void setSite(Site site) {
+        this.site = site;
     }
 }

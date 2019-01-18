@@ -4,7 +4,7 @@ import com.fangdd.tp.core.exceptions.TpServerException;
 import com.fangdd.tp.dto.BaseResponse;
 import com.fangdd.tp.dto.UserContent;
 import com.fangdd.tp.dto.oauth.OAuth2TokenReq;
-import com.fangdd.tp.entity.Team;
+import com.fangdd.tp.entity.Site;
 import com.fangdd.tp.entity.User;
 import com.fangdd.tp.helper.UserContextHelper;
 import com.fangdd.tp.service.OAuth2Service;
@@ -48,8 +48,8 @@ public class OAuth2ApiController {
             throw new TpServerException(404, "no oauth support");
         }
 
-        Team team = UserContextHelper.getTeam();
-        String url = oAuth2Service.getLoginUrl(team.getId(), returnUrl);
+        Site site = UserContextHelper.getSite();
+        String url = oAuth2Service.getLoginUrl(site.getId(), returnUrl);
         return BaseResponse.success(url);
     }
 
@@ -89,7 +89,7 @@ public class OAuth2ApiController {
         String code = req.getParameter("code");
         UserContent content = UserContextHelper.getUserContext();
         OAuth2TokenReq request = new OAuth2TokenReq();
-        request.setTeam(content.getTeam().getId());
+        request.setSite(content.getSite().getId());
         request.setToken(code);
         request.setState(state);
         request.setReturnUrl("/user/oauth");
@@ -126,8 +126,8 @@ public class OAuth2ApiController {
      */
     @PostMapping
     public BaseResponse<User> doLogin(@RequestBody OAuth2TokenReq tokenReq) {
-        String team = tokenReq.getTeam();
-        OAuth2Service oAuth2Service = getOAuth2Service(team);
+        String site = tokenReq.getSite();
+        OAuth2Service oAuth2Service = getOAuth2Service(site);
         if (oAuth2Service == null) {
             return BaseResponse.error(404, "当前账户不支持OAuth2登录！");
         }

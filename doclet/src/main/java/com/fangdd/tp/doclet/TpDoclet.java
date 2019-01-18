@@ -27,7 +27,7 @@ import java.util.Map;
  */
 public class TpDoclet extends Doclet {
     public static boolean start(RootDoc root) {
-        String baseDir = System.getProperty("basedir", "/Users/ycoe/Projects/fdd/tp/tp-doc/tp-demo-server");
+        String baseDir = System.getProperty("basedir", "/Users/ycoe/Projects/fdd/tp/tp-doc/doclet-test");
         //下面在开发测试时把注释打开`
 //        String exportType = System.getProperty("exportType", "mongodb");
         String exportType = System.getProperty("exportType", "console");

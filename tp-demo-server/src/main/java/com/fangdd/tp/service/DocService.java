@@ -84,6 +84,7 @@ public interface DocService {
 
     /**
      * 检查文档列表是否有更新
+     *
      * @param lastDocVersion 最新的版本号
      * @return
      */

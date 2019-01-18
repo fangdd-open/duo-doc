@@ -1,6 +1,6 @@
 package com.fangdd.tp.doclet.helper;
 
-import com.squareup.okhttp.*;
+import okhttp3.*;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;

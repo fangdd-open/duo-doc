@@ -1,7 +1,5 @@
 package com.fangdd.tp.service.impl;
 
-import com.fangdd.tp.core.exceptions.Http401Exception;
-import com.fangdd.tp.core.exceptions.TpServerException;
 import com.fangdd.tp.dao.UserDao;
 import com.fangdd.tp.dto.oauth.OAuth2UserInfo;
 import com.fangdd.tp.dto.oauth.TokenInfo;
@@ -102,7 +100,7 @@ public class UserServiceImpl implements UserService {
     public User regist(String code, TokenInfo tokenInfo, OAuth2UserInfo userInfo) {
         User user = new User();
         user.setName(userInfo.getName());
-        user.setTeams(Lists.newArrayList(tokenInfo.getTeam()));
+        user.setSites(Lists.newArrayList(tokenInfo.getSite()));
         user.setRole(RoleEnum.USER.getRole());
         user.setToken(UUIDUtils.generateUUID());
         long now = System.currentTimeMillis();

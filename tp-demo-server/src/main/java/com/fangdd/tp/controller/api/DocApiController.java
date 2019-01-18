@@ -1,14 +1,17 @@
 package com.fangdd.tp.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fangdd.tp.core.annotation.Account;
 import com.fangdd.tp.doclet.pojo.Artifact;
 import com.fangdd.tp.doclet.pojo.DocDto;
 import com.fangdd.tp.doclet.pojo.entity.DocLog;
 import com.fangdd.tp.dto.BaseResponse;
 import com.fangdd.tp.dto.request.DocLogQuery;
 import com.fangdd.tp.dto.request.DocQuery;
+import com.fangdd.tp.entity.User;
 import com.fangdd.tp.helper.GzipHelper;
 import com.fangdd.tp.helper.MD5Utils;
+import com.fangdd.tp.helper.UserContextHelper;
 import com.fangdd.tp.service.DocImportService;
 import com.fangdd.tp.service.DocService;
 import org.slf4j.Logger;
