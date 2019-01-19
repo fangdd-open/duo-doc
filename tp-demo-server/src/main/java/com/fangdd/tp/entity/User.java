@@ -76,7 +76,7 @@ public class User {
     private Site currentSite;
 
     /**
-     * 用户可用的登录授权服务代码s
+     * 用户可用的登录授权服务代码
      */
     private List<String> authCodes;
 

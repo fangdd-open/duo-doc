@@ -1,9 +1,8 @@
 package com.fangdd.tp.dto.response;
 
-import com.fangdd.tp.dto.request.RequestParam;
+import com.fangdd.tp.doclet.pojo.entity.RequestParam;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @auth ycoe

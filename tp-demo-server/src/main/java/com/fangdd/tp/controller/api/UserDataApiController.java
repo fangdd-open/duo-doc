@@ -3,10 +3,13 @@ package com.fangdd.tp.controller.api;
 import com.fangdd.tp.core.annotation.Account;
 import com.fangdd.tp.dto.request.ExpandData;
 import com.fangdd.tp.entity.User;
+import com.fangdd.tp.entity.UserData;
 import com.fangdd.tp.helper.UserContextHelper;
 import com.fangdd.tp.service.UserDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @chapter 用户接口
@@ -19,6 +22,13 @@ import org.springframework.web.bind.annotation.*;
 public class UserDataApiController {
     @Autowired
     private UserDataService userDataService;
+
+    @Account
+    @GetMapping("/data")
+    public UserData get() {
+        User user = UserContextHelper.getUser();
+        return userDataService.get(user);
+    }
 
     /**
      * @param docId 文档ID
@@ -55,6 +65,20 @@ public class UserDataApiController {
     public Boolean setExpand(@RequestBody ExpandData data) {
         User user = UserContextHelper.getUser();
         userDataService.setExpand(data, user);
+        return true;
+    }
+
+    /**
+     * 批量保存菜单展开状态
+     *
+     * @param data 批量状态数据
+     * @return
+     */
+    @Account
+    @PostMapping("/menu-expands")
+    public Boolean setExpands(@RequestBody List<ExpandData> data) {
+        User user = UserContextHelper.getUser();
+        data.forEach(item -> userDataService.setExpand(item, user));
         return true;
     }
 }

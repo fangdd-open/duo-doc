@@ -5,13 +5,13 @@ import com.fangdd.tp.dao.EnvDao;
 import com.fangdd.tp.doclet.enums.EnvEnum;
 import com.fangdd.tp.doclet.pojo.entity.Env;
 import com.fangdd.tp.doclet.pojo.entity.EnvItem;
-import com.fangdd.tp.dto.request.EnvSaveDto;
+import com.fangdd.tp.doclet.pojo.entity.RequestParam;
 import com.fangdd.tp.service.EvnService;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.mongodb.client.model.Filters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -24,46 +24,26 @@ public class EvnServiceImpl implements EvnService {
     @Autowired
     private EnvDao envDao;
 
-    /**
-     * 保存环境
-     *
-     * @param request 环境变量
-     * @return
-     */
     @Override
-    public Env save(EnvSaveDto request) {
+    public boolean save(Env request) {
         String id = request.getId();
         if (Strings.isNullOrEmpty(id)) {
             throw new DocletException("id不能为空！");
         }
 
-        List<EnvItem> envs = request.getEnvs();
-        if (envs == null || envs.isEmpty()) {
+        List<EnvItem> restEnvs = request.getRestEnvs();
+        if (restEnvs == null || restEnvs.isEmpty()) {
             throw new DocletException("项目环境不能为空！");
         }
 
         List<EnvItem> items = Lists.newArrayList();
-        envs.forEach(envItem -> {
-            String url = envItem.getUrl();
-            if (Strings.isNullOrEmpty(url)) {
+        restEnvs.forEach(envItem -> {
+            EnvItem item = getEnvItem(envItem);
+            if (item == null) {
                 return;
             }
-            String code = envItem.getCode();
-            if (Strings.isNullOrEmpty(code)) {
-                throw new DocletException("项目环境代码不能为空！");
-            }
-
-            EnvEnum envEnum = EnvEnum.valueOf(code.toLowerCase());
-            EnvItem item = new EnvItem();
-            item.setCode(envEnum.name());
-            item.setName(envEnum.getName());
-            item.setUrl(url);
             items.add(item);
         });
-        if (items.isEmpty()) {
-            envDao.deleteOne(Filters.eq("_id", id));
-            return null;
-        }
 
         Env env = get(id);
         if (env == null) {
@@ -71,12 +51,48 @@ public class EvnServiceImpl implements EvnService {
             env = new Env();
             env.setId(id);
             env.setRestEnvs(items);
+            env.setRestTest(request.getRestTest());
             envDao.insertOne(env);
         } else {
+            env.setRestEnvs(items);
+            env.setRestTest(request.getRestTest());
             envDao.updateEntity(env);
         }
+        return true;
+    }
 
-        return env;
+    private EnvItem getEnvItem(EnvItem envItem) {
+        String url = envItem.getUrl();
+        if (Strings.isNullOrEmpty(url)) {
+            return null;
+        }
+        String code = envItem.getCode();
+        if (Strings.isNullOrEmpty(code)) {
+            throw new DocletException("项目环境代码不能为空！");
+        }
+
+        EnvEnum envEnum = EnvEnum.valueOf(code.toUpperCase());
+        EnvItem item = new EnvItem();
+        item.setCode(envEnum.name());
+        item.setName(envItem.getName());
+        item.setUrl(url);
+        if (!CollectionUtils.isEmpty(envItem.getHeaders())) {
+            List<RequestParam> headers = Lists.newArrayList();
+            envItem.getHeaders()
+                    .stream()
+                    .filter(header -> !Strings.isNullOrEmpty(header.getKey()))
+                    .forEach(header -> {
+                        RequestParam h = new RequestParam();
+                        h.setKey(header.getKey());
+                        h.setValue(header.getValue());
+                        h.setDescription(header.getDescription());
+                        headers.add(h);
+                    });
+            if (!headers.isEmpty()) {
+                item.setHeaders(headers);
+            }
+        }
+        return item;
     }
 
     /**

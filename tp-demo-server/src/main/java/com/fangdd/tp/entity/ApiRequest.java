@@ -1,7 +1,7 @@
 package com.fangdd.tp.entity;
 
 import com.fangdd.tp.dto.request.RequestBodyParam;
-import com.fangdd.tp.dto.request.RequestParam;
+import com.fangdd.tp.doclet.pojo.entity.RequestParam;
 
 import java.util.List;
 

@@ -9,7 +9,7 @@ import com.fangdd.tp.dto.oauth.OAuth2TokenReq;
 import com.fangdd.tp.dto.oauth.OAuth2UserInfo;
 import com.fangdd.tp.dto.oauth.TokenInfo;
 import com.fangdd.tp.dto.request.InvokeData;
-import com.fangdd.tp.dto.request.RequestParam;
+import com.fangdd.tp.doclet.pojo.entity.RequestParam;
 import com.fangdd.tp.dto.response.InvokeResultDto;
 import com.fangdd.tp.entity.OAuth2Conf;
 import com.fangdd.tp.entity.User;

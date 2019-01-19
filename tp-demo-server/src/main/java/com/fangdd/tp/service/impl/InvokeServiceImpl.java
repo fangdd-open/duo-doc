@@ -2,7 +2,7 @@ package com.fangdd.tp.service.impl;
 
 import com.fangdd.tp.dto.request.InvokeData;
 import com.fangdd.tp.dto.request.RequestBodyParam;
-import com.fangdd.tp.dto.request.RequestParam;
+import com.fangdd.tp.doclet.pojo.entity.RequestParam;
 import com.fangdd.tp.dto.response.InvokeResultDto;
 import com.fangdd.tp.entity.User;
 import com.fangdd.tp.service.InvokeService;
@@ -16,8 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.List;
 
 /**

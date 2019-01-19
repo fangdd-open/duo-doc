@@ -1,5 +1,7 @@
 package com.fangdd.tp.entity;
 
+import com.fangdd.tp.doclet.pojo.entity.EnvItem;
+
 import java.util.List;
 
 /**
@@ -31,6 +33,11 @@ public class Site {
      * 可用的登录授权服务代码s
      */
     private List<String> auths;
+
+    /**
+     * Dubbo ZooKeep配置
+     */
+    private List<EnvItem> dubbo;
 
     public String getId() {
         return id;
@@ -70,5 +77,13 @@ public class Site {
 
     public void setAuths(List<String> auths) {
         this.auths = auths;
+    }
+
+    public List<EnvItem> getDubbo() {
+        return dubbo;
+    }
+
+    public void setDubbo(List<EnvItem> dubbo) {
+        this.dubbo = dubbo;
     }
 }

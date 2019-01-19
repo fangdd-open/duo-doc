@@ -2,6 +2,8 @@ package com.fangdd.tp.doclet.pojo.entity;
 
 import com.fangdd.tp.doclet.enums.EnvEnum;
 
+import java.util.List;
+
 /**
  * @auth ycoe
  * @date 18/10/26
@@ -25,6 +27,11 @@ public class EnvItem {
      */
     private String url;
 
+    /**
+     * 指定请求头
+     */
+    private List<RequestParam> headers;
+
     public String getCode() {
         return code;
     }
@@ -47,5 +54,13 @@ public class EnvItem {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public List<RequestParam> getHeaders() {
+        return headers;
+    }
+
+    public void setHeaders(List<RequestParam> headers) {
+        this.headers = headers;
     }
 }

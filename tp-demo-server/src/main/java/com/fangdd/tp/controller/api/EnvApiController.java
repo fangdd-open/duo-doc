@@ -1,13 +1,10 @@
 package com.fangdd.tp.controller.api;
 
+import com.fangdd.tp.core.annotation.Account;
 import com.fangdd.tp.doclet.pojo.entity.Env;
-import com.fangdd.tp.dto.BaseResponse;
-import com.fangdd.tp.dto.request.EnvSaveDto;
 import com.fangdd.tp.service.EvnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.File;
 
 /**
  * @chapter 文档接口
@@ -22,18 +19,6 @@ public class EnvApiController {
     private EvnService evnService;
 
     /**
-     * 保存项目环境
-     *
-     * @param request 环境请求
-     * @return
-     */
-    @PostMapping
-    public BaseResponse<Env> save(@RequestBody EnvSaveDto request) {
-        Env env = evnService.save(request);
-        return BaseResponse.success(env);
-    }
-
-    /**
      * 获取项目环境
      *
      * @param id 项目ID
@@ -42,5 +27,11 @@ public class EnvApiController {
     @GetMapping("/{id}")
     public Env get(@PathVariable String id) {
         return evnService.get(id);
+    }
+
+    @Account
+    @PostMapping
+    public boolean save(@RequestBody Env env) {
+        return evnService.save(env);
     }
 }

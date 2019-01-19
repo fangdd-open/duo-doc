@@ -1,5 +1,6 @@
 package com.fangdd.tp.dto.request;
 
+import com.fangdd.tp.doclet.pojo.entity.RequestParam;
 import com.fangdd.tp.doclet.pojo.entity.EnvItem;
 
 import java.util.List;

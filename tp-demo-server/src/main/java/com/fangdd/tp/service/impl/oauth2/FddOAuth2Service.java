@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.fangdd.tp.dto.oauth.OAuth2ServiceInfo;
 import com.fangdd.tp.dto.oauth.OAuth2TokenReq;
 import com.fangdd.tp.dto.oauth.OAuth2UserInfo;
-import com.fangdd.tp.dto.request.RequestParam;
+import com.fangdd.tp.doclet.pojo.entity.RequestParam;
 import com.fangdd.tp.entity.AuthInfo;
 import com.fangdd.tp.entity.User;
 import com.google.common.collect.Lists;

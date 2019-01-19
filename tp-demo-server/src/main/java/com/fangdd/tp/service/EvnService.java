@@ -1,6 +1,5 @@
 package com.fangdd.tp.service;
 
-import com.fangdd.tp.dto.request.EnvSaveDto;
 import com.fangdd.tp.doclet.pojo.entity.Env;
 
 /**
@@ -14,7 +13,7 @@ public interface EvnService {
      * @param request 环境变量
      * @return
      */
-    Env save(EnvSaveDto request);
+    boolean save(Env request);
 
     /**
      * 获取某个项目的环境

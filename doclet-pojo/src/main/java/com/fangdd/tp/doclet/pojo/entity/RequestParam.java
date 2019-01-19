@@ -1,4 +1,4 @@
-package com.fangdd.tp.dto.request;
+package com.fangdd.tp.doclet.pojo.entity;
 
 /**
  * @auth ycoe

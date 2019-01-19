@@ -119,4 +119,9 @@ public class UserDataServiceImpl implements UserDataService {
             userDataDao.updateOne(arrayFilter, Updates.set(EXPANDING_MENUS + ".$.expandingMenus", expandingMenus));
         }
     }
+
+    @Override
+    public UserData get(User user) {
+        return userDataDao.getEntity(Filters.eq(ID, user.getId()));
+    }
 }
