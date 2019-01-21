@@ -12,11 +12,11 @@ public enum EnvEnum {
 
     private String name;
 
-    public String getName() {
-        return name;
-    }
-
     EnvEnum(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }
