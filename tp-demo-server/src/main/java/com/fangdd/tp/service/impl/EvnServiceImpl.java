@@ -31,18 +31,20 @@ public class EvnServiceImpl implements EvnService {
             throw new DocletException("id不能为空！");
         }
 
+        List<String> dubboEnvs = request.getDubboEnvs();
+
         List<EnvItem> restEnvs = request.getRestEnvs();
         if (restEnvs == null || restEnvs.isEmpty()) {
             throw new DocletException("项目环境不能为空！");
         }
 
-        List<EnvItem> items = Lists.newArrayList();
+        List<EnvItem> restItems = Lists.newArrayList();
         restEnvs.forEach(envItem -> {
             EnvItem item = getEnvItem(envItem);
             if (item == null) {
                 return;
             }
-            items.add(item);
+            restItems.add(item);
         });
 
         Env env = get(id);
@@ -50,12 +52,20 @@ public class EvnServiceImpl implements EvnService {
             //新增
             env = new Env();
             env.setId(id);
-            env.setRestEnvs(items);
+            env.setRestEnvs(restItems);
             env.setRestTest(request.getRestTest());
+            if (!CollectionUtils.isEmpty(dubboEnvs)) {
+                env.setDubboEnvs(dubboEnvs);
+            }
             envDao.insertOne(env);
         } else {
-            env.setRestEnvs(items);
+            env.setRestEnvs(restItems);
             env.setRestTest(request.getRestTest());
+            if (!CollectionUtils.isEmpty(dubboEnvs)) {
+                env.setDubboEnvs(dubboEnvs);
+            } else {
+                env.setDubboEnvs(null);
+            }
             envDao.updateEntity(env);
         }
         return true;

@@ -23,9 +23,9 @@ public class Env {
     private List<EnvItem> restEnvs;
 
     /**
-     * dubbo环境列表
+     * 开通的dubbo环境，依赖站点的配置
      */
-    private List<EnvItem> dubboEnvs;
+    private List<String> dubboEnvs;
 
     public String getId() {
         return id;
@@ -43,11 +43,11 @@ public class Env {
         this.restEnvs = restEnvs;
     }
 
-    public List<EnvItem> getDubboEnvs() {
+    public List<String> getDubboEnvs() {
         return dubboEnvs;
     }
 
-    public void setDubboEnvs(List<EnvItem> dubboEnvs) {
+    public void setDubboEnvs(List<String> dubboEnvs) {
         this.dubboEnvs = dubboEnvs;
     }
 
