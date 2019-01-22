@@ -1,5 +1,6 @@
 package com.fangdd.tp.service;
 
+import com.fangdd.tp.dto.request.DocCreateDto;
 import com.fangdd.tp.dto.request.LogDto;
 import com.fangdd.tp.entity.User;
 import com.fangdd.tp.entity.UserLog;
@@ -15,4 +16,11 @@ public interface UserLogService {
      * @return
      */
     UserLog add(User user, LogDto log);
+
+    /**
+     * 文档创建
+     * @param docCreateDto 创建日志
+     * @return
+     */
+    UserLog add(DocCreateDto docCreateDto);
 }

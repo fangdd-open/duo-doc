@@ -4,11 +4,19 @@ import com.fangdd.tp.dao.*;
 import com.fangdd.tp.doclet.pojo.*;
 import com.fangdd.tp.doclet.pojo.entity.DocLog;
 import com.fangdd.tp.doclet.pojo.entity.MarkdownDoc;
+import com.fangdd.tp.dto.request.DocCreateDto;
+import com.fangdd.tp.dto.request.LogDto;
+import com.fangdd.tp.helper.UserContextHelper;
+import com.fangdd.tp.service.ApiUnwindService;
 import com.fangdd.tp.service.DocImportService;
+import com.fangdd.tp.service.UserLogService;
 import com.fangdd.traffic.common.mongo.utils.UUIDUtils;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.InsertOneModel;
+import com.mongodb.client.model.Projections;
+import org.bson.conversions.Bson;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,21 +45,43 @@ public class DocImportServiceImpl implements DocImportService {
     @Autowired
     private MarkdownDocDao markdownDocDao;
 
+    @Autowired
+    private ApiUnwindService apiUnwindService;
+
+    @Autowired
+    private UserLogService userLogService;
+
     @Override
     public String save(DocDto docRequest) {
         Artifact artifact = docRequest.getArtifact();
-        artifact.setDocVersion(System.currentTimeMillis());
+        long docVersion = System.currentTimeMillis();
+        artifact.setDocVersion(docVersion);
         List<Chapter> chapters = docRequest.getChapters();
         List<Entity> entities = docRequest.getEntities();
         Map<String, String> markdownDocMaps = docRequest.getMarkdownMaps();
 
         String md5 = artifact.getMd5();
+        if (Strings.isNullOrEmpty(md5)) {
+            return "ERROR: 版本过低，请更新包：com.fangdd:tp-doc:1.2-SNAPSHOT";
+        }
+
         //检查是否一致
-        if (docDao.exists(Filters.and(
-                Filters.eq("_id", artifact.getId()),
-                Filters.eq("md5", md5)
-        ))) {
-            return "/doc/" + artifact.getId() + "/";
+        Bson idFilter = Filters.eq("_id", artifact.getId());
+        Artifact existArtifact = docDao
+                .find(idFilter)
+                .projection(Projections.include("md5"))
+                .first();
+        if (existArtifact != null) {
+            if (md5.equals(existArtifact.getMd5())) {
+                return "/doc/" + artifact.getId() + "/";
+            }
+        } else {
+            // 不存在，创建新文档
+            DocCreateDto createDto = new DocCreateDto();
+            createDto.setSite(UserContextHelper.getSite().getId());
+            createDto.setDocId(artifact.getId());
+            createDto.setDocVersion(docVersion);
+            this.userLogService.add(createDto);
         }
 
         //保存entitySet
@@ -91,6 +121,9 @@ public class DocImportServiceImpl implements DocImportService {
 
         //写入doc
         docDao.upsertEntity(artifact);
+
+        //unwind
+        apiUnwindService.unwindDocApi(artifact.getId(), artifact.getDocVersion());
 
         return "/doc/" + artifact.getId() + "/";
     }

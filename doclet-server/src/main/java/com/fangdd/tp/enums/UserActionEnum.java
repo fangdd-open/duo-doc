@@ -7,6 +7,7 @@ package com.fangdd.tp.enums;
 public enum UserActionEnum {
     LOGIN(1, "用户登录"),
     LOGOUT(2, "用户注销"),
+    DOC_CREATE(3, "文档创建"),
 
     REST_FUL_INVOKE(10, "RestFul接口调用"),
     DUBBO_INVOKE(11, "Dubbo接口调用"),
