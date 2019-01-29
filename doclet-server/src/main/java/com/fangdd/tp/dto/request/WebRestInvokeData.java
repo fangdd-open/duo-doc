@@ -9,15 +9,17 @@ import java.util.List;
  * @auth ycoe
  * @date 18/11/23
  */
-public class InvokeData {
+public class WebRestInvokeData {
     /**
      * 文档ID
+     *
      * @demo com.fangdd.tp:scanengine-dp-server
      */
     private String docId;
 
     /**
      * api key
+     *
      * @demo
      */
     private String apiKey;

@@ -4,7 +4,7 @@ package com.fangdd.tp.dto.request;
  * @auth ycoe
  * @date 18/12/4
  */
-public class ApiRequestSave extends InvokeData {
+public class ApiRequestSave extends WebRestInvokeData {
     /**
      * api_request._id
      *

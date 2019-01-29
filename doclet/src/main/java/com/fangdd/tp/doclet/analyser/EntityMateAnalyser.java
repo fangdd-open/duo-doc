@@ -9,7 +9,6 @@ import com.fangdd.tp.doclet.helper.TagHelper;
 import com.fangdd.tp.doclet.pojo.Entity;
 import com.fangdd.tp.doclet.pojo.EntityRef;
 import com.fangdd.tp.doclet.render.EntityHandle;
-import com.google.common.base.Enums;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -143,7 +142,31 @@ public class EntityMateAnalyser {
             return entity;
         }
 
-        //处理属性
+        if (classDoc.isEnum()) {
+            //如果是枚举，处理枚举元素
+            analyseEnumItems(classDoc, fieldItems);
+        } else {
+            //处理实体类属性
+            analyseEntityFields(classDoc, parameterizedTypeMap, fieldItems);
+        }
+
+        return entity;
+    }
+
+    private static void analyseEnumItems(ClassDoc classDoc, List<EntityRef> fieldItems) {
+        FieldDoc[] enumConstants = classDoc.enumConstants();
+        if (enumConstants != null) {
+            for (FieldDoc item : enumConstants) {
+                EntityRef fieldRef = new EntityRef();
+                fieldRef.setEntityName(item.name());
+                fieldRef.setComment(item.commentText());
+                fieldRef.setName(item.name());
+                fieldItems.add(fieldRef);
+            }
+        }
+    }
+
+    private static void analyseEntityFields(ClassDoc classDoc, Map<String, Type> parameterizedTypeMap, List<EntityRef> fieldItems) {
         CURRENT_CLASS_FIELD_NAMES.clear();
         List<FieldDoc> fields = getFields(classDoc);
         if (fields != null) {
@@ -186,8 +209,6 @@ public class EntityMateAnalyser {
                 fieldItems.add(fieldRef);
             }
         }
-
-        return entity;
     }
 
     private static void readFieldAnnotation(EntityRef fieldRef, FieldDoc field) {

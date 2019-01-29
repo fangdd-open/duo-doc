@@ -1,7 +1,7 @@
 package com.fangdd.tp.helper;
 
 import com.alibaba.fastjson.JSONObject;
-import com.fangdd.tp.dto.request.DubboInvokeDto;
+import com.fangdd.tp.dto.request.DubboGenericInvokeDto;
 import org.junit.Test;
 
 /**
@@ -18,7 +18,7 @@ public class DubboCallbackUtilsTest {
         Object[] methodParams = {"习大大最新在广东"};
         String version = "1.0.0";
         for (int i = 0; i < 10; i++) {
-            DubboInvokeDto invokeData = new DubboInvokeDto();
+            DubboGenericInvokeDto invokeData = new DubboGenericInvokeDto();
             invokeData.setDubboRegistUri(address);
             invokeData.setInterfaceName(interfaceName);
             invokeData.setMethodName(methodName);
@@ -26,7 +26,7 @@ public class DubboCallbackUtilsTest {
             invokeData.setMethodParamTypes(methodParamType);
             invokeData.setMethodParams(methodParams);
 
-            Object obj = DubboInvoker.invoke(invokeData);
+            Object obj = DubboGenericInvoker.invoke(invokeData);
             System.out.println(JSONObject.toJSONString(obj));
         }
     }

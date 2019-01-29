@@ -5,14 +5,14 @@ import com.fangdd.tp.doclet.pojo.DubboInfo;
 import com.fangdd.tp.doclet.pojo.EntityRef;
 import com.fangdd.tp.doclet.pojo.entity.EnvItem;
 import com.fangdd.tp.doclet.pojo.entity.RequestParam;
-import com.fangdd.tp.dto.request.DubboInvokeDto;
-import com.fangdd.tp.dto.request.InvokeData;
+import com.fangdd.tp.dto.request.DubboGenericInvokeDto;
+import com.fangdd.tp.dto.request.WebRestInvokeData;
 import com.fangdd.tp.dto.request.RequestBodyParam;
 import com.fangdd.tp.dto.response.InvokeResultDto;
 import com.fangdd.tp.entity.ApiEntity;
 import com.fangdd.tp.entity.Site;
 import com.fangdd.tp.entity.User;
-import com.fangdd.tp.helper.DubboInvoker;
+import com.fangdd.tp.helper.DubboGenericInvoker;
 import com.fangdd.tp.helper.UserContextHelper;
 import com.fangdd.tp.service.ApiService;
 import com.fangdd.tp.service.InvokeService;
@@ -44,15 +44,20 @@ public class InvokeServiceImpl implements InvokeService {
     /**
      * 接口调用
      *
-     * @param user
+     * @param user 当前用户
      * @param req  接口参数
      * @return
      */
     @Override
-    public InvokeResultDto invoke(User user, InvokeData req) {
+    public InvokeResultDto invoke(User user, WebRestInvokeData req) {
         OkHttpClient client = new OkHttpClient();
-        HttpUrl.Builder urlBuilder = HttpUrl.parse(req.getUrl()).newBuilder();
+        HttpUrl httpUrl = HttpUrl.parse(req.getUrl());
+        if (httpUrl == null) {
+            logger.warn("调用发生错误，url异常，url={}", req.getUrl());
+            return getErrorInvokeResult(System.currentTimeMillis(), "调用发生错误，url异常！");
+        }
 
+        HttpUrl.Builder urlBuilder = httpUrl.newBuilder();
         if (!CollectionUtils.isEmpty(req.getParams())) {
             req.getParams().forEach(param -> urlBuilder.addEncodedQueryParameter(param.getKey(), param.getValue()));
         }
@@ -73,25 +78,19 @@ public class InvokeServiceImpl implements InvokeService {
         }
 
         Request request = requestBuilder.build();
-
         logger.info("获取用户信息请求：{}", request);
-
         long t1 = System.currentTimeMillis();
         try {
             Response response = client.newCall(request).execute();
             return getResponseResult(response, t1);
         } catch (IOException e) {
-            InvokeResultDto result = new InvokeResultDto();
-            result.setStatus(0);
-            result.setResponseAtMillis(System.currentTimeMillis() - t1);
             logger.warn("调用发生错误，query:{}", request.toString(), e);
-            result.setResponseBody(e.getMessage());
-            return result;
+            return getErrorInvokeResult(t1, e.getMessage());
         }
     }
 
     @Override
-    public InvokeResultDto dubboInvoke(User user, InvokeData request) {
+    public InvokeResultDto dubboInvoke(User user, WebRestInvokeData request) {
         long t1 = System.currentTimeMillis();
 
         String docId = request.getDocId();
@@ -133,7 +132,7 @@ public class InvokeServiceImpl implements InvokeService {
         int index = apiDefined.lastIndexOf('.');
         String interfaceName = apiDefined.substring(0, index);
         String methodName = apiDefined.substring(index + 1);
-        DubboInvokeDto invokeDto = new DubboInvokeDto();
+        DubboGenericInvokeDto invokeDto = new DubboGenericInvokeDto();
         invokeDto.setDubboRegistUri(dubboEnv.getUrl());
         invokeDto.setInterfaceName(interfaceName);
         invokeDto.setMethodName(methodName);
@@ -143,7 +142,7 @@ public class InvokeServiceImpl implements InvokeService {
         invokeDto.setMethodParams(methodParams);
 
         try {
-            Object resp = DubboInvoker.invoke(invokeDto);
+            Object resp = DubboGenericInvoker.invoke(invokeDto);
             InvokeResultDto result = new InvokeResultDto();
             result.setStatus(200);
             result.setResponseBody(resp == null ? null : JSONObject.toJSONString(resp));
@@ -154,6 +153,14 @@ public class InvokeServiceImpl implements InvokeService {
             logger.error("Dubbo接口调用失败：{}", JSONObject.toJSONString(invokeDto), e);
             return new InvokeResultDto(500, "Dubbo接口调用失败！", System.currentTimeMillis() - t1);
         }
+    }
+
+    private InvokeResultDto getErrorInvokeResult(long startTime, String message) {
+        InvokeResultDto result = new InvokeResultDto();
+        result.setStatus(0);
+        result.setResponseAtMillis(System.currentTimeMillis() - startTime);
+        result.setResponseBody(message);
+        return result;
     }
 
     private EnvItem getDubboRegistUri(String docId, String envCode) {
@@ -198,7 +205,7 @@ public class InvokeServiceImpl implements InvokeService {
         return result;
     }
 
-    private void setPostBody(InvokeData req, Request.Builder requestBuilder) {
+    private void setPostBody(WebRestInvokeData req, Request.Builder requestBuilder) {
         String mediaTypeStr = "application/json";
         if (!CollectionUtils.isEmpty(req.getHeaders())) {
             for (RequestParam header : req.getHeaders()) {

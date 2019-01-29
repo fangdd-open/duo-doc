@@ -3,7 +3,7 @@ package com.fangdd.tp.service.impl;
 import com.fangdd.tp.core.exceptions.TpServerException;
 import com.fangdd.tp.dao.ApiRequestDao;
 import com.fangdd.tp.dto.request.ApiRequestSave;
-import com.fangdd.tp.dto.request.InvokeData;
+import com.fangdd.tp.dto.request.WebRestInvokeData;
 import com.fangdd.tp.dto.request.LogDto;
 import com.fangdd.tp.entity.ApiRequest;
 import com.fangdd.tp.entity.User;
@@ -66,7 +66,7 @@ public class ApiRequestServiceImpl implements ApiRequestService {
 
         LogDto log = new LogDto();
         log.setAction(UserActionEnum.INVOKE_REQUEST_SAVE);
-        InvokeData invokeRequest = new InvokeData();
+        WebRestInvokeData invokeRequest = new WebRestInvokeData();
         BeanUtils.copyProperties(request, invokeRequest);
         invokeRequest.setApiKey(request.getId());
         log.setInvokeRequest(invokeRequest);

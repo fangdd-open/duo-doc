@@ -15,7 +15,7 @@ public class LogDto {
     /**
      * 接口
      */
-    private InvokeData invokeRequest;
+    private WebRestInvokeData invokeRequest;
 
     public UserActionEnum getAction() {
         return action;
@@ -25,11 +25,11 @@ public class LogDto {
         this.action = action;
     }
 
-    public InvokeData getInvokeRequest() {
+    public WebRestInvokeData getInvokeRequest() {
         return invokeRequest;
     }
 
-    public void setInvokeRequest(InvokeData invokeRequest) {
+    public void setInvokeRequest(WebRestInvokeData invokeRequest) {
         this.invokeRequest = invokeRequest;
     }
 }

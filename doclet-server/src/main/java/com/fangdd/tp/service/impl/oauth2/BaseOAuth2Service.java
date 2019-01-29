@@ -8,7 +8,7 @@ import com.fangdd.tp.dto.oauth.OAuth2ServiceInfo;
 import com.fangdd.tp.dto.oauth.OAuth2TokenReq;
 import com.fangdd.tp.dto.oauth.OAuth2UserInfo;
 import com.fangdd.tp.dto.oauth.TokenInfo;
-import com.fangdd.tp.dto.request.InvokeData;
+import com.fangdd.tp.dto.request.WebRestInvokeData;
 import com.fangdd.tp.doclet.pojo.entity.RequestParam;
 import com.fangdd.tp.dto.response.InvokeResultDto;
 import com.fangdd.tp.entity.OAuth2Conf;
@@ -80,7 +80,7 @@ public abstract class BaseOAuth2Service implements OAuth2Service {
         }
 
         OAuth2ServiceInfo serviceInfo = getOAuth2ServiceInfo(request.getSite());
-        InvokeData invokeRequest = new InvokeData();
+        WebRestInvokeData invokeRequest = new WebRestInvokeData();
         invokeRequest.setUrl(serviceInfo.getAccessTokenApi());
         invokeRequest.setMethod(HttpMethod.GET.name());
 
@@ -106,7 +106,7 @@ public abstract class BaseOAuth2Service implements OAuth2Service {
         }
 
         //通过accessToken获取用户信息
-        InvokeData userInvokeRequest = new InvokeData();
+        WebRestInvokeData userInvokeRequest = new WebRestInvokeData();
         userInvokeRequest.setUrl(serviceInfo.getUserInfoApi());
         userInvokeRequest.setMethod(HttpMethod.GET.name());
 

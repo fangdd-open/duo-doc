@@ -1,6 +1,6 @@
 package com.fangdd.tp.entity;
 
-import com.fangdd.tp.dto.request.InvokeData;
+import com.fangdd.tp.dto.request.WebRestInvokeData;
 
 /**
  * @auth ycoe
@@ -48,7 +48,7 @@ public class UserLog {
     /**
      * 接口调用参数
      */
-    private InvokeData request;
+    private WebRestInvokeData request;
 
     /**
      * 事件时间
@@ -103,11 +103,11 @@ public class UserLog {
         this.title = title;
     }
 
-    public InvokeData getRequest() {
+    public WebRestInvokeData getRequest() {
         return request;
     }
 
-    public void setRequest(InvokeData request) {
+    public void setRequest(WebRestInvokeData request) {
         this.request = request;
     }
 

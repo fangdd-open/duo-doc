@@ -6,7 +6,7 @@ import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.rpc.service.GenericService;
 import com.alibaba.fastjson.JSONObject;
-import com.fangdd.tp.dto.request.DubboInvokeDto;
+import com.fangdd.tp.dto.request.DubboGenericInvokeDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,8 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @auth ycoe
  * @date 18/10/25
  */
-public class DubboInvoker {
-    private static Logger logger = LoggerFactory.getLogger(DubboInvoker.class);
+public class DubboGenericInvoker {
+    private static Logger logger = LoggerFactory.getLogger(DubboGenericInvoker.class);
 
     // 当前应用的信息
     private static ApplicationConfig application = new ApplicationConfig();
@@ -39,7 +39,7 @@ public class DubboInvoker {
      * @param invokeDto 调用参数
      * @return
      */
-    public static Object invoke(DubboInvokeDto invokeDto) {
+    public static Object invoke(DubboGenericInvokeDto invokeDto) {
         ReferenceConfig reference = getReferenceConfig(invokeDto.getInterfaceName(), invokeDto.getDubboRegistUri(), invokeDto.getVersion());
         GenericService genericService = (GenericService) reference.get();
         if (genericService == null) {

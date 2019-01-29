@@ -4,7 +4,7 @@ package com.fangdd.tp.dto.request;
  * @auth ycoe
  * @date 19/1/21
  */
-public class DubboInvokeDto {
+public class DubboGenericInvokeDto {
     /**
      * dubbo注册服务器地址，比如zookeeper地址
      */
