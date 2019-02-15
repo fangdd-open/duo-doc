@@ -5,9 +5,7 @@ import com.fangdd.tp.doclet.pojo.DubboInfo;
 import com.fangdd.tp.doclet.pojo.EntityRef;
 import com.fangdd.tp.doclet.pojo.entity.EnvItem;
 import com.fangdd.tp.doclet.pojo.entity.RequestParam;
-import com.fangdd.tp.dto.request.DubboGenericInvokeDto;
-import com.fangdd.tp.dto.request.WebRestInvokeData;
-import com.fangdd.tp.dto.request.RequestBodyParam;
+import com.fangdd.tp.dto.request.*;
 import com.fangdd.tp.dto.response.InvokeResultDto;
 import com.fangdd.tp.entity.ApiEntity;
 import com.fangdd.tp.entity.Site;
@@ -18,6 +16,7 @@ import com.fangdd.tp.service.ApiService;
 import com.fangdd.tp.service.InvokeService;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +27,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @auth ycoe
@@ -90,11 +90,11 @@ public class InvokeServiceImpl implements InvokeService {
     }
 
     @Override
-    public InvokeResultDto dubboInvoke(User user, WebRestInvokeData request) {
+    public InvokeResultDto dubboInvoke(User user, WebDubboInvokeReq request) {
         long t1 = System.currentTimeMillis();
 
         String docId = request.getDocId();
-        String envCode = request.getEnv().getCode();
+        String envCode = request.getEnvCode();
 
         //获取当前环境dubbo注册地址
         EnvItem dubboEnv = getDubboRegistUri(docId, envCode);
@@ -117,15 +117,25 @@ public class InvokeServiceImpl implements InvokeService {
         List<EntityRef> requestParams = apiEntity.getRequestParams();
         int paramLen = requestParams.size();
         String[] methodParamTypes = new String[paramLen];
-        Object[] methodParams = new String[paramLen];
+        Object[] methodParams = new Object[paramLen];
 
-        List<RequestParam> params = request.getParams();
+        List<WebDubboInvokeReqItem> params = request.getParams();
         if (params.size() != paramLen) {
             return new InvokeResultDto(500, "Dubbo接口参数数量错误！", System.currentTimeMillis() - t1);
         }
         for (int i = 0; i < paramLen; i++) {
-            methodParamTypes[i] = requestParams.get(i).getEntityName();
-            methodParams[i] = params.get(i).getValue();
+            WebDubboInvokeReqItem reqItem = request.getParams().get(i);
+            String paramTypeName = reqItem.getTypeName();
+            methodParamTypes[i] = paramTypeName;
+            Integer type = reqItem.getType();
+            if (type == 3 || type == 4) {
+                // collect | map
+                int startIndex = paramTypeName.indexOf('<');
+                if (startIndex > -1) {
+                    methodParamTypes[i] = paramTypeName.substring(0, startIndex);
+                }
+            }
+            methodParams[i] = getValue(reqItem);
         }
 
         String apiDefined = apiEntity.getCode();
@@ -151,8 +161,58 @@ public class InvokeServiceImpl implements InvokeService {
             return result;
         } catch (Exception e) {
             logger.error("Dubbo接口调用失败：{}", JSONObject.toJSONString(invokeDto), e);
-            return new InvokeResultDto(500, "Dubbo接口调用失败！", System.currentTimeMillis() - t1);
+            return new InvokeResultDto(500, e.getMessage(), System.currentTimeMillis() - t1);
         }
+    }
+
+    private Object getValue(WebDubboInvokeReqItem item) {
+        String itemStrValue = item.getValue();
+        if (itemStrValue == null) {
+            return null;
+        }
+        //类型：0=基本类型 1=枚举 2=pojo 3=collection 4=map
+        int type = item.getType();
+        if (type == 2) {
+            //pojo
+            Map<String, Object> objValue = Maps.newHashMap();
+            objValue.put("class", item.getTypeName()); //类名
+            List<WebDubboInvokeReqItem> fields = JSONObject.parseArray(item.getValue(), WebDubboInvokeReqItem.class);
+            for (WebDubboInvokeReqItem reqItem : fields) {
+                if (!reqItem.getAvailable()) {
+                    continue;
+                }
+                Object val = getValue(reqItem);
+                objValue.put(reqItem.getKey(), val);
+            }
+            if (objValue.isEmpty()) {
+                return null;
+            }
+            return objValue;
+        } else if (type == 3) {
+            // collection
+            List<WebDubboInvokeReqItem> fields = JSONObject.parseArray(itemStrValue, WebDubboInvokeReqItem.class);
+            Object[] values = new Object[fields.size()];
+            for (int i = 0; i < fields.size(); i++) {
+                WebDubboInvokeReqItem reqItem = fields.get(i);
+                Object val = getValue(reqItem);
+                if (val != null) {
+                    values[i] = val;
+                }
+            }
+            return values;
+        } else if (type == 4) {
+            // map
+            List<WebDubboInvokeReqItem> fields = JSONObject.parseArray(itemStrValue, WebDubboInvokeReqItem.class);
+            Map<String, Object> map = Maps.newHashMap();
+            for (WebDubboInvokeReqItem reqItem : fields) {
+                Object val = getValue(reqItem);
+                if (val != null) {
+                    map.put(reqItem.getMapKey(), val);
+                }
+            }
+            return map;
+        }
+        return itemStrValue;
     }
 
     private InvokeResultDto getErrorInvokeResult(long startTime, String message) {

@@ -44,7 +44,7 @@ public class WebDubboInvokeReq {
     /**
      * 调用方法参数值
      */
-    private List<Map<String, Object>> params;
+    private List<WebDubboInvokeReqItem> params;
 
     public String getId() {
         return id;
@@ -86,11 +86,11 @@ public class WebDubboInvokeReq {
         this.envCode = envCode;
     }
 
-    public List<Map<String, Object>> getParams() {
+    public List<WebDubboInvokeReqItem> getParams() {
         return params;
     }
 
-    public void setParams(List<Map<String, Object>> params) {
+    public void setParams(List<WebDubboInvokeReqItem> params) {
         this.params = params;
     }
 }

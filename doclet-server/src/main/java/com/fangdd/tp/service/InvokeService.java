@@ -1,5 +1,6 @@
 package com.fangdd.tp.service;
 
+import com.fangdd.tp.dto.request.WebDubboInvokeReq;
 import com.fangdd.tp.dto.request.WebRestInvokeData;
 import com.fangdd.tp.dto.response.InvokeResultDto;
 import com.fangdd.tp.entity.User;
@@ -25,5 +26,5 @@ public interface InvokeService {
      * @param request 接口参数
      * @return
      */
-    InvokeResultDto dubboInvoke(User user, WebRestInvokeData request);
+    InvokeResultDto dubboInvoke(User user, WebDubboInvokeReq request);
 }

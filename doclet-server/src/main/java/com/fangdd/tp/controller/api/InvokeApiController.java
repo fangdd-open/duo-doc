@@ -3,6 +3,7 @@ package com.fangdd.tp.controller.api;
 import com.fangdd.tp.core.annotation.Account;
 import com.fangdd.tp.dto.BaseResponse;
 import com.fangdd.tp.dto.request.ApiRequestSave;
+import com.fangdd.tp.dto.request.WebDubboInvokeReq;
 import com.fangdd.tp.dto.request.WebRestInvokeData;
 import com.fangdd.tp.entity.ApiRequest;
 import com.fangdd.tp.dto.response.InvokeResultDto;
@@ -56,7 +57,7 @@ public class InvokeApiController {
      */
     @Account
     @PostMapping("/dubbo")
-    public BaseResponse<InvokeResultDto> dubboInvoke(@RequestBody WebRestInvokeData request) {
+    public BaseResponse<InvokeResultDto> dubboInvoke(@RequestBody WebDubboInvokeReq request) {
         User user = UserContextHelper.getUser();
         InvokeResultDto invokeResult = invokeService.dubboInvoke(user, request);
         if (invokeResult.getStatus() != 200) {
