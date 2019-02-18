@@ -2,8 +2,9 @@ package com.fangdd.tp.service;
 
 import com.fangdd.tp.dao.UserLogDao;
 import com.fangdd.tp.dto.request.DocCreateDto;
-import com.fangdd.tp.dto.request.WebRestInvokeData;
 import com.fangdd.tp.dto.request.LogDto;
+import com.fangdd.tp.dto.request.WebRestInvokeData;
+import com.fangdd.tp.entity.ApiRequestDubbo;
 import com.fangdd.tp.entity.User;
 import com.fangdd.tp.entity.UserLog;
 import com.fangdd.tp.enums.UserActionEnum;
@@ -34,6 +35,11 @@ public class UserLogServiceImpl implements UserLogService {
         WebRestInvokeData invokeRequest = log.getInvokeRequest();
         if (invokeRequest != null) {
             userLog.setApiId(invokeRequest.getApiKey());
+        }
+
+        ApiRequestDubbo apiRequestDubbo = log.getInvokeRequestDubbo();
+        if (apiRequestDubbo != null) {
+            userLog.setRequestDubbo(apiRequestDubbo);
         }
         userLog.setRequest(invokeRequest);
         userLog.setActionTime(System.currentTimeMillis());

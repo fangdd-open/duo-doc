@@ -1,4 +1,4 @@
-package com.fangdd.tp.dto.request;
+package com.fangdd.tp.entity;
 
 /**
  * 从web前端发起的dubbo请求
@@ -6,7 +6,7 @@ package com.fangdd.tp.dto.request;
  * @auth ycoe
  * @date 19/1/24
  */
-public class WebDubboInvokeReqItem {
+public class ApiRequestDubboParamItem {
     /**
      * 参数名称
      */
@@ -36,6 +36,11 @@ public class WebDubboInvokeReqItem {
      * 如果是Map时的key
      */
     private String mapKey;
+
+    /**
+     * 是否多行展示，String类型编辑时有效
+     */
+    private Boolean multiLine;
 
     public String getKey() {
         return key;
@@ -83,5 +88,13 @@ public class WebDubboInvokeReqItem {
 
     public void setMapKey(String mapKey) {
         this.mapKey = mapKey;
+    }
+
+    public Boolean getMultiLine() {
+        return multiLine;
+    }
+
+    public void setMultiLine(Boolean multiLine) {
+        this.multiLine = multiLine;
     }
 }

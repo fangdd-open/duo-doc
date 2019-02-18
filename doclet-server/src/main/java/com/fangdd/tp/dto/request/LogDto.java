@@ -1,5 +1,6 @@
 package com.fangdd.tp.dto.request;
 
+import com.fangdd.tp.entity.ApiRequestDubbo;
 import com.fangdd.tp.enums.UserActionEnum;
 
 /**
@@ -17,6 +18,8 @@ public class LogDto {
      */
     private WebRestInvokeData invokeRequest;
 
+    private ApiRequestDubbo invokeRequestDubbo;
+
     public UserActionEnum getAction() {
         return action;
     }
@@ -31,5 +34,13 @@ public class LogDto {
 
     public void setInvokeRequest(WebRestInvokeData invokeRequest) {
         this.invokeRequest = invokeRequest;
+    }
+
+    public ApiRequestDubbo getInvokeRequestDubbo() {
+        return invokeRequestDubbo;
+    }
+
+    public void setInvokeRequestDubbo(ApiRequestDubbo invokeRequestDubbo) {
+        this.invokeRequestDubbo = invokeRequestDubbo;
     }
 }

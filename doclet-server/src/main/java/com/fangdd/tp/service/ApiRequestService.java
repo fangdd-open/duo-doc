@@ -1,7 +1,9 @@
 package com.fangdd.tp.service;
 
 import com.fangdd.tp.dto.request.ApiRequestSave;
+import com.fangdd.tp.dto.request.WebDubboInvokeReq;
 import com.fangdd.tp.entity.ApiRequest;
+import com.fangdd.tp.entity.ApiRequestDubbo;
 import com.fangdd.tp.entity.User;
 
 import java.util.List;
@@ -16,4 +18,6 @@ public interface ApiRequestService {
     void delete(User user, String apiRequestId);
 
     List<ApiRequest> query(User user, String apiKey);
+
+    ApiRequestDubbo saveDubbo(User user, WebDubboInvokeReq request);
 }

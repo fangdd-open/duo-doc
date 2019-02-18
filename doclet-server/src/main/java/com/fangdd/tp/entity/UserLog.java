@@ -46,9 +46,14 @@ public class UserLog {
     private String title;
 
     /**
-     * 接口调用参数
+     * RestFul接口调用参数
      */
     private WebRestInvokeData request;
+
+    /**
+     * Dubbo接口调用参数
+     */
+    private ApiRequestDubbo requestDubbo;
 
     /**
      * 事件时间
@@ -117,5 +122,13 @@ public class UserLog {
 
     public void setActionTime(Long actionTime) {
         this.actionTime = actionTime;
+    }
+
+    public ApiRequestDubbo getRequestDubbo() {
+        return requestDubbo;
+    }
+
+    public void setRequestDubbo(ApiRequestDubbo requestDubbo) {
+        this.requestDubbo = requestDubbo;
     }
 }

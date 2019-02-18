@@ -7,9 +7,7 @@ import com.fangdd.tp.doclet.pojo.entity.EnvItem;
 import com.fangdd.tp.doclet.pojo.entity.RequestParam;
 import com.fangdd.tp.dto.request.*;
 import com.fangdd.tp.dto.response.InvokeResultDto;
-import com.fangdd.tp.entity.ApiEntity;
-import com.fangdd.tp.entity.Site;
-import com.fangdd.tp.entity.User;
+import com.fangdd.tp.entity.*;
 import com.fangdd.tp.helper.DubboGenericInvoker;
 import com.fangdd.tp.helper.UserContextHelper;
 import com.fangdd.tp.service.ApiService;
@@ -20,6 +18,7 @@ import com.google.common.collect.Maps;
 import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -119,12 +118,12 @@ public class InvokeServiceImpl implements InvokeService {
         String[] methodParamTypes = new String[paramLen];
         Object[] methodParams = new Object[paramLen];
 
-        List<WebDubboInvokeReqItem> params = request.getParams();
+        List<ApiRequestDubboParamItem> params = request.getParams();
         if (params.size() != paramLen) {
             return new InvokeResultDto(500, "Dubbo接口参数数量错误！", System.currentTimeMillis() - t1);
         }
         for (int i = 0; i < paramLen; i++) {
-            WebDubboInvokeReqItem reqItem = request.getParams().get(i);
+            ApiRequestDubboParamItem reqItem = request.getParams().get(i);
             String paramTypeName = reqItem.getTypeName();
             methodParamTypes[i] = paramTypeName;
             Integer type = reqItem.getType();
@@ -155,7 +154,7 @@ public class InvokeServiceImpl implements InvokeService {
             Object resp = DubboGenericInvoker.invoke(invokeDto);
             InvokeResultDto result = new InvokeResultDto();
             result.setStatus(200);
-            result.setResponseBody(resp == null ? null : JSONObject.toJSONString(resp));
+            result.setResponseBody(getResponseBodyStr(resp));
             result.setResponseAtMillis(System.currentTimeMillis() - t1);
             result.setHeaders(Lists.newArrayList());
             return result;
@@ -165,7 +164,20 @@ public class InvokeServiceImpl implements InvokeService {
         }
     }
 
-    private Object getValue(WebDubboInvokeReqItem item) {
+    private String getResponseBodyStr(Object resp) {
+        if (resp == null) {
+            return null;
+        }
+
+        if (BeanUtils.isSimpleValueType(resp.getClass())) {
+            //如果是基本类型
+            return resp.toString();
+        }
+
+        return JSONObject.toJSONString(resp);
+    }
+
+    private Object getValue(ApiRequestDubboParamItem item) {
         String itemStrValue = item.getValue();
         if (itemStrValue == null) {
             return null;
@@ -176,8 +188,8 @@ public class InvokeServiceImpl implements InvokeService {
             //pojo
             Map<String, Object> objValue = Maps.newHashMap();
             objValue.put("class", item.getTypeName()); //类名
-            List<WebDubboInvokeReqItem> fields = JSONObject.parseArray(item.getValue(), WebDubboInvokeReqItem.class);
-            for (WebDubboInvokeReqItem reqItem : fields) {
+            List<ApiRequestDubboParamItem> fields = JSONObject.parseArray(item.getValue(), ApiRequestDubboParamItem.class);
+            for (ApiRequestDubboParamItem reqItem : fields) {
                 if (!reqItem.getAvailable()) {
                     continue;
                 }
@@ -190,10 +202,10 @@ public class InvokeServiceImpl implements InvokeService {
             return objValue;
         } else if (type == 3) {
             // collection
-            List<WebDubboInvokeReqItem> fields = JSONObject.parseArray(itemStrValue, WebDubboInvokeReqItem.class);
+            List<ApiRequestDubboParamItem> fields = JSONObject.parseArray(itemStrValue, ApiRequestDubboParamItem.class);
             Object[] values = new Object[fields.size()];
             for (int i = 0; i < fields.size(); i++) {
-                WebDubboInvokeReqItem reqItem = fields.get(i);
+                ApiRequestDubboParamItem reqItem = fields.get(i);
                 Object val = getValue(reqItem);
                 if (val != null) {
                     values[i] = val;
@@ -202,9 +214,9 @@ public class InvokeServiceImpl implements InvokeService {
             return values;
         } else if (type == 4) {
             // map
-            List<WebDubboInvokeReqItem> fields = JSONObject.parseArray(itemStrValue, WebDubboInvokeReqItem.class);
+            List<ApiRequestDubboParamItem> fields = JSONObject.parseArray(itemStrValue, ApiRequestDubboParamItem.class);
             Map<String, Object> map = Maps.newHashMap();
-            for (WebDubboInvokeReqItem reqItem : fields) {
+            for (ApiRequestDubboParamItem reqItem : fields) {
                 Object val = getValue(reqItem);
                 if (val != null) {
                     map.put(reqItem.getMapKey(), val);

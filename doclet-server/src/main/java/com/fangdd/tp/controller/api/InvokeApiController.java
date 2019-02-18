@@ -5,8 +5,9 @@ import com.fangdd.tp.dto.BaseResponse;
 import com.fangdd.tp.dto.request.ApiRequestSave;
 import com.fangdd.tp.dto.request.WebDubboInvokeReq;
 import com.fangdd.tp.dto.request.WebRestInvokeData;
-import com.fangdd.tp.entity.ApiRequest;
 import com.fangdd.tp.dto.response.InvokeResultDto;
+import com.fangdd.tp.entity.ApiRequest;
+import com.fangdd.tp.entity.ApiRequestDubbo;
 import com.fangdd.tp.entity.User;
 import com.fangdd.tp.helper.UserContextHelper;
 import com.fangdd.tp.service.ApiRequestService;
@@ -65,6 +66,19 @@ public class InvokeApiController {
         } else {
             return BaseResponse.success(invokeResult);
         }
+    }
+
+    /**
+     * 保存接口调用参数
+     *
+     * @param request 调用参数
+     * @return
+     */
+    @Account
+    @PostMapping("/save/dubbo")
+    public BaseResponse<ApiRequestDubbo> save(@RequestBody WebDubboInvokeReq request) {
+        User user = UserContextHelper.getUser();
+        return BaseResponse.success(apiRequestService.saveDubbo(user, request));
     }
 
     /**

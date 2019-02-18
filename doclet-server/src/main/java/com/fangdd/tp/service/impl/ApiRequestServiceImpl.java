@@ -2,10 +2,13 @@ package com.fangdd.tp.service.impl;
 
 import com.fangdd.tp.core.exceptions.TpServerException;
 import com.fangdd.tp.dao.ApiRequestDao;
+import com.fangdd.tp.dao.ApiRequestDubboDao;
 import com.fangdd.tp.dto.request.ApiRequestSave;
-import com.fangdd.tp.dto.request.WebRestInvokeData;
 import com.fangdd.tp.dto.request.LogDto;
+import com.fangdd.tp.dto.request.WebDubboInvokeReq;
+import com.fangdd.tp.dto.request.WebRestInvokeData;
 import com.fangdd.tp.entity.ApiRequest;
+import com.fangdd.tp.entity.ApiRequestDubbo;
 import com.fangdd.tp.entity.User;
 import com.fangdd.tp.enums.RoleEnum;
 import com.fangdd.tp.enums.UserActionEnum;
@@ -29,6 +32,9 @@ import java.util.List;
 public class ApiRequestServiceImpl implements ApiRequestService {
     @Autowired
     private ApiRequestDao apiRequestDao;
+
+    @Autowired
+    private ApiRequestDubboDao apiRequestDubboDao;
 
     @Autowired
     private UserLogService userLogService;
@@ -107,5 +113,38 @@ public class ApiRequestServiceImpl implements ApiRequestService {
         return apiRequestDao.find(filter)
                 .limit(200)
                 .into(Lists.newArrayList());
+    }
+
+    @Override
+    public ApiRequestDubbo saveDubbo(User user, WebDubboInvokeReq request) {
+        String apiRequestId = request.getId();
+        ApiRequestDubbo existsApiRequest = null;
+        if (!Strings.isNullOrEmpty(apiRequestId)) {
+            existsApiRequest = apiRequestDubboDao.getEntityById(apiRequestId);
+            if (existsApiRequest == null) {
+                throw new TpServerException(404, "记录找不到或已被删除！");
+            }
+        }
+
+        ApiRequestDubbo apiRequest = new ApiRequestDubbo();
+        apiRequest.setName(request.getName());
+        apiRequest.setDocId(request.getDocId());
+        apiRequest.setApiKey(request.getApiKey());
+        apiRequest.setEnvCode(request.getEnvCode());
+        apiRequest.setParams(request.getParams());
+
+        if (existsApiRequest == null) {
+            apiRequestDubboDao.insertOne(apiRequest);
+        } else {
+            apiRequest.setId(request.getId());
+            apiRequestDubboDao.updateEntity(apiRequest);
+        }
+
+        LogDto log = new LogDto();
+        log.setAction(UserActionEnum.INVOKE_REQUEST_DUBBO_SAVE);
+        log.setInvokeRequestDubbo(apiRequest);
+        userLogService.add(user, log);
+
+        return apiRequest;
     }
 }
