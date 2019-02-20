@@ -43,6 +43,21 @@ public class ApiRequestDubbo {
      */
     private List<ApiRequestDubboParamItem> params;
 
+    /**
+     * 创建的用户ID
+     */
+    private Long userId;
+
+    /**
+     * 创建的用户名称
+     */
+    private String userName;
+
+    /**
+     * 是否公开接口
+     */
+    private Boolean publicState;
+
     public String getId() {
         return id;
     }
@@ -89,5 +104,29 @@ public class ApiRequestDubbo {
 
     public void setParams(List<ApiRequestDubboParamItem> params) {
         this.params = params;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public Boolean getPublicState() {
+        return publicState;
+    }
+
+    public void setPublicState(Boolean publicState) {
+        this.publicState = publicState;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 }

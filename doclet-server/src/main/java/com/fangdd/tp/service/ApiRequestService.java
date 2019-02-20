@@ -20,4 +20,6 @@ public interface ApiRequestService {
     List<ApiRequest> query(User user, String apiKey);
 
     ApiRequestDubbo saveDubbo(User user, WebDubboInvokeReq request);
+
+    List<ApiRequestDubbo> queryDubbo(User user, String apiKey);
 }

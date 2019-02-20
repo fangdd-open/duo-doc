@@ -132,12 +132,15 @@ public class ApiRequestServiceImpl implements ApiRequestService {
         apiRequest.setApiKey(request.getApiKey());
         apiRequest.setEnvCode(request.getEnvCode());
         apiRequest.setParams(request.getParams());
+        apiRequest.setPublicState(request.getPublicState());
 
         if (existsApiRequest == null) {
+            apiRequest.setUserId(user.getId());
+            apiRequest.setUserName(user.getName());
             apiRequestDubboDao.insertOne(apiRequest);
         } else {
             apiRequest.setId(request.getId());
-            apiRequestDubboDao.updateEntity(apiRequest);
+            apiRequestDubboDao.updateEntitySafe(apiRequest);
         }
 
         LogDto log = new LogDto();
@@ -146,5 +149,19 @@ public class ApiRequestServiceImpl implements ApiRequestService {
         userLogService.add(user, log);
 
         return apiRequest;
+    }
+
+    @Override
+    public List<ApiRequestDubbo> queryDubbo(User user, String apiKey) {
+        Bson filter = Filters.and(
+                Filters.eq("apiKey", apiKey),
+                Filters.or(
+                        Filters.eq("publicState", 1),
+                        Filters.eq("userId", user.getId())
+                )
+        );
+        return apiRequestDubboDao.find(filter)
+                .limit(200)
+                .into(Lists.newArrayList());
     }
 }

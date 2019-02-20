@@ -109,7 +109,7 @@ public class InvokeApiController {
     }
 
     /**
-     * 获取某个接口的调用配置列表
+     * 获取某个Rest接口的调用参数列表
      *
      * @param apiKey 接口key
      * @return
@@ -121,4 +121,16 @@ public class InvokeApiController {
         return BaseResponse.success(apiRequestService.query(user, apiKey));
     }
 
+    /**
+     * 获取某个Dubbo接口的调用参数列表
+     *
+     * @param apiKey 接口key
+     * @return
+     */
+    @Account
+    @GetMapping("/list/dubbo/{apiKey}")
+    public BaseResponse<List<ApiRequestDubbo>> listDubboRequests(@PathVariable String apiKey) {
+        User user = UserContextHelper.getUser();
+        return BaseResponse.success(apiRequestService.queryDubbo(user, apiKey));
+    }
 }
