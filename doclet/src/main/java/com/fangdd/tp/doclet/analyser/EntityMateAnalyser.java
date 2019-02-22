@@ -219,7 +219,7 @@ public class EntityMateAnalyser {
 
         for (AnnotationDesc annotationDesc : annotations) {
             EntityFieldAnnotationAnalyser analyser = FIELD_ANNOTATION_ANALYSER_MAP.get(annotationDesc.annotationType().qualifiedName());
-            if (analyser != null) {
+            if (analyser != null && analyser.check(fieldRef, field)) {
                 analyser.analyse(annotationDesc, fieldRef, field);
             }
         }

@@ -16,7 +16,7 @@ public abstract class EntityFieldAnnotationAnalyser {
      * @param fieldDoc
      * @return
      */
-    protected boolean check(EntityRef fieldRef, FieldDoc fieldDoc) {
+    public boolean check(EntityRef fieldRef, FieldDoc fieldDoc) {
         return true;
     }
 

@@ -16,7 +16,7 @@ import java.util.Date;
  */
 public class DateTimeFormatFieldAnnotationAnalyser extends EntityFieldAnnotationAnalyser {
     @Override
-    protected boolean check(EntityRef fieldRef, FieldDoc fieldDoc) {
+    public boolean check(EntityRef fieldRef, FieldDoc fieldDoc) {
         return Strings.isNullOrEmpty(fieldRef.getDemo());
     }
 
