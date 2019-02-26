@@ -35,8 +35,10 @@ public class AccountInterceptor implements HandlerInterceptor {
     private static final String AUTH_TOKEN = "auth-token";
 
     private static final Cache<String, Site> CACHE = CacheBuilder.newBuilder()
-            .expireAfterWrite(1, TimeUnit.MINUTES) //5分钟后过期
-            .maximumSize(10000) //最多1万个key
+            //5分钟后过期
+            .expireAfterWrite(1, TimeUnit.MINUTES)
+            //最多1万个key
+            .maximumSize(10000)
             .build();
     private static final String HOST = "Host";
 

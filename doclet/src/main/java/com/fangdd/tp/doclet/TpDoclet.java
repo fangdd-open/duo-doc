@@ -29,9 +29,9 @@ public class TpDoclet extends Doclet {
     public static boolean start(RootDoc root) {
         String baseDir = System.getProperty("basedir", "/Users/ycoe/Projects/fdd/tp/tp-doc/doclet-test");
         //下面在开发测试时把注释打开`
-        String exportType = System.getProperty("exportType", "mongodb");
+//        String exportType = System.getProperty("exportType", "mongodb");
 //        String exportType = System.getProperty("exportType", "web");
-//        String exportType = System.getProperty("exportType", "console"); //在控制台打印，用于测试
+        String exportType = System.getProperty("exportType", "console"); //在控制台打印，用于测试
 //        String server = System.getProperty("server", "http://127.0.0.1:17010"); //提交到本地，用于测试
 
         String server = System.getProperty("server", "http://tp-doc.fangdd.net");

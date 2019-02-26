@@ -1,5 +1,6 @@
 package com.fangdd.tp.service.impl;
 
+import com.fangdd.tp.core.exceptions.TpServerException;
 import com.fangdd.tp.dao.UserDao;
 import com.fangdd.tp.dto.oauth.OAuth2UserInfo;
 import com.fangdd.tp.dto.oauth.TokenInfo;
@@ -9,11 +10,14 @@ import com.fangdd.tp.enums.RoleEnum;
 import com.fangdd.tp.service.UserService;
 import com.fangdd.traffic.common.mongo.utils.UUIDUtils;
 import com.google.common.collect.Lists;
+import com.mongodb.client.model.Collation;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -23,7 +27,13 @@ import java.util.List;
  */
 @Service
 public class UserServiceImpl implements UserService {
-    private static final Long TOKEN_EXPIRE_IN = 1000L * 60 * 60 * 24 * 30; //一个月过期
+    //一个月过期
+    private static final Long TOKEN_EXPIRE_IN = 1000L * 60 * 60 * 24 * 30;
+
+    private static final String ID = "_id";
+
+    private static final String DOCS_OWNER = "docsOwner";
+
     @Autowired
     private UserDao userDao;
 
@@ -52,7 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private void logout(User user) {
-        userDao.updateOne(Filters.eq("_id", user.getId()), Updates.combine(
+        userDao.updateOne(Filters.eq(ID, user.getId()), Updates.combine(
                 Updates.unset("token")
         ));
     }
@@ -115,6 +125,35 @@ public class UserServiceImpl implements UserService {
         user.setAuths(auths);
         userDao.insertOne(user);
         return user;
+    }
+
+    @Override
+    public Boolean addDocOwner(String docId, Long userId) {
+        Bson idFilter = Filters.eq(ID, userId);
+        User user = userDao.getEntity(idFilter, Projections.include(DOCS_OWNER));
+        if (user == null) {
+            throw new TpServerException(404, "无法找到此用户！");
+        }
+        List<String> docList = user.getDocsOwner();
+        if (docList == null || !docList.contains(docId)) {
+            userDao.updateOne(idFilter, Updates.addToSet(DOCS_OWNER, docId));
+        }
+        return true;
+    }
+
+    @Override
+    public Boolean removeDocOwner(String docId, Long userId) {
+        Bson idFilter = Filters.eq(ID, userId);
+        User user = userDao.getEntity(idFilter, Projections.include(DOCS_OWNER));
+        if (user == null) {
+            throw new TpServerException(404, "无法找到此用户！");
+        }
+        List<String> docList = user.getDocsOwner();
+        if (!CollectionUtils.isEmpty(docList)) {
+            docList.remove(docId);
+            userDao.updateOne(idFilter, Updates.set(DOCS_OWNER, docList));
+        }
+        return true;
     }
 
     private AuthInfo newAuthInfo(String code, TokenInfo tokenInfo) {

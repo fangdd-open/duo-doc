@@ -7,6 +7,18 @@
     <groupId>com.fangdd</groupId>
     <artifactId>doclet-test</artifactId>
     <version>1.2-SNAPSHOT</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 
     <!-- 因为一个pom不允许有多个parent，所以采用此种方式引入spring-boot依赖 -->
