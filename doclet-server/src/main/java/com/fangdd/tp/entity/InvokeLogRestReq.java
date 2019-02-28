@@ -1,43 +1,17 @@
-package com.fangdd.tp.dto.request;
+package com.fangdd.tp.entity;
 
 import com.fangdd.tp.doclet.pojo.entity.RequestParam;
-import com.fangdd.tp.doclet.pojo.entity.EnvItem;
+import com.fangdd.tp.dto.request.RequestBodyParam;
 
 import java.util.List;
 
 /**
- * @auth ycoe
- * @date 18/11/23
+ * RestFul请求的请求内容
+ *
+ * @author xuwenzhen
+ * @date 2019/2/26
  */
-public class WebRestInvokeData {
-    /**
-     * 文档ID
-     *
-     * @demo com.fangdd.tp:scanengine-dp-server
-     */
-    private String docId;
-
-    /**
-     * api key
-     *
-     * @demo
-     */
-    private String apiKey;
-
-    /**
-     * 站点ID
-     *
-     * @demo fdd
-     */
-    private String siteId;
-
-    /**
-     * 环境代码
-     *
-     * @demo dev
-     */
-    private EnvItem env;
-
+public class InvokeLogRestReq {
     /**
      * 调用URL（不包含参数）
      *
@@ -71,30 +45,6 @@ public class WebRestInvokeData {
      * POST提交数据
      */
     private RequestBodyParam requestBody;
-
-    public String getDocId() {
-        return docId;
-    }
-
-    public void setDocId(String docId) {
-        this.docId = docId;
-    }
-
-    public String getApiKey() {
-        return apiKey;
-    }
-
-    public void setApiKey(String apiKey) {
-        this.apiKey = apiKey;
-    }
-
-    public EnvItem getEnv() {
-        return env;
-    }
-
-    public void setEnv(EnvItem env) {
-        this.env = env;
-    }
 
     public String getUrl() {
         return url;
@@ -142,13 +92,5 @@ public class WebRestInvokeData {
 
     public void setRequestBody(RequestBodyParam requestBody) {
         this.requestBody = requestBody;
-    }
-
-    public String getSiteId() {
-        return siteId;
-    }
-
-    public void setSiteId(String siteId) {
-        this.siteId = siteId;
     }
 }

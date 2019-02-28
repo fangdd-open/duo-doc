@@ -5,12 +5,14 @@ import com.fangdd.tp.doclet.pojo.DubboInfo;
 import com.fangdd.tp.doclet.pojo.EntityRef;
 import com.fangdd.tp.doclet.pojo.entity.EnvItem;
 import com.fangdd.tp.doclet.pojo.entity.RequestParam;
+import com.fangdd.tp.dto.PagedListDto;
 import com.fangdd.tp.dto.request.*;
 import com.fangdd.tp.dto.response.InvokeResultDto;
 import com.fangdd.tp.entity.*;
 import com.fangdd.tp.helper.DubboGenericInvoker;
 import com.fangdd.tp.helper.UserContextHelper;
 import com.fangdd.tp.service.ApiService;
+import com.fangdd.tp.service.InvokeLogService;
 import com.fangdd.tp.service.InvokeService;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -36,6 +38,12 @@ import java.util.Map;
 public class InvokeServiceImpl implements InvokeService {
     private static final Logger logger = LoggerFactory.getLogger(InvokeServiceImpl.class);
     private static final String CONTENT_TYPE = "Content-Type";
+    private static final String RAW = "raw";
+    private static final String X_WWW_FORM_URLENCODED = "x-www-form-urlencoded";
+    private static final String FORM_DATA = "form-data";
+
+    @Autowired
+    private InvokeLogService invokeLogService;
 
     @Autowired
     private ApiService apiService;
@@ -81,10 +89,14 @@ public class InvokeServiceImpl implements InvokeService {
         long t1 = System.currentTimeMillis();
         try {
             Response response = client.newCall(request).execute();
-            return getResponseResult(response, t1);
+            InvokeResultDto responseResult = getResponseResult(response, t1);
+            invokeLogService.log(user, req, responseResult);
+            return responseResult;
         } catch (IOException e) {
             logger.warn("调用发生错误，query:{}", request.toString(), e);
-            return getErrorInvokeResult(t1, e.getMessage());
+            InvokeResultDto errorInvokeResult = getErrorInvokeResult(t1, e.getMessage());
+            invokeLogService.log(user, req, errorInvokeResult);
+            return errorInvokeResult;
         }
     }
 
@@ -157,10 +169,13 @@ public class InvokeServiceImpl implements InvokeService {
             result.setResponseBody(getResponseBodyStr(resp));
             result.setResponseAtMillis(System.currentTimeMillis() - t1);
             result.setHeaders(Lists.newArrayList());
+            invokeLogService.log(user, request, result);
             return result;
         } catch (Exception e) {
             logger.error("Dubbo接口调用失败：{}", JSONObject.toJSONString(invokeDto), e);
-            return new InvokeResultDto(500, e.getMessage(), System.currentTimeMillis() - t1);
+            InvokeResultDto invokeResultDto = new InvokeResultDto(500, e.getMessage(), System.currentTimeMillis() - t1);
+            invokeLogService.log(user, request, invokeResultDto);
+            return invokeResultDto;
         }
     }
 
@@ -187,7 +202,8 @@ public class InvokeServiceImpl implements InvokeService {
         if (type == 2) {
             //pojo
             Map<String, Object> objValue = Maps.newHashMap();
-            objValue.put("class", item.getTypeName()); //类名
+            //类名
+            objValue.put("class", item.getTypeName());
             List<ApiRequestDubboParamItem> fields = JSONObject.parseArray(item.getValue(), ApiRequestDubboParamItem.class);
             for (ApiRequestDubboParamItem reqItem : fields) {
                 if (!reqItem.getAvailable()) {
@@ -297,7 +313,7 @@ public class InvokeServiceImpl implements InvokeService {
 
         MediaType mediaType = MediaType.parse(mediaTypeStr);
         String rawDataType = body.getRawDataType();
-        if ("raw".equalsIgnoreCase(rawDataType)) {
+        if (RAW.equalsIgnoreCase(rawDataType)) {
             RequestBody requestBody = RequestBody.create(mediaType, Strings.isNullOrEmpty(body.getRawData()) ? "" : body.getRawData());
             requestBuilder.post(requestBody);
             return;
@@ -308,14 +324,14 @@ public class InvokeServiceImpl implements InvokeService {
             return;
         }
 
-        if ("x-www-form-urlencoded".equalsIgnoreCase(rawDataType)) {
+        if (X_WWW_FORM_URLENCODED.equalsIgnoreCase(rawDataType)) {
             HttpUrl.Builder urlencodedBuilder = new HttpUrl.Builder();
             body.getFormData().forEach(form -> {
                 urlencodedBuilder.addEncodedQueryParameter(form.getKey(), form.getValue());
             });
             RequestBody requestBody = RequestBody.create(mediaType, urlencodedBuilder.toString().substring(4));
             requestBuilder.post(requestBody);
-        } else if ("form-data".equalsIgnoreCase(rawDataType)) {
+        } else if (FORM_DATA.equalsIgnoreCase(rawDataType)) {
             MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder();
             body.getFormData().forEach(form -> {
                 requestBodyBuilder.addFormDataPart(form.getKey(), form.getValue());

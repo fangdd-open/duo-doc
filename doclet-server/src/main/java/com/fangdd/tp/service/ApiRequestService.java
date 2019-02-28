@@ -17,6 +17,8 @@ public interface ApiRequestService {
 
     void delete(User user, String apiRequestId);
 
+    void deleteDubbo(User user, String apiRequestId);
+
     List<ApiRequest> query(User user, String apiKey);
 
     ApiRequestDubbo saveDubbo(User user, WebDubboInvokeReq request);

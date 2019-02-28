@@ -3,12 +3,11 @@ package com.fangdd.tp.service.impl;
 import com.fangdd.tp.core.exceptions.TpServerException;
 import com.fangdd.tp.dao.ApiRequestDao;
 import com.fangdd.tp.dao.ApiRequestDubboDao;
-import com.fangdd.tp.dto.request.ApiRequestSave;
-import com.fangdd.tp.dto.request.LogDto;
-import com.fangdd.tp.dto.request.WebDubboInvokeReq;
-import com.fangdd.tp.dto.request.WebRestInvokeData;
+import com.fangdd.tp.dto.PagedListDto;
+import com.fangdd.tp.dto.request.*;
 import com.fangdd.tp.entity.ApiRequest;
 import com.fangdd.tp.entity.ApiRequestDubbo;
+import com.fangdd.tp.entity.InvokeLog;
 import com.fangdd.tp.entity.User;
 import com.fangdd.tp.enums.RoleEnum;
 import com.fangdd.tp.enums.UserActionEnum;
@@ -98,6 +97,26 @@ public class ApiRequestServiceImpl implements ApiRequestService {
         // 写入操作日志
         LogDto log = new LogDto();
         log.setAction(UserActionEnum.INVOKE_REQUEST_DELETE);
+        userLogService.add(user, log);
+    }
+
+    @Override
+    public void deleteDubbo(User user, String apiRequestId) {
+        ApiRequestDubbo apiRequestDubbo = apiRequestDubboDao.getEntityById(apiRequestId);
+        if (apiRequestDubbo == null) {
+            throw new TpServerException(404, "无法找到当前配置记录：id=" + apiRequestId);
+        }
+        if (!user.getId().equals(apiRequestDubbo.getUserId())) {
+            //记录不是当前用户创建的，检查是否是管理员
+            if (user.getRole() != RoleEnum.ADMIN.getRole()) {
+                throw new TpServerException(500, "没有权限删除此配置");
+            }
+        }
+
+        apiRequestDubboDao.deleteOne(Filters.eq("_id", apiRequestId));
+        // 写入操作日志
+        LogDto log = new LogDto();
+        log.setAction(UserActionEnum.INVOKE_REQUEST_DUBBO_DELETE);
         userLogService.add(user, log);
     }
 

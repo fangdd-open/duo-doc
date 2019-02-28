@@ -25,6 +25,13 @@ public class ApiRequestDubbo {
     private String docId;
 
     /**
+     * 站点ID
+     *
+     * @demo fdd
+     */
+    private String siteId;
+
+    /**
      * api key
      *
      * @demo
@@ -128,5 +135,13 @@ public class ApiRequestDubbo {
 
     public String getUserName() {
         return userName;
+    }
+
+    public String getSiteId() {
+        return siteId;
+    }
+
+    public void setSiteId(String siteId) {
+        this.siteId = siteId;
     }
 }
