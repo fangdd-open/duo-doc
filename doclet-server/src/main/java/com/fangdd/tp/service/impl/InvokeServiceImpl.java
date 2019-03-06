@@ -70,14 +70,9 @@ public class InvokeServiceImpl implements InvokeService {
         }
 
         Request.Builder requestBuilder = new Request.Builder().url(urlBuilder.build());
-        if (!CollectionUtils.isEmpty(req.getHeaders())) {
-            for (RequestParam header : req.getHeaders()) {
-                if (Strings.isNullOrEmpty(header.getKey())) {
-                    continue;
-                }
-                requestBuilder.addHeader(header.getKey(), header.getValue());
-            }
-        }
+        List<RequestParam> envHeaders = req.getEnv().getHeaders();
+        addHeaders(envHeaders, requestBuilder);
+        addHeaders(req.getHeaders(), requestBuilder);
 
         if (HttpMethod.POST.name().equalsIgnoreCase(req.getMethod())) {
             // POST请求
@@ -97,6 +92,17 @@ public class InvokeServiceImpl implements InvokeService {
             InvokeResultDto errorInvokeResult = getErrorInvokeResult(t1, e.getMessage());
             invokeLogService.log(user, req, errorInvokeResult);
             return errorInvokeResult;
+        }
+    }
+
+    private void addHeaders(List<RequestParam> headers, Request.Builder requestBuilder) {
+        if (!CollectionUtils.isEmpty(headers)) {
+            for (RequestParam header : headers) {
+                if (Strings.isNullOrEmpty(header.getKey())) {
+                    continue;
+                }
+                requestBuilder.addHeader(header.getKey(), header.getValue());
+            }
         }
     }
 

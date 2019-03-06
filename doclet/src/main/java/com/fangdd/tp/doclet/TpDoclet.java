@@ -9,6 +9,7 @@ import com.fangdd.tp.doclet.helper.BookHelper;
 import com.fangdd.tp.doclet.helper.FileHelper;
 import com.fangdd.tp.doclet.pojo.Artifact;
 import com.fangdd.tp.doclet.pojo.Chapter;
+import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.sun.javadoc.ClassDoc;
@@ -26,15 +27,18 @@ import java.util.Map;
  * @date 18/1/5
  */
 public class TpDoclet extends Doclet {
+    private static final String CONSOLE = "console";
+
     public static boolean start(RootDoc root) {
         String baseDir = System.getProperty("basedir", "/Users/ycoe/Projects/fdd/tp/tp-doc/doclet-test");
         //下面在开发测试时把注释打开`
-//        String exportType = System.getProperty("exportType", "mongodb");
+        String exportType = System.getProperty("exportType", "mongodb");
 //        String exportType = System.getProperty("exportType", "web");
-        String exportType = System.getProperty("exportType", "console"); //在控制台打印，用于测试
+//        String exportType = System.getProperty("exportType", CONSOLE); //在控制台打印，用于测试
 //        String server = System.getProperty("server", "http://127.0.0.1:17010"); //提交到本地，用于测试
 
         String server = System.getProperty("server", "http://tp-doc.fangdd.net");
+
         BookHelper.setServer(server);
 
         //读取主服务的信息
@@ -46,11 +50,8 @@ public class TpDoclet extends Doclet {
             }
         }
 
-        //尝试读取xml配置的dubbo服务配置
-        File dubboXmlFile = new File(baseDir + "/src/main/resources/applicationContext-dubbo.xml");
-        if (dubboXmlFile.exists()) {
-            DubboXmlAnalyser.analyse(dubboXmlFile);
-        }
+        // 从xml配置中读取dubbo配置
+        loadDubboFromXmlConf(baseDir);
 
         for (ClassDoc doc : root.classes()) {
             ApiAnalyser.analyse(doc);
@@ -59,7 +60,7 @@ public class TpDoclet extends Doclet {
         //尝试读取主服务根目录下的.md文件
         readMarkdown(new File(baseDir));
 
-        if ("console".equalsIgnoreCase(exportType)) {
+        if (CONSOLE.equalsIgnoreCase(exportType)) {
             //导出 markdown 到 控制台
             List<Chapter> chapterSet = Lists.newArrayList();
             for (Map.Entry<String, Chapter> entry : BookHelper.getBooks().entrySet()) {
@@ -72,6 +73,23 @@ public class TpDoclet extends Doclet {
         }
 
         return true;
+    }
+
+    private static void loadDubboFromXmlConf(String baseDir) {
+        // 动态配置的dubboXml配置文件，多个使用逗号分隔
+        String dubboConfXmls = System.getProperty("dubbo-xml", "applicationContext-dubbo.xml");
+        //尝试读取xml配置的dubbo服务配置
+        Iterable<String> dubboConfXmlArray = Splitter
+                .on(",")
+                .omitEmptyStrings()
+                .trimResults()
+                .split(dubboConfXmls);
+        for (String dubboConfXml : dubboConfXmlArray) {
+            File dubboXmlFile = new File(baseDir + "/src/main/resources/" + dubboConfXml);
+            if (dubboXmlFile.exists()) {
+                DubboXmlAnalyser.analyse(dubboXmlFile);
+            }
+        }
     }
 
     private static void readMarkdown(File baseDir) {

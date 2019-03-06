@@ -16,6 +16,7 @@ import java.util.List;
  * @section 用户行为接口
  * @auth ycoe
  * @date 19/1/17
+ * @disable
  */
 @RestController
 @RequestMapping("/api/user")

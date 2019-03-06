@@ -31,6 +31,11 @@ public class EntityRef {
     private String demo;
 
     /**
+     * 默认值
+     */
+    private String defaultValue;
+
+    /**
      * 参数注解，在RestFul参数中有，比如@PathVariable / @RequestBody等
      */
     private String annotation;
@@ -81,5 +86,13 @@ public class EntityRef {
 
     public void setAnnotation(String annotation) {
         this.annotation = annotation;
+    }
+
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
     }
 }

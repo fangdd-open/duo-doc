@@ -82,9 +82,9 @@ TP-DOC是对javadoc的扩展，对代码无任何入侵或污染，通过读取�
 
 目前接口文档支持两种类型：
 
-1. RestFul接口： [批量获取多个广告位接口](http://tp-doc.fangdd.net/doc/com.fangdd.cp:m-web-cp-server/?code=com.fangdd.cp.m.controller.AdvertApiController.getEsfAdvertMap)
+1. RestFul接口： [小区筛选结果接口](http://tp-doc.fangdd.net/doc/com.fangdd.cp:m-web-cp-server/cd4ae6f7f3c114ad507ec67b3aad8e50)
 
-2. Dubbo接口：[通过ID获取文章](http://tp-doc.fangdd.net/doc/com.fangdd.cp:article-ctc-cp-server/?code=com.fangdd.cp.ctc.article.service.ArticleService.queryArticleById)
+2. Dubbo接口：[文章内链、敏感词格式化](http://tp-doc.fangdd.net/doc/com.fangdd.tp:scanengine-dp-server/bcd736748b165a61fdffb728436583b5)
 
 3. 目前接入的项目文档：[项目索引](http://tp-doc.fangdd.net)
 <br>
@@ -133,6 +133,8 @@ public class CellApiController {
 
 PS：暂未实现将`@RestController`写在父类的场景
 
+如果添加注释`@disable`，则整个Controller的文档都不会被创建
+
 
 ### 2. 方法
 
@@ -152,6 +154,9 @@ Controller里面的方法，只要被注解为`@RequestMapping` / `@GetMapping` 
 `@param` 参数的注释，会出现在文档的参数表格里面，如果没有指定则没有注释信息（暂时实现默认值的写法）
 
 `@return` 响应的注释
+
+如果添加注释`@disable`，则本接口的文档都不会被创建
+
 
 ### 4. 方法参数
 

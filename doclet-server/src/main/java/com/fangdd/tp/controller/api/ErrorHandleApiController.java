@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * @disable
+ */
 @RestController
 @ControllerAdvice(annotations = {RestController.class})
 public class ErrorHandleApiController {
@@ -30,6 +33,7 @@ public class ErrorHandleApiController {
 
     @ExceptionHandler(TpServerException.class)
     public BaseResponse handleTpServerException(TpServerException ex, HttpServletRequest request, HttpServletResponse response) {
+        logger.error(ex.getMessage(), ex);
         return BaseResponse.error(ex.getCode(), ex.getMessage());
     }
 

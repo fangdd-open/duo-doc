@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @auth ycoe
  * @date 19/1/18
+ * @disable
  */
 @RestController
 @RequestMapping("/api/site")

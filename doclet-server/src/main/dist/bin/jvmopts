@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+echo " -Xmx512m -Xms256m -Xmn192m -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+DisableExplicitGC  -DDIAMOND_HOST=$DIAMOND_HOST -DLOGS_DIR=$LOGS_DIR -Dlogging.config=$CONF_DIR/logback.xml "

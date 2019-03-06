@@ -13,7 +13,7 @@ public class TpDocletTest {
     /**
      * maven仓库地址
      */
-    private static final String mavenRepositoryPath = "/Users/ycoe/Software/maven/repository/";
+    private static final String mavenRepositoryPath = "/Users/xuwenzhen/Software/apache-maven-3.6.0/repository/";
 
     /**
      * 需要引入的包
@@ -44,10 +44,10 @@ public class TpDocletTest {
 //                "-public",
 //                "-d",
 //                "/Users/ycoe/Projects/fdd/tp/tp-doc/tp-demo-server/target/docs",
-                "com.fangdd.doclet.test.service.impl",
+                "com.fangdd.doclet.test.controller",
 
                 "-subpackages",
-                projectPath + "/server/target/tp-server.jar",
+                projectPath + "/doclet-test/target/doclet-test-1.2-SNAPSHOT.jar",
                 "-cp",
                 getLibs(),
                 "-sourcepath",
@@ -71,28 +71,9 @@ public class TpDocletTest {
 
     public static String getProjectSrcDirs() {
         String projectPath = System.getProperty("user.dir");
-
-        StringBuilder srcPath = new StringBuilder();
-        File projectDir = new File(projectPath);
-        File[] fs = projectDir.listFiles();
-        for (File f : fs) {
-            if (f.isFile())
-                continue;
-
-            if (!f.getName().contains("test")) {
-                continue;
-            }
-
-            File srcDir = new File(f.getAbsolutePath() + "/src/main/java");
-            if (!srcDir.exists())
-                continue;
-
-            if (srcPath.length() > 0) {
-                srcPath.append(":");
-            }
-            srcPath.append(srcDir.getAbsolutePath());
-        }
-        return srcPath.toString();
+        String srcPath = projectPath + "/doclet-test/src/main/java";
+        srcPath += ":" + projectPath + "/doclet-test-api/src/main/java";
+        return srcPath;
     }
 
 }

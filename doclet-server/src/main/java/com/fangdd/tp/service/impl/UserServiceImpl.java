@@ -10,6 +10,7 @@ import com.fangdd.tp.enums.RoleEnum;
 import com.fangdd.tp.service.UserService;
 import com.fangdd.traffic.common.mongo.utils.UUIDUtils;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.mongodb.client.model.Collation;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
@@ -19,7 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @auth ycoe
@@ -27,19 +31,26 @@ import java.util.List;
  */
 @Service
 public class UserServiceImpl implements UserService {
-    //一个月过期
+    /**
+     * 一个月过期
+     */
     private static final Long TOKEN_EXPIRE_IN = 1000L * 60 * 60 * 24 * 30;
 
     private static final String ID = "_id";
 
     private static final String DOCS_OWNER = "docsOwner";
+    private static final String AUTHS = "auths";
+    private static final String TOKEN_EXPIRED = "tokenExpired";
+    private static final String TOKEN = "token";
+    private static final String AUTHS_CODE = "auths.code";
+    private static final String AUTHS_GID = "auths.gid";
 
     @Autowired
     private UserDao userDao;
 
     @Override
     public User getByToken(String authToken) {
-        Bson filter = Filters.eq("token", authToken);
+        Bson filter = Filters.eq(TOKEN, authToken);
         User user = userDao.getEntity(filter);
         if (user == null) {
             // token失效
@@ -63,7 +74,7 @@ public class UserServiceImpl implements UserService {
 
     private void logout(User user) {
         userDao.updateOne(Filters.eq(ID, user.getId()), Updates.combine(
-                Updates.unset("token")
+                Updates.unset(TOKEN)
         ));
     }
 
@@ -100,8 +111,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getByAccessToken(String code, TokenInfo tokenInfo) {
         Bson filter = Filters.and(
-                Filters.eq("auths.code", code),
-                Filters.eq("auths.gid", tokenInfo.getUserId())
+                Filters.eq(AUTHS_CODE, code),
+                Filters.eq(AUTHS_GID, tokenInfo.getUserId())
         );
         return userDao.getEntity(filter);
     }
@@ -154,6 +165,19 @@ public class UserServiceImpl implements UserService {
             userDao.updateOne(idFilter, Updates.set(DOCS_OWNER, docList));
         }
         return true;
+    }
+
+    @Override
+    public Map<Long, User> getByIds(Set<Long> userIds) {
+        Map<Long, User> userMap = Maps.newHashMap();
+        List<User> userList = userDao
+                .find(Filters.in(ID, userIds))
+                .projection(Projections.exclude(AUTHS, TOKEN_EXPIRED, TOKEN))
+                .into(Lists.newArrayList());
+        if (userList != null) {
+            userList.forEach(user -> userMap.put(user.getId(), user));
+        }
+        return userMap;
     }
 
     private AuthInfo newAuthInfo(String code, TokenInfo tokenInfo) {

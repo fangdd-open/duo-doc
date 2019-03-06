@@ -14,6 +14,7 @@ import com.sun.javadoc.AnnotationDesc;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.MethodDoc;
 import com.sun.javadoc.Tag;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -22,19 +23,11 @@ import java.util.List;
  * @date 18/1/9
  */
 public class RestFulAnalyser {
-    private static final String[][] METHOD_MAPPINGS = new String[][]{
-            new String[] {SpringMvcConstant.ANNOTATION_REQUEST_MAPPING, ""},
-            new String[] {SpringMvcConstant.ANNOTATION_GET_MAPPING, "GET"},
-            new String[] {SpringMvcConstant.ANNOTATION_POST_MAPPING, "POST"},
-            new String[] {SpringMvcConstant.ANNOTATION_PUT_MAPPING, "PUT"},
-            new String[] {SpringMvcConstant.ANNOTATION_PATCH_MAPPING, "PUTCH"},
-            new String[] {SpringMvcConstant.ANNOTATION_DELETE_MAPPING, "DELETE"},
-            new String[] {SpringMvcConstant.ANNOTATION_POST_MAPPING, "POST"}
-    };
+    private static final String URL_SPLITTER = "/";
 
     public static void analyse(ClassDoc classDoc) {
         //@RequestMapping
-        AnnotationDesc requestMappingAnnotation = AnnotationHelper.getAnnotation(classDoc.annotations(), SpringMvcConstant.ANNOTATION_REQUEST_MAPPING);
+        AnnotationDesc requestMappingAnnotation = BookHelper.requestMappingAnnotation;
         AnnotationDesc.ElementValuePair[] vs = requestMappingAnnotation.elementValues();
         List<String> basePaths = RequestMappingAnnotationHelper.getRequestMappingAnnotationValues(vs, "value");
         if (basePaths.isEmpty()) {
@@ -71,10 +64,20 @@ public class RestFulAnalyser {
 
         MethodDoc[] methods = classDoc.methods();
         for (MethodDoc method : methods) {
+            if (TagHelper.contendTag(method.tags(), "@disable")) {
+                continue;
+            }
             Api api = analyseApi(method, section, basePaths);
-            if(api != null && !Strings.isNullOrEmpty(deprecated) && Strings.isNullOrEmpty(api.getDeprecated())) {
+            if (api != null && !Strings.isNullOrEmpty(deprecated) && Strings.isNullOrEmpty(api.getDeprecated())) {
                 api.setDeprecated(deprecated);
             }
+        }
+        if (section.getApis().isEmpty()) {
+            // 如果api为空时，直接清掉
+            BookHelper.delSections(chapter, section);
+        }
+        if (chapter.getSections().isEmpty()) {
+            BookHelper.delChapter(chapter);
         }
     }
 
@@ -82,7 +85,7 @@ public class RestFulAnalyser {
         List<String> methods = null;
         AnnotationDesc.ElementValuePair[] vs = null;
 
-        for (String[] methodMap : METHOD_MAPPINGS) {
+        for (String[] methodMap : DocHelper.METHOD_MAPPINGS) {
             AnnotationDesc requestMappingAnnotation = AnnotationHelper.getAnnotation(methodDoc.annotations(), methodMap[0]);
             if (requestMappingAnnotation != null) {
                 vs = requestMappingAnnotation.elementValues();
@@ -106,21 +109,21 @@ public class RestFulAnalyser {
         for (String basePath : basePaths) {
             for (String path : paths) {
                 String apiPath;
-                if (basePath.endsWith("/")) {
-                    if (path.startsWith("/")) {
+                if (basePath.endsWith(URL_SPLITTER)) {
+                    if (path.startsWith(URL_SPLITTER)) {
                         apiPath = basePath + path.substring(1);
                     } else {
                         apiPath = basePath + path;
                     }
                 } else {
-                    if (path.startsWith("/")) {
+                    if (path.startsWith(URL_SPLITTER)) {
                         apiPath = basePath + path;
                     } else {
-                        apiPath = basePath + "/" + path;
+                        apiPath = basePath + URL_SPLITTER + path;
                     }
                 }
-                if (apiPath.length() > 0 && !apiPath.startsWith("/")) {
-                    apiPath = "/" + apiPath;
+                if (apiPath.length() > 0 && !apiPath.startsWith(URL_SPLITTER)) {
+                    apiPath = URL_SPLITTER + apiPath;
                 }
                 if (!apiPaths.contains(apiPath)) {
                     apiPaths.add(apiPath);

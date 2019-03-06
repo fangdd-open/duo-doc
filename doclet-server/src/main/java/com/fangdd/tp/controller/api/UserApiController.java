@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @section 用户接口
  * @auth ycoe
  * @date 18/1/18
+ * @disable
  */
 @RestController
 @RequestMapping("/api/user")

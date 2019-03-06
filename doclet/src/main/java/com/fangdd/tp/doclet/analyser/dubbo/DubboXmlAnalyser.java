@@ -17,7 +17,6 @@ import java.util.List;
  * @date 18/1/10
  */
 public class DubboXmlAnalyser {
-
     public static void analyse(File dubboXmlFile) {
         SAXBuilder jdomBuilder = new SAXBuilder();
         Document jdomDocument;

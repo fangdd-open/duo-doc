@@ -6,6 +6,7 @@ import com.fangdd.tp.doclet.pojo.*;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.sun.javadoc.AnnotationDesc;
 import com.sun.javadoc.MethodDoc;
 
 import java.util.List;
@@ -21,6 +22,16 @@ public class BookHelper {
     private static final Map<String, DubboInfo> INTERFACE_CLASS_MAP = Maps.newHashMap();
     private static final Map<String, String> MARKDOWN_MAP = Maps.newHashMap();
     private static Artifact artifact = null;
+
+    /**
+     * 当前处理的api类型
+     */
+    public static int currentApiType = 0;
+
+    /**
+     * 当前类里的@RequestMapping，有可能是父类里的
+     */
+    public static AnnotationDesc requestMappingAnnotation = null;
 
     /**
      * 当前分析的接口方法
@@ -148,5 +159,14 @@ public class BookHelper {
 
     public static Map<String, String> getMarkdownDocMap() {
         return MARKDOWN_MAP;
+    }
+
+    public static void delSections(Chapter chapter, Section section) {
+        chapter.getSections().remove(section);
+    }
+
+    public static void delChapter(Chapter chapter) {
+        CHAPTER_MAP.remove(chapter.getName());
+        SECTIONS_MAP.remove(chapter);
     }
 }

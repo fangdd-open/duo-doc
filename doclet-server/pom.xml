@@ -152,6 +152,22 @@
                                         <include name="${project.artifactId}.jar"/>
                                     </fileset>
                                 </copy>
+                                <copy todir="${project.build.directory}/distributions/service/" overwrite="true">
+                                    <fileset dir="${project.basedir}/src/main/dist/"/>
+                                </copy>
+
+                                <copy file="${project.basedir}/src/main/resources/logback-product.xml"
+                                      tofile="${project.build.directory}/distributions/service/conf/logback.xml"/>
+
+                                <delete file="${project.build.directory}/classes/logback.xml"/>
+                                <copy file="${project.basedir}/src/main/resources/logback-product.xml"
+                                      tofile="${project.build.directory}/classes/logback.xml"/>
+                                <delete file="${project.build.directory}/classes/logback-product.xml"/>
+
+                                <delete file="${project.build.directory}/classes/application.properties"/>
+                                <copy file="${project.basedir}/src/main/resources/application-prod.properties"
+                                      tofile="${project.build.directory}/classes/application.properties"/>
+                                <delete file="${project.build.directory}/classes/application-prod.properties"/>
 
                                 <!-- 生成zip压缩包 -->
                                 <zip destfile="${project.build.directory}/distributions/${project.artifactId}.zip">
@@ -163,50 +179,38 @@
                 </executions>
             </plugin>
 
-            <!--<plugin>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-javadoc-plugin</artifactId>-->
-            <!--<version>2.10.3</version>-->
-            <!--<configuration>-->
-            <!--<doclet>com.fangdd.tp.doclet.TpDoclet</doclet>-->
-            <!--<docletArtifact>-->
-            <!--<groupId>com.fangdd</groupId>-->
-            <!--<artifactId>doclet</artifactId>-->
-            <!--<version>1.0-SNAPSHOT</version>-->
-            <!--</docletArtifact>-->
-            <!--&lt;!&ndash;<sourceFileIncludes>&ndash;&gt;-->
-            <!--&lt;!&ndash;&lt;!&ndash; 接口的路径，可以添加多个 &ndash;&gt;&ndash;&gt;-->
-            <!--&lt;!&ndash;<include>com/fangdd/tp/service/impl/*.java</include>&ndash;&gt;-->
-            <!--&lt;!&ndash;</sourceFileIncludes>&ndash;&gt;-->
-            <!--<sourcepath>-->
-            <!--&lt;!&ndash; 指定需要扫描的包路径 &ndash;&gt;-->
-            <!--com.fangdd.tp.*-->
-            <!--</sourcepath>-->
-            <!--<sourcepath>-->
-            <!--&lt;!&ndash; 指定源码路径，如果多个模块，需要包含进去。分隔符：linux使用:   windows使用; &ndash;&gt;-->
-            <!--${project.basedir}/src/main/java:${project.basedir}/../tp-demo-api/src/main/java-->
-            <!--</sourcepath>-->
-            <!--<useStandardDocletOptions>false</useStandardDocletOptions>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
+                <configuration>
+                    <doclet>com.fangdd.tp.doclet.TpDoclet</doclet>
+                    <docletArtifact>
+                        <groupId>com.fangdd</groupId>
+                        <artifactId>doclet</artifactId>
+                        <version>1.2-SNAPSHOT</version>
+                    </docletArtifact>
+                    <sourcepath>
+                        <!-- 指定源码路径，如果多个模块，需要包含进去 -->
+                        ${project.basedir}/src/main/java:${project.basedir}/../doclet-pojo/src/main/java:${project.basedir}/../doclet-render/src/main/java
+                    </sourcepath>
+                    <useStandardDocletOptions>false</useStandardDocletOptions>
 
-            <!--<additionalJOptions>-->
-            <!--&lt;!&ndash; 导出方式，可选方法有： &ndash;&gt;-->
-            <!--&lt;!&ndash;    web: 导出到tp-doc.fangdd.net上 &ndash;&gt;-->
-            <!--&lt;!&ndash;    console: 导出markdown到控制台 &ndash;&gt;-->
-            <!--<additionalJOption>-J-DexportType=web</additionalJOption>-->
-            <!--<additionalJOption>-J-Dbasedir=${project.basedir}</additionalJOption>-->
-            <!--<additionalJOption>-J-Dserver=http://127.0.0.1:17010</additionalJOption>-->
-            <!--</additionalJOptions>-->
-            <!--</configuration>-->
-            <!--<executions>-->
-            <!--<execution>-->
-            <!--<id>attach-javadocs</id>-->
-            <!--<phase>compile</phase>-->
-            <!--<goals>-->
-            <!--<goal>javadoc</goal>-->
-            <!--</goals>-->
-            <!--</execution>-->
-            <!--</executions>-->
-            <!--</plugin>-->
+                    <additionalJOptions>
+                        <additionalJOption>-J-Dbasedir=${project.basedir}</additionalJOption>
+                    </additionalJOptions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <!-- package可以在提交代码后由CI自动触发，如果不需要自动触发，可以设置为site，届时需要手工执行：mvn clean site -->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>javadoc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

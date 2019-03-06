@@ -36,6 +36,8 @@ public class FddOAuth2Service extends BaseOAuth2Service {
     private static final String NAME = "name";
 
     private static final String UC_LOGOUT_API = "/1/user/login";
+    private static final String EMAIL = "email";
+    public static final String MOBILE = "mobile";
 
     /**
      * 获取组织代码，比如fdd
@@ -58,12 +60,19 @@ public class FddOAuth2Service extends BaseOAuth2Service {
 //        authInfo.getAccessToken()
     }
 
+    /**
+     * //{"id":1898580,"name":"徐文振","gender":1,"email":"xuwenzhen@fangdd.com","mobile":"15014110313","locality":"研发-深圳","badge":"P001765","status":1,"passportId":100001815,"statusName":"在职","genderName":"男"}
+     * @param responseBody 响应体
+     * @return
+     */
     @Override
     protected OAuth2UserInfo getUserInfo(String responseBody) {
         OAuth2UserInfo userInfo = new OAuth2UserInfo();
         JSONObject data = JSONObject.parseObject(responseBody);
         userInfo.setId(data.getString(ID));
         userInfo.setName(data.getString(NAME));
+        userInfo.setEmail(data.getString(EMAIL));
+        userInfo.setMobile(data.getString(MOBILE));
         return userInfo;
     }
 

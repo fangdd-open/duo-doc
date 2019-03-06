@@ -1,7 +1,7 @@
 package com.fangdd.tp.doclet.helper;
 
 import com.fangdd.tp.doclet.analyser.EntityMateAnalyser;
-import com.fangdd.tp.doclet.constant.SpringMvcConstant;
+import com.fangdd.tp.doclet.annotation.ParamAnnotation;
 import com.fangdd.tp.doclet.enums.ApiPositionEnum;
 import com.fangdd.tp.doclet.enums.ApiTypeEnum;
 import com.fangdd.tp.doclet.pojo.Api;
@@ -54,14 +54,13 @@ public class BaseApiInfoHelper {
         if (paramList != null && paramList.length > 0) {
             BookHelper.setApiPosition(ApiPositionEnum.PARAMETER);
             for (Parameter parameter : paramList) {
-
                 EntityRef param = EntityMateAnalyser.analyse(parameter.type());
                 if (paramTags != null) {
                     String paramComment = TagHelper.getStringValue(paramTags, parameter.name(), null);
                     param.setComment(paramComment);
                 }
                 param.setName(parameter.name());
-                if(setParamAnnotations(param, parameter)) {
+                if (setParamAnnotations(param, parameter)) {
                     params.add(param);
                 }
             }
@@ -85,39 +84,20 @@ public class BaseApiInfoHelper {
 
     private static boolean setParamAnnotations(EntityRef param, Parameter parameter) {
         AnnotationDesc[] paramAnnotations = parameter.annotations();
-        for (AnnotationDesc annotationDesc : paramAnnotations) {
-            String annotation = annotationDesc.annotationType().toString();
-            if (SpringMvcConstant.ANNOTATION_PATH_VARIABLE.equals(annotation)) {
-                // @PathVariable
-                param.setRequired(true);
-                param.setAnnotation("@PathVariable");
-            } else if (SpringMvcConstant.ANNOTATION_REQUEST_BODY.equals(annotation)) {
-                // @RequestBody
-                param.setRequired(true);
-                param.setAnnotation("@RequestBody");
-            } else if (SpringMvcConstant.ANNOTATION_REQUEST_ATTRIBUTE.equals(annotation)) {
-                // @RequestAttribute， 由此注解的属性一般是由统一拦截器或Filter中设置进去的，所以不添加进参数列表中
-                param.setRequired(true);
-                param.setAnnotation("@RequestAttribute");
-                return false;
-            } else if (SpringMvcConstant.ANNOTATION_REQUEST_HEADER.equals(annotation)){
-                param.setRequired(true);
-                param.setAnnotation("@RequestHeader");
-                return false;
-            }else if (SpringMvcConstant.ANNOTATION_REQUEST_PARAM.equals(annotation)) {
-                // @RequestParam
-                AnnotationValue requiredVal = AnnotationHelper.getValue(annotationDesc, "required");
-                Boolean required = true;
-                if (requiredVal != null) {
-                    required = (Boolean) requiredVal.value();
-                }
-                String defaultValue = AnnotationHelper.getStringValue(annotationDesc, "defaultValue");
-                param.setRequired(required);
-                param.setDemo(defaultValue);
-                param.setAnnotation("@RequestParam");
+        if (paramAnnotations.length == 0) {
+            //未指定时，默认为 @RequestParam
+            ParamAnnotation paramAnnotation = DocHelper.getRestApiParamAnnotation(null);
+            if (paramAnnotation != null) {
+                return paramAnnotation.analyse(param, null);
             }
         }
-
-        return true;
+        for (AnnotationDesc annotationDesc : paramAnnotations) {
+            String annotation = annotationDesc.annotationType().toString();
+            ParamAnnotation paramAnnotation = DocHelper.getRestApiParamAnnotation(annotation);
+            if (paramAnnotation != null) {
+                return paramAnnotation.analyse(param, annotationDesc);
+            }
+        }
+        return false;
     }
 }

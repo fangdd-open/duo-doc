@@ -25,6 +25,7 @@ import java.util.List;
  * @section 文档接口
  * @auth ycoe
  * @date 18/1/18
+ * @disable
  */
 @RestController
 @RequestMapping("/api/doc")

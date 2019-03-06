@@ -22,6 +22,7 @@ import java.util.List;
 /**
  * @auth ycoe
  * @date 18/11/28
+ * @disable
  */
 @Controller
 @RequestMapping("/api/oauth2")

@@ -16,13 +16,6 @@ public class SpringMvcConstant {
     public static final String ANNOTATION_PATCH_MAPPING = "org.springframework.web.bind.annotation.PatchMapping";
     public static final String ANNOTATION_DELETE_MAPPING = "org.springframework.web.bind.annotation.DeleteMapping";
 
-
-    public static final String ANNOTATION_PATH_VARIABLE = "org.springframework.web.bind.annotation.PathVariable";
-    public static final String ANNOTATION_REQUEST_BODY = "org.springframework.web.bind.annotation.RequestBody";
-    public static final String ANNOTATION_REQUEST_PARAM = "org.springframework.web.bind.annotation.RequestParam";
-    public static final String ANNOTATION_REQUEST_ATTRIBUTE = "org.springframework.web.bind.annotation.RequestAttribute";
-    public static final String ANNOTATION_REQUEST_HEADER = "org.springframework.web.bind.annotation.RequestHeader";
-
     private SpringMvcConstant(){}
 
 }

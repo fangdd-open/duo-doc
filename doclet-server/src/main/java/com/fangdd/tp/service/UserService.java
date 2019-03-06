@@ -4,6 +4,9 @@ import com.fangdd.tp.dto.oauth.OAuth2UserInfo;
 import com.fangdd.tp.dto.oauth.TokenInfo;
 import com.fangdd.tp.entity.User;
 
+import java.util.Map;
+import java.util.Set;
+
 /**
  * @auth ycoe
  * @date 18/11/28
@@ -71,4 +74,12 @@ public interface UserService {
      * @return
      */
     Boolean removeDocOwner(String docId, Long userId);
+
+    /**
+     * 通过用户IDs获取对应的用户信息
+     *
+     * @param userIds 用户IDs
+     * @return
+     */
+    Map<Long, User> getByIds(Set<Long> userIds);
 }

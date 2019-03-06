@@ -9,8 +9,10 @@ import com.fangdd.tp.dto.request.WebRestInvokeData;
 import com.fangdd.tp.dto.response.InvokeResultDto;
 import com.fangdd.tp.entity.*;
 import com.fangdd.tp.service.InvokeLogService;
+import com.fangdd.tp.service.UserService;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import org.bson.Document;
@@ -18,12 +20,11 @@ import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.sun.tools.doclint.Entity.copy;
-import static com.sun.tools.doclint.Entity.nu;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author xuwenzhen
@@ -41,6 +42,9 @@ public class InvokeLogServiceImpl implements InvokeLogService {
 
     @Autowired
     private ApiDao apiDao;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 记录请求日志
@@ -145,6 +149,20 @@ public class InvokeLogServiceImpl implements InvokeLogService {
                 .limit(pageSize)
                 .into(Lists.newArrayList());
         pagedListDto.setList(list);
+        if (!CollectionUtils.isEmpty(list)) {
+            Set<Long> userIds = Sets.newHashSet();
+            list.forEach(item -> userIds.add(item.getUserId()));
+            if (!CollectionUtils.isEmpty(userIds)) {
+                Map<Long, User> userIdMap = userService.getByIds(userIds);
+                list.forEach(item -> {
+                    User user = userIdMap.get(item.getUserId());
+                    if (user != null) {
+                        item.setUserName(user.getName());
+                    }
+                });
+            }
+        }
+
         return pagedListDto;
     }
 

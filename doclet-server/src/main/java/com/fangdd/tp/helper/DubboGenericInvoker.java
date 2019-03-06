@@ -20,13 +20,19 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DubboGenericInvoker {
     private static Logger logger = LoggerFactory.getLogger(DubboGenericInvoker.class);
 
-    // 当前应用的信息
+    /**
+     * 当前应用的信息
+     */
     private static ApplicationConfig application = new ApplicationConfig();
 
-    // 注册中心信息缓存
+    /**
+     * 注册中心信息缓存
+     */
     private static Map<String, RegistryConfig> registryConfigCache = new ConcurrentHashMap<>();
 
-    // 各个业务方的ReferenceConfig缓存
+    /**
+     * 各个业务方的ReferenceConfig缓存
+     */
     private static Map<String, ReferenceConfig> referenceCache = new ConcurrentHashMap<>();
 
     static {
@@ -81,7 +87,8 @@ public class DubboGenericInvoker {
             String address,
             String version
     ) {
-        ReferenceConfig referenceConfig = referenceCache.get(interfaceName);
+        String key = address + ":" + interfaceName;
+        ReferenceConfig referenceConfig = referenceCache.get(key);
         if (null == referenceConfig) {
             referenceConfig = new ReferenceConfig<>();
             referenceConfig.setApplication(application);
@@ -91,7 +98,7 @@ public class DubboGenericInvoker {
                 referenceConfig.setVersion(version);
             }
             referenceConfig.setGeneric(true);
-            referenceCache.put(interfaceName, referenceConfig);
+            referenceCache.put(key, referenceConfig);
         }
         return referenceConfig;
     }

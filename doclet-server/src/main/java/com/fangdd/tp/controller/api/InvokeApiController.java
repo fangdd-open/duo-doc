@@ -26,6 +26,7 @@ import java.util.List;
  * @section 接口调用
  * @auth ycoe
  * @date 18/11/23
+ * @disable
  */
 @RestController
 @RequestMapping("/api/invoke")

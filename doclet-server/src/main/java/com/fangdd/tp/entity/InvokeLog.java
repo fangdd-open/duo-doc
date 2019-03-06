@@ -1,5 +1,7 @@
 package com.fangdd.tp.entity;
 
+import com.fangdd.traffic.common.mongo.annotation.Ignore;
+
 /**
  * @author xuwenzhen
  * @date 2019/2/26
@@ -98,6 +100,12 @@ public class InvokeLog {
      * @demo 1519975108000
      */
     private Long invokeTime;
+
+    /**
+     * 用户名，数据不入库
+     */
+    @Ignore
+    private String userName;
 
     public String getId() {
         return id;
@@ -217,5 +225,13 @@ public class InvokeLog {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

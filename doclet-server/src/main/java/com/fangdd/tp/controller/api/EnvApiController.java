@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
  * @section 环境接口
  * @auth ycoe
  * @date 18/10/26
+ * @disable
  */
 @RestController
 @RequestMapping("/api/env")
