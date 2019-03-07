@@ -15,6 +15,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
+import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -145,6 +146,7 @@ public class InvokeLogServiceImpl implements InvokeLogService {
         List<InvokeLog> list = invokeLogDao
                 .find(filter)
                 .projection(PROJECTIONS)
+                .sort(Sorts.descending("invokeTime"))
                 .skip(skip)
                 .limit(pageSize)
                 .into(Lists.newArrayList());

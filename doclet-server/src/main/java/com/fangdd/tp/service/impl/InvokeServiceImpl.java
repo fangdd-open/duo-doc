@@ -70,8 +70,10 @@ public class InvokeServiceImpl implements InvokeService {
         }
 
         Request.Builder requestBuilder = new Request.Builder().url(urlBuilder.build());
-        List<RequestParam> envHeaders = req.getEnv().getHeaders();
-        addHeaders(envHeaders, requestBuilder);
+        if (req.getEnv() != null) {
+            List<RequestParam> envHeaders = req.getEnv().getHeaders();
+            addHeaders(envHeaders, requestBuilder);
+        }
         addHeaders(req.getHeaders(), requestBuilder);
 
         if (HttpMethod.POST.name().equalsIgnoreCase(req.getMethod())) {

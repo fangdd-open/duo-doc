@@ -170,9 +170,9 @@ Controller里面的方法，只要被注解为`@RequestMapping` / `@GetMapping` 
 
 `@RequestParam`：默认必填，也可以通过属性`required`声明是否必填，使用`defaultValue`声明默认值。如果参数是没有带任何注解，也相当于使用此注解，必填
 
-`@RequestAttribute`：一般是由Filter或拦截器注入的，所以不把它当成是请求参数，生成文档会有问题
+`@RequestAttribute`：一般是由Filter或拦截器注入的，所以不把它当成是请求参数，不会出现在文档里面
 
-`@Header`：暂未实现
+`@RequestHeader`：是由请求头注进来的，暂时也不体现在文档中
 
 自定义注解暂不支持
 
@@ -328,19 +328,6 @@ dubbo文档的生成规则与RestFul的完全一致，请参考上面RestFul说�
 ![](https://fs.fangdd.com/customer/fufeixiazai/FoZA1oYbWJym-SbCgJ0cNMzBhJed.png
 )
 
-<br>
 
-## 五、已知问题
-
-1. 暂不支持gardle
-
-2. 
-
-<br>
-
-
-## Next Step
-
-1.  
 
 
