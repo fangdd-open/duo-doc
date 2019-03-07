@@ -7,31 +7,32 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
- * @chapter 用户接口
- * @c1 30
+ * @chapter 角色接口
+ * @c1 20
  * @author xuwenzhen
  * @date 2019/3/4
  */
-@RestController
-@RequestMapping("/api")
-public class UserApiController extends BaseApiController{
+//@RestController
+//@RequestMapping("/api/role")
+public class RoleApiController {
     /**
-     * 查询用户基本信息
+     * 查询用户角色信息
      * @param userId 用户ID
      * @return
      */
-    @GetMapping("/user")
-    public User getDetail(Long userId) {
+    @GetMapping("/get")
+    public User getRole(Long userId) {
         return null;
     }
 
     /**
-     * 查询用户基本信息2
+     *
+     * @disable
      * @param userId
      * @return
      */
-    @GetMapping("/user2")
-    public User getDetails(Long userId) {
-        return null;
-    }
+//    @GetMapping("/user2")
+//    public User getDetails(Long userId) {
+//        return null;
+//    }
 }

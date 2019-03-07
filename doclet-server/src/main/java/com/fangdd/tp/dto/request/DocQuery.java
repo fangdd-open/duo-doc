@@ -1,7 +1,7 @@
 package com.fangdd.tp.dto.request;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/23
  */
 public class DocQuery {

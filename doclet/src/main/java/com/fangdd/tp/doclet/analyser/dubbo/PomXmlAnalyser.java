@@ -1,6 +1,7 @@
 package com.fangdd.tp.doclet.analyser.dubbo;
 
 import com.fangdd.tp.doclet.exception.DocletException;
+import com.fangdd.tp.doclet.helper.Logger;
 import com.fangdd.tp.doclet.helper.XmlHelper;
 import com.fangdd.tp.doclet.pojo.Artifact;
 import com.google.common.base.Strings;
@@ -18,12 +19,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/10
  */
 public class PomXmlAnalyser {
     private static final Map<File, Artifact> PATH_POM_MAP = Maps.newHashMap();
     private static final List<File> pomPathList = Lists.newArrayList();
+    private static final Logger logger = new Logger();
 
     public static Artifact analyse(ClassDoc classDoc) {
         File classFile = classDoc.position().file();
@@ -83,7 +85,7 @@ public class PomXmlAnalyser {
             }
         });
         if (pomXmlFiles != null && pomXmlFiles.length == 1) {
-            System.out.println("找到" + pomXmlFiles[0].getAbsolutePath());
+            logger.info("找到" + pomXmlFiles[0].getAbsolutePath());
             Artifact info = PomXmlAnalyser.analyse(pomXmlFiles[0]);
             for (File path : pomPathList) {
                 PATH_POM_MAP.put(path, info);

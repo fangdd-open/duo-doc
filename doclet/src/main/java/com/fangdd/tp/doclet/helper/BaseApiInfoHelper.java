@@ -18,14 +18,17 @@ import java.util.List;
  * @date 18/1/18
  */
 public class BaseApiInfoHelper {
+    private BaseApiInfoHelper() {
+    }
+
     public static Api getApiBase(MethodDoc method, Section section) {
         Tag[] tags = method.tags();
         String apiName = TagHelper.getStringValue(tags, "@chapter", null);
         String since = TagHelper.getStringValue(tags, "@since", null);
         String author = TagHelper.getStringValue(tags, "@author", null);
         String deprecated = TagHelper.getStringValue(tags, "@deprecated", null);
-        String rank = TagHelper.getStringValue(tags, "@rank", "0");
         String returnComment = TagHelper.getStringValue(tags, "@return", null);
+        Integer order = TagHelper.getIntegerValue(tags, "@c3");
 
         String comment = method.commentText();
         if (Strings.isNullOrEmpty(apiName)) {
@@ -75,10 +78,12 @@ public class BaseApiInfoHelper {
         api.setSince(since);
         api.setAuthor(author);
         api.setDeprecated(deprecated);
-        api.setRank(Integer.parseInt(rank));
         api.setResponse(response);
         api.setRequestParams(params);
         api.setCode(apiCode);
+        if (order != null) {
+            api.setOrder(order);
+        }
         return api;
     }
 

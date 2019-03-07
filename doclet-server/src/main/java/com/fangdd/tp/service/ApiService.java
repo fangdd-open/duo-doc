@@ -3,7 +3,7 @@ package com.fangdd.tp.service;
 import com.fangdd.tp.entity.ApiEntity;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 19/1/21
  */
 public interface ApiService {

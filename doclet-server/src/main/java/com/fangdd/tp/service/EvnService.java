@@ -3,7 +3,7 @@ package com.fangdd.tp.service;
 import com.fangdd.tp.doclet.pojo.entity.Env;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/10/26
  */
 public interface EvnService {

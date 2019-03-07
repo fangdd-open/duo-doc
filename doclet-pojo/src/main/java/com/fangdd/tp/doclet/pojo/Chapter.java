@@ -2,7 +2,7 @@ package com.fangdd.tp.doclet.pojo;
 
 import java.util.List;
 
-public class Chapter extends MongoDbEntity {
+public class Chapter extends MongoDbEntity implements Comparable<Chapter> {
     /**
      * 章节名
      */
@@ -32,6 +32,11 @@ public class Chapter extends MongoDbEntity {
      * maven.version
      */
     private String version;
+
+    /**
+     * 排序，越小越前
+     */
+    private Integer order;
 
     public String getName() {
         return name;
@@ -83,7 +88,19 @@ public class Chapter extends MongoDbEntity {
 
     @Override
     public String toString() {
-
         return "Chapter: " + name + "[" + type + "]";
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
+
+    @Override
+    public int compareTo(Chapter o) {
+        return this.order - o.order;
     }
 }

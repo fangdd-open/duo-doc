@@ -1,7 +1,7 @@
 package com.fangdd.tp.doclet.pojo;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/10
  */
 public class Artifact {

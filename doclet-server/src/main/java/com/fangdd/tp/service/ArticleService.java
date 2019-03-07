@@ -1,7 +1,7 @@
 package com.fangdd.tp.service;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/5
  */
 public interface ArticleService {

@@ -6,7 +6,7 @@ import com.fangdd.tp.doclet.render.markdown.ChapterMarkdownRender;
 import java.util.List;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/21
  */
 public class ExportMarkdownToConsole {

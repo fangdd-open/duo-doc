@@ -5,7 +5,7 @@ import com.fangdd.tp.entity.User;
 import com.fangdd.tp.entity.UserData;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 19/1/17
  */
 public interface UserDataService {

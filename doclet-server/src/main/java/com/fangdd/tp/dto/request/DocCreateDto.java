@@ -1,7 +1,7 @@
 package com.fangdd.tp.dto.request;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 19/1/22
  */
 public class DocCreateDto {

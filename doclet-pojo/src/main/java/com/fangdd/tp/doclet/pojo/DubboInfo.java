@@ -3,7 +3,7 @@ package com.fangdd.tp.doclet.pojo;
 /**
  * com.alibaba.dubbo.config.annotation.Service注解对应的属性
  *
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/12
  */
 public class DubboInfo {

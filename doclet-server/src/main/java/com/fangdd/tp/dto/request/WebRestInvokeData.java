@@ -6,7 +6,7 @@ import com.fangdd.tp.doclet.pojo.entity.EnvItem;
 import java.util.List;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/11/23
  */
 public class WebRestInvokeData {

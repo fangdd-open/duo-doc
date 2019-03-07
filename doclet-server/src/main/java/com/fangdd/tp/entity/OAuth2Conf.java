@@ -3,7 +3,7 @@ package com.fangdd.tp.entity;
 import java.util.Map;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/11/28
  */
 public class OAuth2Conf {

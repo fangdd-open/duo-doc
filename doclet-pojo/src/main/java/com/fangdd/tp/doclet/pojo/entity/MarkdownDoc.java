@@ -5,7 +5,7 @@ import com.fangdd.tp.doclet.pojo.MongoDbEntity;
 import java.io.Serializable;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/3/12
  */
 public class MarkdownDoc extends MongoDbEntity implements Serializable {

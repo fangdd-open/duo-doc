@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/23
  */
 public class DocDto {

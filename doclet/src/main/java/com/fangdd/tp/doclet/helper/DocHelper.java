@@ -22,7 +22,7 @@ public class DocHelper {
             new String[] {SpringMvcConstant.ANNOTATION_GET_MAPPING, "GET"},
             new String[] {SpringMvcConstant.ANNOTATION_POST_MAPPING, "POST"},
             new String[] {SpringMvcConstant.ANNOTATION_PUT_MAPPING, "PUT"},
-            new String[] {SpringMvcConstant.ANNOTATION_PATCH_MAPPING, "PUTCH"},
+            new String[] {SpringMvcConstant.ANNOTATION_PATCH_MAPPING, "PATCH"},
             new String[] {SpringMvcConstant.ANNOTATION_DELETE_MAPPING, "DELETE"},
             new String[] {SpringMvcConstant.ANNOTATION_POST_MAPPING, "POST"}
     };

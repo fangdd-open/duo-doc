@@ -3,7 +3,7 @@ package com.fangdd.tp.entity;
 import java.util.List;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 19/1/17
  */
 public class UserData {

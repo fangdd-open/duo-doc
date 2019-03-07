@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/23
  */
 public abstract class TpDocBaseEntityDao<T> extends BaseEntityDao<T> {

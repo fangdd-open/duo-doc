@@ -6,7 +6,7 @@ import com.fangdd.doclet.test.dto.User;
 import com.fangdd.doclet.test.service.UserService;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 19/1/4
  */
 @Service(version="1.0.0")

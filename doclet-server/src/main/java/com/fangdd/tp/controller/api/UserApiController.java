@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @chapter Rest接口
  * @section 用户接口
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/18
  * @disable
  */

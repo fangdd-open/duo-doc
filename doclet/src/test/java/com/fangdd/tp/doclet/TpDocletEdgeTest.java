@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/5
  */
 public class TpDocletEdgeTest {

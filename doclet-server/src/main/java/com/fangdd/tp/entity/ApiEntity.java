@@ -5,7 +5,7 @@ import com.fangdd.tp.doclet.pojo.Api;
 import java.util.List;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 19/1/21
  */
 public class ApiEntity extends Api {

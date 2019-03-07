@@ -1,7 +1,7 @@
 package com.fangdd.tp.dto.oauth;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/11/29
  */
 public class OAuth2UserInfo {

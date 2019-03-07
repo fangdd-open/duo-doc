@@ -5,7 +5,7 @@ import com.fangdd.tp.doclet.enums.EnvEnum;
 import java.util.List;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/10/26
  */
 public class EnvItem {

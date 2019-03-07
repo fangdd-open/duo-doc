@@ -1,7 +1,7 @@
 package com.fangdd.tp.service;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 19/1/21
  */
 public interface ApiUnwindService {

@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.*;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/8/23
  */
 public class MultiReadHttpServletRequest extends HttpServletRequestWrapper {

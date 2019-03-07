@@ -5,7 +5,7 @@ import com.fangdd.tp.doclet.pojo.entity.MarkdownDoc;
 import org.springframework.stereotype.Repository;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/23
  */
 @Repository

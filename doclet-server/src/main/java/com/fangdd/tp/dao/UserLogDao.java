@@ -4,7 +4,7 @@ import com.fangdd.tp.entity.UserLog;
 import org.springframework.stereotype.Repository;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/23
  */
 @Repository

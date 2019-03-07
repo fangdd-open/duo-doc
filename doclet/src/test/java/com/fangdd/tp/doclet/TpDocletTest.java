@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/5
  */
 public class TpDocletTest {
@@ -38,6 +38,7 @@ public class TpDocletTest {
     public static void main(String[] args) throws IOException {
         projectPath = System.getProperty("user.dir");
 
+        System.setProperty("exportType", "console");
         String projectSrcDirs = getProjectSrcDirs();
         System.out.println("扫描目录：" + projectSrcDirs);
         String[] docArgs = new String[]{

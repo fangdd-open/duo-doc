@@ -5,7 +5,7 @@ import com.fangdd.tp.doclet.pojo.entity.EnvItem;
 import java.util.List;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/11/28
  */
 public class Site {

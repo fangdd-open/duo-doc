@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/10/25
  */
 public class DubboGenericInvoker {

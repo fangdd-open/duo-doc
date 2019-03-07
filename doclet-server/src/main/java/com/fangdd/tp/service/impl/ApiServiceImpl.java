@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.jersey.JerseyProperties;
 import org.springframework.stereotype.Service;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 19/1/21
  */
 @Service

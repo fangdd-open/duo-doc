@@ -38,6 +38,10 @@ public class RestFulAnalyser {
         String chapterName = TagHelper.getStringValue(tags, "@chapter", DocletConstant.DEFAULT_CHAPTER_NAME);
         Chapter chapter = BookHelper.getChapter(StringHelper.firstLine(chapterName));
 
+        Integer order = TagHelper.getIntegerValue(tags, "@c1");
+        if (order != null) {
+            chapter.setOrder(order);
+        }
         String sectionName = TagHelper.getStringValue(tags, "@section", null);
         String comment = classDoc.commentText();
         if (StringHelper.isEmpty(sectionName)) {
@@ -56,8 +60,10 @@ public class RestFulAnalyser {
         Section section = BookHelper.getSections(chapter, sectionName);
         section.setCode(classFullName);
 
-        String rankStr = TagHelper.getStringValue(tags, "@rank", "0");
-        section.setRank(Integer.parseInt(rankStr));
+        Integer sectionOrder = TagHelper.getIntegerValue(tags, "@c2");
+        if (sectionOrder != null) {
+            section.setOrder(sectionOrder);
+        }
         section.setComment(comment);
 
         String deprecated = TagHelper.getStringValue(tags, "@deprecated", null);

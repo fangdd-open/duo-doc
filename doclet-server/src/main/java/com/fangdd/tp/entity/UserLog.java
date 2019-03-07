@@ -3,7 +3,7 @@ package com.fangdd.tp.entity;
 import com.fangdd.tp.dto.request.WebRestInvokeData;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/12/4
  */
 public class UserLog {

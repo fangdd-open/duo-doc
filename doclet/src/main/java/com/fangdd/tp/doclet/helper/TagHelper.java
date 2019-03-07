@@ -2,12 +2,15 @@ package com.fangdd.tp.doclet.helper;
 
 import com.sun.javadoc.ParamTag;
 import com.sun.javadoc.Tag;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by ycoe on 16/1/27.
+ *
+ * @author ycoe
+ * @date 16/1/27
  */
 public class TagHelper {
     private TagHelper() {
@@ -42,8 +45,8 @@ public class TagHelper {
     /**
      * 是否包含某个tag
      *
-     * @param tags
-     * @param tagName
+     * @param tags 标签
+     * @param tagName 标签名
      * @return
      */
     public static boolean contendTag(Tag[] tags, String tagName) {
@@ -59,8 +62,17 @@ public class TagHelper {
     }
 
     public static String getStringValue(Tag[] tags) {
-        if (tags == null || tags.length == 0)
+        if (tags == null || tags.length == 0) {
             return null;
+        }
         return tags[0].text();
+    }
+
+    public static Integer getIntegerValue(Tag[] tags, String tagName) {
+        List<String> values = getValues(tags, tagName);
+        if (!values.isEmpty() && NumberUtils.isDigits(values.get(0))) {
+            return Integer.parseInt(values.get(0));
+        }
+        return null;
     }
 }

@@ -6,7 +6,7 @@ import com.fangdd.tp.dto.response.InvokeResultDto;
 import com.fangdd.tp.entity.User;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/11/23
  */
 public interface InvokeService {

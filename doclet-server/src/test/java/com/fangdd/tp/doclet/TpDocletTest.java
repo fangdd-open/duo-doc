@@ -5,7 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/5
  */
 public class TpDocletTest {

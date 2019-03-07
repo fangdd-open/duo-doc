@@ -7,7 +7,7 @@ import org.jdom2.filter.Filters;
 import java.util.List;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/3/2
  */
 public class XmlHelper {

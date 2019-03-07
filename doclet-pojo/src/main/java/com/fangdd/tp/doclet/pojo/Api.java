@@ -4,7 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import java.util.List;
 
-public class Api {
+public class Api implements Comparable<Api> {
     /**
      * API编码，即{className}.{methodName}
      */
@@ -61,11 +61,6 @@ public class Api {
     private List<String> paths;
 
     /**
-     * 排序,越小越前
-     */
-    private int rank = 255;
-
-    /**
      * 响应
      */
     private EntityRef response;
@@ -90,6 +85,11 @@ public class Api {
      * Dubbo接口客户端包的坐标信息，Dubbo接口时有值
      */
     private Artifact artifact;
+
+    /**
+     * 排序值，越小越前
+     */
+    private Integer order;
 
     public String getCode() {
         return code;
@@ -171,14 +171,6 @@ public class Api {
         this.paths = paths;
     }
 
-    public int getRank() {
-        return rank;
-    }
-
-    public void setRank(int rank) {
-        this.rank = rank;
-    }
-
     public EntityRef getResponse() {
         return response;
     }
@@ -225,5 +217,18 @@ public class Api {
 
     public Artifact getArtifact() {
         return artifact;
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
+
+    @Override
+    public int compareTo(Api o) {
+        return this.order - o.order;
     }
 }

@@ -252,6 +252,10 @@ public class BaseResponse<T> {
 ```java
 /**
  * DEMO接口
+ * @chapter Demo接口
+ * @section Demo1
+ * @c1 10
+ * @c2 10
  */
 @RestController
 @RequestMapping("/demo")
@@ -259,6 +263,7 @@ public class DemoApiController {
     /**
      * 接口1
      * 这里注释的第一行会被当成是接口的名称，第二行被当成是接口说明
+     * @c3 10
      * @return
      */
     @RequestMapping(value = "/api1")
@@ -297,6 +302,17 @@ public class User<T> {
 会生成以下文档：
 
 ![](https://static-tp.fangdd.com/xfwf/Fvxk4XXhzWjfcrK3pT3HO--6maYq.png)
+
+
+### 7. 排序
+
+|注释标签|范围|说明|DEMO |
+|:--|:--|:--|:--|
+| @c1 | 类 | 一级分类，即 @chapter 排序 | @c1 10 |
+| @c2 | 类 | 二级分类，即 @section 排序 | @c2 10 |
+| @c3 | 方法 | 接口排序，即 @api 排序 | @c3 10 |
+
+排序值越小越前
 
 <br>
 

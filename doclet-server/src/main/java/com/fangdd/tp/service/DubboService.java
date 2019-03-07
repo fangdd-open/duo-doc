@@ -1,7 +1,7 @@
 package com.fangdd.tp.service;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/10/15
  */
 public interface DubboService {

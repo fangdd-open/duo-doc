@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/10/15
  */
 @Configuration

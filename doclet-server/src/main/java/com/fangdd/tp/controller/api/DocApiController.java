@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * @chapter Rest接口
  * @section 文档接口
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/18
  * @disable
  */

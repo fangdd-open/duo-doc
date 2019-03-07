@@ -5,6 +5,7 @@ import com.fangdd.tp.doclet.analyser.entity.EntityFieldAnnotationAnalyser;
 import com.fangdd.tp.doclet.analyser.entity.NotNullFieldAnnotationAnalyser;
 import com.fangdd.tp.doclet.constant.EntityConstant;
 import com.fangdd.tp.doclet.helper.BookHelper;
+import com.fangdd.tp.doclet.helper.Logger;
 import com.fangdd.tp.doclet.helper.TagHelper;
 import com.fangdd.tp.doclet.pojo.Entity;
 import com.fangdd.tp.doclet.pojo.EntityRef;
@@ -27,6 +28,7 @@ public class EntityMateAnalyser {
     private static final String COLLECTION_CLASS_NAME = Collection.class.getName();
     private static final String MAP_CLASS_NAME = Map.class.getName();
     private static final String BOOLEAN = "boolean";
+    private static final Logger logger = new Logger();
     private static final Map<String, EntityFieldAnnotationAnalyser> FIELD_ANNOTATION_ANALYSER_MAP = Maps.newHashMap();
 
     static {
@@ -82,7 +84,7 @@ public class EntityMateAnalyser {
                         if (parameterType != null) {
                             parameterizedTypeList.add(parameterType);
                         } else {
-                            System.out.println("接口"
+                            logger.info("接口"
                                     + BookHelper.getCurrentMethod()
                                     + " " + BookHelper.getApiPosition().getTitle()
                                     + " " + className + "<===未指定泛型类型");

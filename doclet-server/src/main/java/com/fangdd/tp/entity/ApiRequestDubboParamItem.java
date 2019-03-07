@@ -3,7 +3,7 @@ package com.fangdd.tp.entity;
 /**
  * 从web前端发起的dubbo请求
  *
- * @auth ycoe
+ * @author ycoe
  * @date 19/1/24
  */
 public class ApiRequestDubboParamItem {

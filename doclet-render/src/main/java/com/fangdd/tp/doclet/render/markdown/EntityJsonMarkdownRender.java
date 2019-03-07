@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/16
  */
 public class EntityJsonMarkdownRender {

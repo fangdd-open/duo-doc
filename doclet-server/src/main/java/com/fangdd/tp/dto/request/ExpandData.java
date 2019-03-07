@@ -1,7 +1,7 @@
 package com.fangdd.tp.dto.request;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 19/1/17
  */
 public class ExpandData {

@@ -4,7 +4,7 @@ import com.fangdd.tp.entity.Site;
 import com.fangdd.tp.entity.User;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/11/30
  */
 public class UserContent {

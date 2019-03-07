@@ -3,7 +3,7 @@ package com.fangdd.doclet.test.service;
 import com.fangdd.doclet.test.dto.User;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 19/1/4
  */
 public interface UserService {

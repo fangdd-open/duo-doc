@@ -1,7 +1,7 @@
 package com.fangdd.tp.core.exceptions;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 17/11/30
  */
 public class TpServerException extends RuntimeException {

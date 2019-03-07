@@ -5,7 +5,7 @@ import com.fangdd.traffic.common.mongo.annotation.AutoIncrement;
 import java.util.List;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/11/28
  */
 public class User {

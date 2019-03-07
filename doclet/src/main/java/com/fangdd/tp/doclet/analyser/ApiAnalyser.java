@@ -15,7 +15,7 @@ import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Tag;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/9
  */
 public class ApiAnalyser {

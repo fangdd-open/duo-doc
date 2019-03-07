@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/10/15
  */
 public class DubboServiceFactory {

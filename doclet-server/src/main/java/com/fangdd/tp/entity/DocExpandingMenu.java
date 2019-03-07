@@ -1,7 +1,7 @@
 package com.fangdd.tp.entity;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 19/1/17
  */
 public class DocExpandingMenu {

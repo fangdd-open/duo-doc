@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/11/29
  */
 public abstract class BaseOAuth2Service implements OAuth2Service {

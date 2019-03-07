@@ -7,7 +7,7 @@ import com.google.common.base.Strings;
 import java.util.List;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/15
  */
 public class EntityTableMarkdownRender {

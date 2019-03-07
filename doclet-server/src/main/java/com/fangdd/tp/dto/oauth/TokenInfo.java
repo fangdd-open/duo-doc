@@ -3,7 +3,7 @@ package com.fangdd.tp.dto.oauth;
 import com.alibaba.fastjson.annotation.JSONField;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/11/28
  */
 public class TokenInfo {
