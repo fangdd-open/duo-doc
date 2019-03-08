@@ -4,6 +4,7 @@ import com.fangdd.tp.core.exceptions.TpServerException;
 import com.fangdd.tp.dao.UserDao;
 import com.fangdd.tp.dto.oauth.OAuth2UserInfo;
 import com.fangdd.tp.dto.oauth.TokenInfo;
+import com.fangdd.tp.dto.response.SimpleUserDto;
 import com.fangdd.tp.entity.AuthInfo;
 import com.fangdd.tp.entity.User;
 import com.fangdd.tp.enums.RoleEnum;
@@ -11,7 +12,6 @@ import com.fangdd.tp.service.UserService;
 import com.fangdd.traffic.common.mongo.utils.UUIDUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.mongodb.client.model.Collation;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;
@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,6 +43,9 @@ public class UserServiceImpl implements UserService {
     private static final String TOKEN = "token";
     private static final String AUTHS_CODE = "auths.code";
     private static final String AUTHS_GID = "auths.gid";
+    private static final String NAME = "name";
+    private static final String MOBILE = "mobile";
+    private static final String EMAIL = "email";
 
     @Autowired
     private UserDao userDao;
@@ -178,6 +180,15 @@ public class UserServiceImpl implements UserService {
             userList.forEach(user -> userMap.put(user.getId(), user));
         }
         return userMap;
+    }
+
+    @Override
+    public List<SimpleUserDto> getOwners(String docId) {
+        return userDao
+                .getDocumentMongoCollection(SimpleUserDto.class)
+                .find(Filters.eq(DOCS_OWNER, docId))
+                .projection(Projections.include(NAME, MOBILE, EMAIL))
+                .into(Lists.newArrayList());
     }
 
     private AuthInfo newAuthInfo(String code, TokenInfo tokenInfo) {

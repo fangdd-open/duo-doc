@@ -20,7 +20,6 @@ import com.sun.javadoc.RootDoc;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 

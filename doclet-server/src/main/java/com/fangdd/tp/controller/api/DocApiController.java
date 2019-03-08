@@ -7,11 +7,14 @@ import com.fangdd.tp.doclet.pojo.entity.DocLog;
 import com.fangdd.tp.dto.BaseResponse;
 import com.fangdd.tp.dto.request.DocLogQuery;
 import com.fangdd.tp.dto.request.DocQuery;
+import com.fangdd.tp.dto.response.SimpleUserDto;
+import com.fangdd.tp.entity.User;
 import com.fangdd.tp.helper.GzipHelper;
 import com.fangdd.tp.helper.MD5Utils;
 import com.fangdd.tp.service.ApiUnwindService;
 import com.fangdd.tp.service.DocImportService;
 import com.fangdd.tp.service.DocService;
+import com.fangdd.tp.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +43,9 @@ public class DocApiController {
 
     @Autowired
     private ApiUnwindService apiUnwindService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 提交文档信息
@@ -159,5 +165,10 @@ public class DocApiController {
     public String unwind() {
         apiUnwindService.unwindAll();
         return "success";
+    }
+
+    @GetMapping("/{docId}/owner")
+    public List<SimpleUserDto> getDocOwner(@PathVariable String docId) {
+        return userService.getOwners(docId);
     }
 }

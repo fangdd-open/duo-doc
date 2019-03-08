@@ -1,5 +1,6 @@
 package com.fangdd.tp.doclet.helper;
 
+import com.google.common.base.Strings;
 import com.sun.javadoc.ParamTag;
 import com.sun.javadoc.Tag;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -8,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author ycoe
  * @date 16/1/27
  */
@@ -21,7 +21,7 @@ public class TagHelper {
         if (values.isEmpty()) {
             return defaultValue;
         }
-        return values.get(0);
+        return Strings.isNullOrEmpty(values.get(0)) ? defaultValue : values.get(0);
     }
 
     public static List<String> getValues(Tag[] tags, String tagName) {
@@ -45,7 +45,7 @@ public class TagHelper {
     /**
      * 是否包含某个tag
      *
-     * @param tags 标签
+     * @param tags    标签
      * @param tagName 标签名
      * @return
      */

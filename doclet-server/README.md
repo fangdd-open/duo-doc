@@ -344,6 +344,21 @@ dubbo文档的生成规则与RestFul的完全一致，请参考上面RestFul说�
 ![](https://fs.fangdd.com/customer/fufeixiazai/FoZA1oYbWJym-SbCgJ0cNMzBhJed.png
 )
 
+<br>
+
+## 七、错误示范
+
+```java
+/**
+ * 标签
+ * @demo [笋盘, 满五唯一]
+ */
+private List<String> tags;
+```
+
+上面字段`tags`的注释，因为是`List<String>`类型，应该写为：`@demo ["笋盘", "满五唯一"]`
+
+这种错误可能会影响`restful`代码调用时的`request body` demo 值
 
 
 

@@ -19,12 +19,14 @@ import java.util.stream.Collectors;
  */
 public class HttpFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(HttpFilter.class);
+    private static final int MAX_LEN = 2000;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         //do nothing
     }
 
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         MultiReadHttpServletRequest req = new MultiReadHttpServletRequest((HttpServletRequest) request);
         long startTime = System.currentTimeMillis();
@@ -34,12 +36,15 @@ public class HttpFilter implements Filter {
         String queryString = req.getQueryString();
         if ("POST".equalsIgnoreCase(method)) {
             String t = requestBodyToString(req);
-            logger.info("{} {} query:{} head:{} body:{}", method, uri, queryString, headers, t);
+            if (req.getContentLength() > MAX_LEN) {
+                logger.info("{} {} query:{} head:{} long body...", method, uri, queryString, headers);
+            } else {
+                logger.info("{} {} query:{} head:{} body:{}", method, uri, queryString, headers, t);
+            }
         } else {
             logger.info("{} {} query:{} head:{}", method, uri, queryString, headers);
         }
 
-        boolean success = false;
         try {
             chain.doFilter(req, response);
         } finally {

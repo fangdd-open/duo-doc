@@ -80,6 +80,16 @@ public class User {
      */
     private List<String> authCodes;
 
+    /**
+     * Email
+     */
+    private String email;
+
+    /**
+     * 手机号码
+     */
+    private String mobile;
+
     public Long getId() {
         return id;
     }
@@ -190,5 +200,21 @@ public class User {
 
     public void setAuthCodes(List<String> authCodes) {
         this.authCodes = authCodes;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 }

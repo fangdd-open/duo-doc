@@ -23,7 +23,7 @@ public class BaseApiInfoHelper {
 
     public static Api getApiBase(MethodDoc method, Section section) {
         Tag[] tags = method.tags();
-        String apiName = TagHelper.getStringValue(tags, "@chapter", null);
+        String apiName = TagHelper.getStringValue(tags, "@api", null);
         String since = TagHelper.getStringValue(tags, "@since", null);
         String author = TagHelper.getStringValue(tags, "@author", null);
         String deprecated = TagHelper.getStringValue(tags, "@deprecated", null);

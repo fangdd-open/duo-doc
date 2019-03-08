@@ -2,8 +2,10 @@ package com.fangdd.tp.service;
 
 import com.fangdd.tp.dto.oauth.OAuth2UserInfo;
 import com.fangdd.tp.dto.oauth.TokenInfo;
+import com.fangdd.tp.dto.response.SimpleUserDto;
 import com.fangdd.tp.entity.User;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -82,4 +84,11 @@ public interface UserService {
      * @return
      */
     Map<Long, User> getByIds(Set<Long> userIds);
+
+    /**
+     * 查询某个文档的所有者
+     * @param docId 文档ID
+     * @return 所有者列表
+     */
+    List<SimpleUserDto> getOwners(String docId);
 }
