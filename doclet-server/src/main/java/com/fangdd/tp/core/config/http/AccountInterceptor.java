@@ -51,7 +51,6 @@ public class AccountInterceptor implements HandlerInterceptor {
         UserContent userContent = new UserContent();
 
         String host = request.getHeader(HOST);
-        logger.info("host: {}, Host:{}", host, request.getHeader("Host"));
         Site site = getSite(host);
         userContent.setSite(site);
 

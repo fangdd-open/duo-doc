@@ -37,8 +37,10 @@ public class TpDocletTest {
 
     public static void main(String[] args) throws IOException {
         projectPath = System.getProperty("user.dir");
+        projectPath = projectPath + "/doclet-test";
 
-        System.setProperty("exportType", "console");
+        System.setProperty("exporter", "console");
+        System.setProperty("basedir", projectPath);
         String projectSrcDirs = getProjectSrcDirs();
         System.out.println("扫描目录：" + projectSrcDirs);
         String[] docArgs = new String[]{
@@ -71,7 +73,6 @@ public class TpDocletTest {
 
 
     public static String getProjectSrcDirs() {
-        String projectPath = System.getProperty("user.dir");
         String srcPath = projectPath + "/doclet-test/src/main/java";
         srcPath += ":" + projectPath + "/doclet-test-api/src/main/java";
         return srcPath;

@@ -5,7 +5,8 @@ TP-DOC是对javadoc的扩展，对代码无任何入侵或污染，通过读取�
 1. spring mvc提供的  `@RestController`注解的类和由`@RequestMapping` / `@GetMapping` / `@PostMapping` / `@PutMapping` / `@PatchMapping` / `@DeleteMapping` 注解的方法
 
 2. @com.alibaba.dubbo.config.annotation.Service注解的Dubbo接口
-3. 使用xml配置的dubbo服务接口 （暂时只能支持固定路径的配置文件）
+
+3. 使用xml配置的dubbo服务接口
 
 本工具以maven插件方式提供，使用本自动化文档系统只需要：多写注释，多写注释，多写注释！
 
@@ -156,6 +157,8 @@ Controller里面的方法，只要被注解为`@RequestMapping` / `@GetMapping` 
 `@return` 响应的注释
 
 如果添加注释`@disable`，则本接口的文档都不会被创建
+
+如果添加注释`@disableInvoke`，则本接口的文档都允许在TP-DOC中调用
 
 
 ### 4. 方法参数
@@ -327,19 +330,31 @@ dubbo文档的生成规则与RestFul的完全一致，请参考上面RestFul说�
 
 ### 2. 配置方式声明
 
-目前仅支持配置文件名且目录为：`/src/main/resources/applicationContext-dubbo.xml`
+可以通过插件配置中的变更`dubboXmlConfigs`配置需要加载的`dubbo`配置文件，文件使用相对于`{baseDir}/src/main/resources/`的相对目录，多个文件使用英文逗号分隔：
+
+```xml
+<additionalJOption>-J-DdubboXmlConfigs=dubbo-config.xml,dubbo/dubbo-config1.xml</additionalJOption>
+```
 
 <br>
 
 ## 六、Markdown文档
 
-系统支持自定义markdown文档，markdown文档必须是在启动项目下，以`.md`为后缀。
+系统支持自定义markdown文档，markdown文档默认是在启动项目下的`doc`，以`.md`为后缀。
 
-默认，需要一个`REDME.md`文件，用于在项目文档根目录中显示（参考github的项目首页）
+如果需要改变可以通过插件配置指定目录：
 
-另外，如果文件名跟分类名一致时，会将文档的链接加在分类上，比如有个分类目录为：`公共接口` > `相册接口`
+```xml
+<additionalJOption>-J-DmarkdownDir=docs</additionalJOption>
+```
 
-然后创建两个文件：`公共接口.md` 和 `公共接口.相册接口.md`，这时，生成的目录结构会显示成下图那样，是带链接的。
+默认，项目需要一个`REDME.md`文件，项目文档根目录中显示（参考github的项目首页）
+
+另外，如果文件名跟分类名匹配时，会将文档的链接加在分类上，比如有个分类目录为：`公共接口`/`相册接口`
+
+在文档目录中有两个文件：`doc/公共接口/相册接口/README.md` 和 `doc/公共接口/README.md`
+
+生成的目录结构会显示成下图那样，是带链接的，同时分类前面的icon也会显示成markdown的标识。
 
 ![](https://fs.fangdd.com/customer/fufeixiazai/FoZA1oYbWJym-SbCgJ0cNMzBhJed.png
 )
@@ -347,6 +362,8 @@ dubbo文档的生成规则与RestFul的完全一致，请参考上面RestFul说�
 <br>
 
 ## 七、错误示范
+
+### 1. @demo 值要跟类型匹配
 
 ```java
 /**
@@ -359,6 +376,8 @@ private List<String> tags;
 上面字段`tags`的注释，因为是`List<String>`类型，应该写为：`@demo ["笋盘", "满五唯一"]`
 
 这种错误可能会影响`restful`代码调用时的`request body` demo 值
+
+
 
 
 

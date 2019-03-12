@@ -12,7 +12,7 @@ public class DocletConfig {
     /**
      * 生成的文档导出到哪里，可选：mongodb | console
      */
-    public static String exportType;
+    public static String exporter;
 
     /**
      * 文档服务地址
@@ -24,10 +24,22 @@ public class DocletConfig {
      */
     public static String dubboConfXmls;
 
+    /**
+     * markdown文档目录
+     */
+    public static String markdownDir;
+
     static {
         baseDir = System.getProperty("basedir", "/Users/ycoe/Projects/fdd/tp/tp-doc/doclet-test");
-        exportType = System.getProperty("exportType", "mongodb");
+        exporter = System.getProperty("exporter", "server");
         server = System.getProperty("server", "http://tp-doc.fangdd.net");
-        dubboConfXmls = System.getProperty("dubbo-xml", "applicationContext-dubbo.xml");
+        dubboConfXmls = System.getProperty("dubboXmlConfigs", "applicationContext-dubbo.xml");
+        markdownDir = System.getProperty("markdownDir", "doc");
+        if (markdownDir.startsWith("/")) {
+            markdownDir = markdownDir.substring(1);
+        }
+        if (markdownDir.startsWith("./")) {
+            markdownDir = markdownDir.substring(2);
+        }
     }
 }
