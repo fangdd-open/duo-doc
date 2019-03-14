@@ -37,7 +37,7 @@ public class TpDocletTest {
 
     public static void main(String[] args) throws IOException {
         projectPath = System.getProperty("user.dir");
-        projectPath = projectPath + "/doclet-test";
+//        projectPath = projectPath + "/doclet-test";
 
         System.setProperty("exporter", "console");
         System.setProperty("basedir", projectPath);

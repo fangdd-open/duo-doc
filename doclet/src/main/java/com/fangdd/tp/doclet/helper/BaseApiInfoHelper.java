@@ -103,6 +103,6 @@ public class BaseApiInfoHelper {
                 return paramAnnotation.analyse(param, annotationDesc);
             }
         }
-        return false;
+        return true;
     }
 }

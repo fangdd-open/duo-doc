@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 /**
  *
  * @chapter 用户接口
@@ -21,7 +23,7 @@ public class UserApiController extends BaseApiController{
      * @return
      */
     @GetMapping("/user")
-    public User getDetail(Long userId) {
+    public User getDetail(@Valid Long userId) {
         return null;
     }
 
