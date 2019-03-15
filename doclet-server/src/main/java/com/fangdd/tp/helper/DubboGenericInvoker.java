@@ -6,6 +6,7 @@ import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.rpc.service.GenericService;
 import com.alibaba.fastjson.JSONObject;
+import com.fangdd.tp.core.exceptions.TpServerException;
 import com.fangdd.tp.dto.request.DubboGenericInvokeDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,12 +47,7 @@ public class DubboGenericInvoker {
      * @return
      */
     public static Object invoke(DubboGenericInvokeDto invokeDto) {
-        ReferenceConfig reference = getReferenceConfig(invokeDto.getInterfaceName(), invokeDto.getDubboRegistUri(), invokeDto.getVersion());
-        GenericService genericService = (GenericService) reference.get();
-        if (genericService == null) {
-            logger.debug("GenericService创建失败:{}", JSONObject.toJSONString(invokeDto));
-            return null;
-        }
+        GenericService genericService = getGenericService(invokeDto.getInterfaceName(), invokeDto.getDubboRegistUri(), invokeDto.getVersion());
 
         return genericService.$invoke(invokeDto.getMethodName(), invokeDto.getMethodParamTypes(), invokeDto.getMethodParams());
     }
@@ -82,13 +78,14 @@ public class DubboGenericInvoker {
         return registryConfig;
     }
 
-    private static ReferenceConfig getReferenceConfig(
+    private static GenericService getGenericService(
             String interfaceName,
             String address,
             String version
     ) {
         String key = address + ":" + interfaceName;
         ReferenceConfig referenceConfig = referenceCache.get(key);
+
         if (null == referenceConfig) {
             referenceConfig = new ReferenceConfig<>();
             referenceConfig.setApplication(application);
@@ -100,6 +97,20 @@ public class DubboGenericInvoker {
             referenceConfig.setGeneric(true);
             referenceCache.put(key, referenceConfig);
         }
-        return referenceConfig;
+
+        GenericService genericService;
+        try {
+            genericService = (GenericService) referenceConfig.get();
+        } catch (Exception e) {
+            referenceCache.remove(key);
+            referenceConfig.destroy();
+            throw new TpServerException(500, "获取GenericService失败！", e);
+        }
+        if (genericService == null) {
+            referenceCache.remove(key);
+            referenceConfig.destroy();
+            throw new TpServerException(500, "GenericService创建失败");
+        }
+        return genericService;
     }
 }

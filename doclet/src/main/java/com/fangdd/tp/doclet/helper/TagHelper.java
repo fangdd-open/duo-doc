@@ -21,7 +21,7 @@ public class TagHelper {
         if (values.isEmpty()) {
             return defaultValue;
         }
-        return Strings.isNullOrEmpty(values.get(0)) ? defaultValue : values.get(0);
+        return values.get(0);
     }
 
     public static List<String> getValues(Tag[] tags, String tagName) {
