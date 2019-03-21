@@ -35,9 +35,8 @@ public class FddOAuth2Service extends BaseOAuth2Service {
     private static final String ID = "id";
     private static final String NAME = "name";
 
-    private static final String UC_LOGOUT_API = "/1/user/login";
     private static final String EMAIL = "email";
-    public static final String MOBILE = "mobile";
+    private static final String MOBILE = "mobile";
 
     /**
      * 获取组织代码，比如fdd

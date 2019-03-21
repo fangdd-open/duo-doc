@@ -125,7 +125,7 @@ public class ApiRequestServiceImpl implements ApiRequestService {
         Bson filter = Filters.and(
                 Filters.eq("apiKey", apiKey),
                 Filters.or(
-                        Filters.eq("publicState", 1),
+                        Filters.eq("publicState", true),
                         Filters.eq("userId", user.getId())
                 )
         );
