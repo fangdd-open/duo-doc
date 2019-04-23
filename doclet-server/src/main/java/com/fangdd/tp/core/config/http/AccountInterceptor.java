@@ -18,7 +18,6 @@ import com.google.common.cache.CacheLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Account 注解的验证
+ *
  * @author xuwenzhen
  */
 public class AccountInterceptor implements HandlerInterceptor {
@@ -43,7 +43,8 @@ public class AccountInterceptor implements HandlerInterceptor {
             //最多1万个key
             .maximumSize(10000)
             .build();
-    private static final String HOST = "Host";
+    private static final String DOMAIN = "domain";
+    private static final String DOMAIN2 = "Host";
 
     @Autowired
     private UserService userService;
@@ -55,7 +56,10 @@ public class AccountInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         UserContent userContent = new UserContent();
 
-        String host = request.getHeader(HOST);
+        String host = request.getHeader(DOMAIN);
+        if (Strings.isNullOrEmpty(host)) {
+            host = request.getHeader(DOMAIN2);
+        }
         Site site = getSite(host);
         userContent.setSite(site);
 
@@ -99,7 +103,7 @@ public class AccountInterceptor implements HandlerInterceptor {
             //返回了空对象
             throw new TpServerException(404, "无效域名！", e);
         }
-        
+
         return site;
     }
 
