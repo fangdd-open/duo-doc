@@ -1,8 +1,10 @@
 package com.fangdd.tp.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fangdd.tp.core.DocletException;
 import com.fangdd.tp.doclet.pojo.Artifact;
 import com.fangdd.tp.doclet.pojo.DocDto;
+import com.fangdd.tp.doclet.pojo.ProviderApiDto;
 import com.fangdd.tp.doclet.pojo.entity.DocLog;
 import com.fangdd.tp.dto.BaseResponse;
 import com.fangdd.tp.dto.request.DocLogQuery;
@@ -24,9 +26,9 @@ import java.io.IOException;
 import java.util.List;
 
 /**
+ * @author ycoe
  * @chapter Rest接口
  * @section 文档接口
- * @author ycoe
  * @date 18/1/18
  * @disable
  */
@@ -83,6 +85,29 @@ public class DocApiController {
             @RequestParam(required = false) Long version
     ) {
         return docService.get(id, version);
+    }
+
+    /**
+     * 通过appId获取某个文档数据
+     *
+     * @param appId appId
+     * @param vcsId 版本ID
+     * @return 文档的全部数据
+     */
+    @GetMapping("/app/{appId}")
+    public byte[] get(
+            @PathVariable String appId,
+            @RequestParam String vcsId
+    ) {
+        ProviderApiDto byAppId = docService.getByAppId(appId, vcsId);
+        if (byAppId == null) {
+            return new byte[0];
+        }
+        try {
+            return GzipHelper.compress(JSONObject.toJSONString(byAppId));
+        } catch (IOException e) {
+            throw new DocletException("压缩失败！", e);
+        }
     }
 
     /**

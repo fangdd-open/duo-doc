@@ -6,7 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Created by ycoe on 17/10/20.
+ *
+ * @author ycoe
+ * @date 17/10/20
  */
 @Configuration
 public class MongoDataSourceConfig {
@@ -15,9 +17,9 @@ public class MongoDataSourceConfig {
      *
      * @return
      */
-    @Bean("cmsMongoClient")
-    @ConfigurationProperties("mongodb.cms")
-    public YMongoClient matMongoClient() {
+    @Bean
+    @ConfigurationProperties(prefix = "mongodb.db")
+    public YMongoClient getMongoClient() {
         return new YMongoClient();
     }
 }

@@ -3,7 +3,6 @@ package com.fangdd.tp.dao;
 import com.fangdd.traffic.common.mongo.core.BaseEntityDao;
 import com.fangdd.traffic.common.mongo.core.YMongoClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * @author ycoe
@@ -11,8 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
  */
 public abstract class TpDocBaseEntityDao<T> extends BaseEntityDao<T> {
     @Autowired
-    @Qualifier("cmsMongoClient")
-    private YMongoClient yMongoClient;
+    private YMongoClient mongoClient;
 
     @Override
     protected String getDatabaseName() {
@@ -21,6 +19,6 @@ public abstract class TpDocBaseEntityDao<T> extends BaseEntityDao<T> {
 
     @Override
     protected YMongoClient getYMongoClient() {
-        return yMongoClient;
+        return mongoClient;
     }
 }

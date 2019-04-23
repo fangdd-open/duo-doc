@@ -1,10 +1,7 @@
 package com.fangdd.tp.service.impl;
 
 import com.fangdd.tp.dao.*;
-import com.fangdd.tp.doclet.pojo.Artifact;
-import com.fangdd.tp.doclet.pojo.Chapter;
-import com.fangdd.tp.doclet.pojo.DocDto;
-import com.fangdd.tp.doclet.pojo.Entity;
+import com.fangdd.tp.doclet.pojo.*;
 import com.fangdd.tp.doclet.pojo.entity.DocLog;
 import com.fangdd.tp.doclet.pojo.entity.MarkdownDoc;
 import com.fangdd.tp.dto.request.DocLogQuery;
@@ -21,6 +18,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -37,6 +35,9 @@ public class DocServiceImpl implements DocService {
     private static final String DESCRIPTION = "description";
     private static final String ARTIFACT_ID = "artifactId";
     private static final String ID = "_id";
+    private static final String GROUP_ID = "groupId";
+    private static final String APP_ID = "appId";
+    private static final String COMMIT_ID = "commitId";
 
     @Autowired
     private DocDao docDao;
@@ -56,6 +57,7 @@ public class DocServiceImpl implements DocService {
     @Autowired
     private EnvDao envDao;
 
+    @Override
     public DocDto get(String id, Long version) {
         DocDto docDto = new DocDto();
         Artifact doc;
@@ -199,5 +201,62 @@ public class DocServiceImpl implements DocService {
             return this.getDocList(new DocQuery());
         }
         return null;
+    }
+
+    @Override
+    public ProviderApiDto getByAppId(String appId, String vcsId) {
+        Bson filter = Filters.and(
+                Filters.eq(APP_ID, appId),
+                Filters.eq(COMMIT_ID, vcsId)
+        );
+        Bson projection = Projections.include(GROUP_ID, ARTIFACT_ID, DOC_VERSION);
+        Artifact doc = docDao.getEntity(filter, projection);
+
+        if (doc == null) {
+            doc = docLogDao.getEntity(filter, projection);
+        }
+
+        if (doc != null) {
+            return getProviderApiDto(doc.getGroupId(), doc.getArtifactId(), doc.getDocVersion());
+        }
+
+        return null;
+    }
+
+    private ProviderApiDto getProviderApiDto(String groupId, String artifactId, long version) {
+        List<Chapter> chapters = Lists.newArrayList();
+        Bson versionFilter = Filters.and(
+                Filters.eq(DOC_ID, groupId + ":" + artifactId),
+                Filters.eq(DOC_VERSION, version)
+        );
+        docChapterDao
+                .find(versionFilter)
+                .into(chapters);
+        if (CollectionUtils.isEmpty(chapters)) {
+            return null;
+        }
+
+        List<Entity> entities = Lists.newArrayList();
+        docEntityDao
+                .find(versionFilter)
+                .into(entities);
+        if (CollectionUtils.isEmpty(chapters)) {
+            return null;
+        }
+
+        List<Api> apis = Lists.newArrayList();
+        chapters.forEach(chapter -> {
+            List<Section> sections = chapter.getSections();
+            if (CollectionUtils.isEmpty(sections)) {
+                return;
+            }
+            sections.forEach(section -> apis.addAll(section.getApis()));
+
+        });
+
+        ProviderApiDto data = new ProviderApiDto();
+        data.setApis(apis);
+        data.setEntities(entities);
+        return data;
     }
 }

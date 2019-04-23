@@ -1,22 +1,19 @@
 package com.fangdd.tp.core.config;
 
-import com.fangdd.tp.core.annotation.Account;
 import com.fangdd.tp.core.config.http.AccountInterceptor;
 import com.fangdd.tp.service.SiteService;
 import com.fangdd.tp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @author ycoe
  * @date 18/8/8
  */
 @Configuration
-@ConditionalOnBean({Account.class, UserService.class, SiteService.class})
-public class WebMvcInterceptorConfigurerAdapter extends WebMvcConfigurerAdapter {
+public class TpDocWebMvcConfigurer implements WebMvcConfigurer {
     @Autowired
     private UserService userService;
 

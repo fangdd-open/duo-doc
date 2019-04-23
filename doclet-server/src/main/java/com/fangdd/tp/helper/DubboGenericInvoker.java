@@ -1,15 +1,12 @@
 package com.fangdd.tp.helper;
 
-import com.alibaba.dubbo.common.utils.StringUtils;
-import com.alibaba.dubbo.config.ApplicationConfig;
-import com.alibaba.dubbo.config.ReferenceConfig;
-import com.alibaba.dubbo.config.RegistryConfig;
-import com.alibaba.dubbo.rpc.service.GenericService;
-import com.alibaba.fastjson.JSONObject;
 import com.fangdd.tp.core.exceptions.TpServerException;
 import com.fangdd.tp.dto.request.DubboGenericInvokeDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.dubbo.common.utils.StringUtils;
+import org.apache.dubbo.config.ApplicationConfig;
+import org.apache.dubbo.config.ReferenceConfig;
+import org.apache.dubbo.config.RegistryConfig;
+import org.apache.dubbo.rpc.service.GenericService;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,8 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 18/10/25
  */
 public class DubboGenericInvoker {
-    private static Logger logger = LoggerFactory.getLogger(DubboGenericInvoker.class);
-
     /**
      * 当前应用的信息
      */

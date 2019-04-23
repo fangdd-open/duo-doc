@@ -13,6 +13,7 @@ import com.fangdd.tp.doclet.helper.Logger;
 import com.fangdd.tp.doclet.pojo.Artifact;
 import com.fangdd.tp.doclet.pojo.Chapter;
 import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doclet;

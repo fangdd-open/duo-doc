@@ -1,7 +1,6 @@
 package com.fangdd.tp.doclet.analyser.rest;
 
 import com.fangdd.tp.doclet.constant.DocletConstant;
-import com.fangdd.tp.doclet.constant.SpringMvcConstant;
 import com.fangdd.tp.doclet.enums.ApiTypeEnum;
 import com.fangdd.tp.doclet.helper.*;
 import com.fangdd.tp.doclet.pojo.Api;
@@ -14,7 +13,6 @@ import com.sun.javadoc.AnnotationDesc;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.MethodDoc;
 import com.sun.javadoc.Tag;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 

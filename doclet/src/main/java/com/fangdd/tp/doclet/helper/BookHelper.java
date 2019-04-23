@@ -8,7 +8,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.sun.javadoc.AnnotationDesc;
 import com.sun.javadoc.MethodDoc;
-import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;

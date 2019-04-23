@@ -2,6 +2,7 @@ package com.fangdd.tp.service;
 
 import com.fangdd.tp.doclet.pojo.Artifact;
 import com.fangdd.tp.doclet.pojo.DocDto;
+import com.fangdd.tp.doclet.pojo.ProviderApiDto;
 import com.fangdd.tp.doclet.pojo.entity.DocLog;
 import com.fangdd.tp.dto.request.DocLogQuery;
 import com.fangdd.tp.dto.request.DocQuery;
@@ -89,4 +90,12 @@ public interface DocService {
      * @return
      */
     List<Artifact> getDocListCheck(long lastDocVersion);
+
+    /**
+     * 通过appId获取某个文档
+     * @param appId appId
+     * @param vcsId commitId
+     * @return
+     */
+    ProviderApiDto getByAppId(String appId, String vcsId);
 }

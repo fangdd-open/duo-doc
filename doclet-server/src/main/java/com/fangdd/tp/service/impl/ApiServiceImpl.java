@@ -5,7 +5,6 @@ import com.fangdd.tp.entity.ApiEntity;
 import com.fangdd.tp.service.ApiService;
 import com.mongodb.client.model.Filters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jersey.JerseyProperties;
 import org.springframework.stereotype.Service;
 
 /**

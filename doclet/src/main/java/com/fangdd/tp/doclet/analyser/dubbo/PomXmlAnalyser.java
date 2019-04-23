@@ -1,5 +1,6 @@
 package com.fangdd.tp.doclet.analyser.dubbo;
 
+import com.fangdd.tp.doclet.DocletConfig;
 import com.fangdd.tp.doclet.exception.DocletException;
 import com.fangdd.tp.doclet.helper.Logger;
 import com.fangdd.tp.doclet.helper.XmlHelper;
@@ -73,6 +74,11 @@ public class PomXmlAnalyser {
         info.setGroupId(groupId);
         info.setName(name);
         info.setDescription(description);
+
+        info.setAppId(DocletConfig.appId);
+        if (!Strings.isNullOrEmpty(DocletConfig.commitId)) {
+            info.setCommitId(DocletConfig.commitId);
+        }
         return info;
     }
 

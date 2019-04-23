@@ -2,6 +2,7 @@ package com.fangdd.tp.service.impl;
 
 import com.fangdd.tp.dao.ApiDao;
 import com.fangdd.tp.dao.InvokeLogDao;
+import com.fangdd.tp.entity.ApiEntity;
 import com.fangdd.tp.dto.PagedListDto;
 import com.fangdd.tp.dto.request.InvokeLogQuery;
 import com.fangdd.tp.dto.request.WebDubboInvokeReq;

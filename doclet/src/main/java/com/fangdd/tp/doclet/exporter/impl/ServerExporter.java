@@ -8,6 +8,7 @@ import com.fangdd.tp.doclet.helper.BookHelper;
 import com.fangdd.tp.doclet.helper.GzipHelper;
 import com.fangdd.tp.doclet.helper.HttpHelper;
 import com.fangdd.tp.doclet.helper.Logger;
+import com.fangdd.tp.doclet.pojo.Artifact;
 import com.fangdd.tp.doclet.pojo.Chapter;
 import com.fangdd.tp.doclet.pojo.DocDto;
 import com.fangdd.tp.doclet.pojo.Entity;
@@ -21,6 +22,7 @@ import java.util.Map;
 
 /**
  * 导出到服务器
+ *
  * @author ycoe
  * @date 18/1/21
  */
@@ -41,7 +43,8 @@ public class ServerExporter implements Exporter {
         }
 
         DocDto request = new DocDto();
-        request.setArtifact(BookHelper.getArtifact());
+        Artifact artifact = BookHelper.getArtifact();
+        request.setArtifact(artifact);
         request.setChapters(chapterSet);
         request.setEntities(entitySet);
         request.setDocletVersion(DocletConstant.DOCLET_VERTION);

@@ -17,6 +17,8 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,21 +31,24 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Account 注解的验证
+ * @author xuwenzhen
  */
 public class AccountInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(AccountInterceptor.class);
     private static final String AUTH_TOKEN = "auth-token";
 
     private static final Cache<String, Site> CACHE = CacheBuilder.newBuilder()
-            //5分钟后过期
+            //1分钟后过期
             .expireAfterWrite(1, TimeUnit.MINUTES)
             //最多1万个key
             .maximumSize(10000)
             .build();
     private static final String HOST = "Host";
 
+    @Autowired
     private UserService userService;
 
+    @Autowired
     private SiteService siteService;
 
     @Override

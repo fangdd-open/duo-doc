@@ -1,11 +1,11 @@
 package com.fangdd.tp.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fangdd.tp.entity.ApiEntity;
 import com.fangdd.tp.doclet.pojo.DubboInfo;
 import com.fangdd.tp.doclet.pojo.EntityRef;
 import com.fangdd.tp.doclet.pojo.entity.EnvItem;
 import com.fangdd.tp.doclet.pojo.entity.RequestParam;
-import com.fangdd.tp.dto.PagedListDto;
 import com.fangdd.tp.dto.request.*;
 import com.fangdd.tp.dto.response.InvokeResultDto;
 import com.fangdd.tp.entity.*;
@@ -334,16 +334,16 @@ public class InvokeServiceImpl implements InvokeService {
 
         if (X_WWW_FORM_URLENCODED.equalsIgnoreCase(rawDataType)) {
             HttpUrl.Builder urlencodedBuilder = new HttpUrl.Builder();
-            body.getFormData().forEach(form -> {
-                urlencodedBuilder.addEncodedQueryParameter(form.getKey(), form.getValue());
-            });
+            body.getFormData().forEach(
+                    form -> urlencodedBuilder.addEncodedQueryParameter(form.getKey(), form.getValue())
+            );
             RequestBody requestBody = RequestBody.create(mediaType, urlencodedBuilder.toString().substring(4));
             requestBuilder.post(requestBody);
         } else if (FORM_DATA.equalsIgnoreCase(rawDataType)) {
             MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder();
-            body.getFormData().forEach(form -> {
-                requestBodyBuilder.addFormDataPart(form.getKey(), form.getValue());
-            });
+            body.getFormData().forEach(
+                    form -> requestBodyBuilder.addFormDataPart(form.getKey(), form.getValue())
+            );
             requestBuilder.post(requestBodyBuilder.build());
         }
     }
