@@ -1,7 +1,7 @@
 package com.fangdd.tp.doclet.helper;
 
 import com.fangdd.tp.doclet.analyser.EntityMateAnalyser;
-import com.fangdd.tp.doclet.constant.SpringMvcConstant;
+import com.fangdd.tp.doclet.annotation.ParamAnnotation;
 import com.fangdd.tp.doclet.enums.ApiPositionEnum;
 import com.fangdd.tp.doclet.enums.ApiTypeEnum;
 import com.fangdd.tp.doclet.pojo.Api;
@@ -18,14 +18,17 @@ import java.util.List;
  * @date 18/1/18
  */
 public class BaseApiInfoHelper {
+    private BaseApiInfoHelper() {
+    }
+
     public static Api getApiBase(MethodDoc method, Section section) {
         Tag[] tags = method.tags();
-        String apiName = TagHelper.getStringValue(tags, "@chapter", null);
+        String apiName = TagHelper.getStringValue(tags, "@api", null);
         String since = TagHelper.getStringValue(tags, "@since", null);
         String author = TagHelper.getStringValue(tags, "@author", null);
         String deprecated = TagHelper.getStringValue(tags, "@deprecated", null);
-        String rank = TagHelper.getStringValue(tags, "@rank", "0");
         String returnComment = TagHelper.getStringValue(tags, "@return", null);
+        Integer order = TagHelper.getIntegerValue(tags, "@c3");
 
         String comment = method.commentText();
         if (Strings.isNullOrEmpty(apiName)) {
@@ -54,14 +57,13 @@ public class BaseApiInfoHelper {
         if (paramList != null && paramList.length > 0) {
             BookHelper.setApiPosition(ApiPositionEnum.PARAMETER);
             for (Parameter parameter : paramList) {
-
                 EntityRef param = EntityMateAnalyser.analyse(parameter.type());
                 if (paramTags != null) {
                     String paramComment = TagHelper.getStringValue(paramTags, parameter.name(), null);
                     param.setComment(paramComment);
                 }
                 param.setName(parameter.name());
-                if(setParamAnnotations(param, parameter)) {
+                if (setParamAnnotations(param, parameter)) {
                     params.add(param);
                 }
             }
@@ -76,48 +78,31 @@ public class BaseApiInfoHelper {
         api.setSince(since);
         api.setAuthor(author);
         api.setDeprecated(deprecated);
-        api.setRank(Integer.parseInt(rank));
         api.setResponse(response);
         api.setRequestParams(params);
         api.setCode(apiCode);
+        if (order != null) {
+            api.setOrder(order);
+        }
         return api;
     }
 
     private static boolean setParamAnnotations(EntityRef param, Parameter parameter) {
         AnnotationDesc[] paramAnnotations = parameter.annotations();
-        for (AnnotationDesc annotationDesc : paramAnnotations) {
-            String annotation = annotationDesc.annotationType().toString();
-            if (SpringMvcConstant.ANNOTATION_PATH_VARIABLE.equals(annotation)) {
-                // @PathVariable
-                param.setRequired(true);
-                param.setAnnotation("@PathVariable");
-            } else if (SpringMvcConstant.ANNOTATION_REQUEST_BODY.equals(annotation)) {
-                // @RequestBody
-                param.setRequired(true);
-                param.setAnnotation("@RequestBody");
-            } else if (SpringMvcConstant.ANNOTATION_REQUEST_ATTRIBUTE.equals(annotation)) {
-                // @RequestAttribute， 由此注解的属性一般是由统一拦截器或Filter中设置进去的，所以不添加进参数列表中
-                param.setRequired(true);
-                param.setAnnotation("@RequestAttribute");
-                return false;
-            } else if (SpringMvcConstant.ANNOTATION_REQUEST_HEADER.equals(annotation)){
-                param.setRequired(true);
-                param.setAnnotation("@RequestHeader");
-                return false;
-            }else if (SpringMvcConstant.ANNOTATION_REQUEST_PARAM.equals(annotation)) {
-                // @RequestParam
-                AnnotationValue requiredVal = AnnotationHelper.getValue(annotationDesc, "required");
-                Boolean required = true;
-                if (requiredVal != null) {
-                    required = (Boolean) requiredVal.value();
-                }
-                String defaultValue = AnnotationHelper.getStringValue(annotationDesc, "defaultValue");
-                param.setRequired(required);
-                param.setDemo(defaultValue);
-                param.setAnnotation("@RequestParam");
+        if (paramAnnotations.length == 0) {
+            //未指定时，默认为 @RequestParam
+            ParamAnnotation paramAnnotation = DocHelper.getRestApiParamAnnotation(null);
+            if (paramAnnotation != null) {
+                return paramAnnotation.analyse(param, null);
             }
         }
-
+        for (AnnotationDesc annotationDesc : paramAnnotations) {
+            String annotation = annotationDesc.annotationType().toString();
+            ParamAnnotation paramAnnotation = DocHelper.getRestApiParamAnnotation(annotation);
+            if (paramAnnotation != null) {
+                return paramAnnotation.analyse(param, annotationDesc);
+            }
+        }
         return true;
     }
 }

@@ -6,8 +6,10 @@ import com.fangdd.tp.doclet.pojo.*;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.sun.javadoc.AnnotationDesc;
 import com.sun.javadoc.MethodDoc;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +25,16 @@ public class BookHelper {
     private static Artifact artifact = null;
 
     /**
+     * 当前处理的api类型
+     */
+    public static int currentApiType = 0;
+
+    /**
+     * 当前类里的@RequestMapping，有可能是父类里的
+     */
+    public static AnnotationDesc requestMappingAnnotation = null;
+
+    /**
      * 当前分析的接口方法
      */
     private static MethodDoc currentMethod;
@@ -31,7 +43,6 @@ public class BookHelper {
      * 当前分析的接口位置
      */
     private static ApiPositionEnum apiPosition;
-    private static String server;
 
     public static Chapter getChapter(String chapterName) {
         Chapter chapter = CHAPTER_MAP.get(chapterName);
@@ -39,6 +50,8 @@ public class BookHelper {
             return chapter;
         }
         chapter = new Chapter();
+        // 默认排序值：100 + 序号
+        chapter.setOrder(CHAPTER_MAP.size() + 100);
         chapter.setName(chapterName);
         List<Section> sections = Lists.newArrayList();
         chapter.setSections(sections);
@@ -60,6 +73,8 @@ public class BookHelper {
 
         //没有找到，则新创建
         Section section = new Section();
+        // 默认排序值：100 + 序号
+        section.setOrder(sections.size() + 100);
         section.setName(sectionName);
         section.setChapter(chapter);
 
@@ -87,6 +102,8 @@ public class BookHelper {
 
         //没有找到，则新创建
         Api api = new Api();
+        // 默认排序值：100 + 序号
+        api.setOrder(apis.size() + 100);
         api.setKey(key);
         api.setSection(section);
 
@@ -122,14 +139,6 @@ public class BookHelper {
         return BookHelper.artifact;
     }
 
-    public static void setServer(String server) {
-        BookHelper.server = server;
-    }
-
-    public static String getServer() {
-        return server;
-    }
-
     public static void addDubboInterface(String interfaceClass, DubboInfo dubboInfo) {
         INTERFACE_CLASS_MAP.put(interfaceClass, dubboInfo);
     }
@@ -148,5 +157,35 @@ public class BookHelper {
 
     public static Map<String, String> getMarkdownDocMap() {
         return MARKDOWN_MAP;
+    }
+
+    public static void delSections(Chapter chapter, Section section) {
+        chapter.getSections().remove(section);
+    }
+
+    public static void delChapter(Chapter chapter) {
+        CHAPTER_MAP.remove(chapter.getName());
+        SECTIONS_MAP.remove(chapter);
+    }
+
+    public static void sort(List<Chapter> chapterList) {
+        if (!CollectionUtils.isEmpty(chapterList)) {
+            Collections.sort(chapterList);
+        }
+        for (Chapter chapter : chapterList) {
+            sortSections(chapter.getSections());
+        }
+    }
+
+    private static void sortSections(List<Section> sections) {
+        if (!CollectionUtils.isEmpty(sections)) {
+            Collections.sort(sections);
+        }
+        for (Section section : sections) {
+            List<Api> apis = section.getApis();
+            if (!CollectionUtils.isEmpty(apis)) {
+                Collections.sort(apis);
+            }
+        }
     }
 }

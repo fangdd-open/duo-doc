@@ -1,7 +1,7 @@
 package com.fangdd.tp.doclet.pojo;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/10
  */
 public class Artifact {
@@ -9,6 +9,11 @@ public class Artifact {
      * 使用 服务坐标，不带版本号，比如：com.fangdd:tp-demo-server
      */
     private String id;
+
+    /**
+     * 服务ID
+     */
+    private String appId;
 
     /**
      * 最新的文档版本号
@@ -45,12 +50,25 @@ public class Artifact {
      */
     private String md5;
 
+    /**
+     * git.commit.id
+     */
+    private String commitId;
+
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
     public Long getDocVersion() {
@@ -107,5 +125,13 @@ public class Artifact {
 
     public void setMd5(String md5) {
         this.md5 = md5;
+    }
+
+    public String getCommitId() {
+        return commitId;
+    }
+
+    public void setCommitId(String commitId) {
+        this.commitId = commitId;
     }
 }

@@ -3,16 +3,19 @@ package com.fangdd.tp.doclet.analyser;
 import com.fangdd.tp.doclet.analyser.dubbo.DubboServiceImplAnalyser;
 import com.fangdd.tp.doclet.analyser.dubbo.XmlDubboServiceAnalyser;
 import com.fangdd.tp.doclet.analyser.rest.RestFulAnalyser;
+import com.fangdd.tp.doclet.constant.DocletConstant;
 import com.fangdd.tp.doclet.constant.DubboConstant;
 import com.fangdd.tp.doclet.constant.SpringMvcConstant;
 import com.fangdd.tp.doclet.helper.AnnotationHelper;
 import com.fangdd.tp.doclet.helper.BookHelper;
 import com.fangdd.tp.doclet.helper.Logger;
+import com.fangdd.tp.doclet.helper.TagHelper;
 import com.sun.javadoc.AnnotationDesc;
 import com.sun.javadoc.ClassDoc;
+import com.sun.javadoc.Tag;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/9
  */
 public class ApiAnalyser {
@@ -21,11 +24,14 @@ public class ApiAnalyser {
     public static void analyse(ClassDoc classDoc) {
         if (isAvailableRestApi(classDoc)) {
             logger.info("REST接口: " + classDoc);
+            BookHelper.currentApiType = 0;
             RestFulAnalyser.analyse(classDoc);
         } else if (isAvailableDubboApi(classDoc)) {
             logger.info("Dubbo接口: " + classDoc);
+            BookHelper.currentApiType = 1;
             DubboServiceImplAnalyser.analyse(classDoc);
         } else if (isXmlDubboApi(classDoc)) {
+            BookHelper.currentApiType = 1;
             XmlDubboServiceAnalyser.analyse(classDoc);
         }
     }
@@ -47,10 +53,21 @@ public class ApiAnalyser {
      * @return
      */
     private static boolean isAvailableRestApi(ClassDoc classDoc) {
+        BookHelper.requestMappingAnnotation = null;
+        return checkByRestAnnotation(classDoc) || checkSuperClass(classDoc.superclass());
+
+    }
+
+    private static boolean checkSuperClass(ClassDoc superClass) {
+        if (superClass == null || Object.class.getName().equals(superClass.toString())) {
+            return false;
+        }
+        return checkByRestAnnotation(superClass);
+    }
+
+    private static boolean checkByRestAnnotation(ClassDoc classDoc) {
         //@RestController
         AnnotationDesc restControllerAnnotation = AnnotationHelper.getAnnotation(classDoc.annotations(), SpringMvcConstant.ANNOTATION_REST_CONTROLLER);
-        //@Controller
-//        AnnotationDesc controllerAnnotation = AnnotationHelper.getAnnotation(classDoc.annotations(), SpringMvcConstant.ANNOTATION_CONTROLLER);
         if (restControllerAnnotation == null) {
             return false;
         }
@@ -60,6 +77,15 @@ public class ApiAnalyser {
         if (requestMappingAnnotation == null) {
             return false;
         }
+
+        // 检查是否添加了 @disable 标签
+        Tag[] tags = classDoc.tags();
+        if (TagHelper.contendTag(tags, "@disable")) {
+            return false;
+        }
+
+        //添加进缓存
+        BookHelper.requestMappingAnnotation = requestMappingAnnotation;
         return true;
     }
 }

@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.3.RELEASE</version>
+    </parent>
+
+    <groupId>com.fangdd</groupId>
+    <artifactId>doclet-server</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <description>自动化文档后台服务</description>
+    <packaging>jar</packaging>
+
+    <properties>
+        <doclet.version>1.2-SNAPSHOT</doclet.version>
+        <docker.project.id>tp-doc.op.fdd</docker.project.id>
+        <docker.starter.app>com.fangdd.tp.Application</docker.starter.app>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.39</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fangdd</groupId>
+            <artifactId>spring-boot-starter-config-superdiamond</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fangdd</groupId>
+            <artifactId>spring-boot-starter-fdd-dubbo</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Http请求日志 -->
+        <dependency>
+            <groupId>com.fangdd</groupId>
+            <artifactId>spring-boot-starter-rest-filter</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>3.12.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fangdd</groupId>
+            <artifactId>doclet-pojo</artifactId>
+            <version>${doclet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fangdd</groupId>
+            <artifactId>doclet-render</artifactId>
+            <version>${doclet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fangdd.traffic</groupId>
+            <artifactId>common-mongodb</artifactId>
+            <version>2.5.2-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.24.0-GA</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>26.0-jre</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>5.1.5.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.1.3.RELEASE</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>assembly-deploy-package</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <copy todir="${project.build.directory}/distributions/service/lib" overwrite="true">
+                                    <fileset dir="${project.build.directory}">
+                                        <include name="${project.artifactId}.jar"/>
+                                    </fileset>
+                                </copy>
+                                <copy todir="${project.build.directory}/distributions/service/" overwrite="true">
+                                    <fileset dir="${project.basedir}/src/main/dist/"/>
+                                </copy>
+
+                                <!-- 生成zip压缩包 -->
+                                <zip destfile="${project.build.directory}/distributions/${project.artifactId}.zip">
+                                    <zipfileset dir="${project.build.directory}/distributions/service"/>
+                                </zip>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
+                <configuration>
+                    <doclet>com.fangdd.tp.doclet.TpDoclet</doclet>
+                    <docletArtifact>
+                        <groupId>com.fangdd</groupId>
+                        <artifactId>doclet</artifactId>
+                        <version>1.2-SNAPSHOT</version>
+                    </docletArtifact>
+                    <sourcepath>
+                        <!-- 指定源码路径，如果多个模块，需要包含进去 -->
+                        ${project.basedir}/src/main/java:${project.basedir}/../doclet-pojo/src/main/java:${project.basedir}/../doclet-render/src/main/java
+                    </sourcepath>
+                    <useStandardDocletOptions>false</useStandardDocletOptions>
+
+                    <additionalJOptions>
+                        <additionalJOption>-J-Dbasedir=${project.basedir}</additionalJOption>
+                    </additionalJOptions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <!-- package可以在提交代码后由CI自动触发，如果不需要自动触发，可以设置为site，届时需要手工执行：mvn clean site -->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>javadoc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>2.2.4</version>
+                <executions>
+                    <execution>
+                        <id>get-the-git-infos</id>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+                    <prefix>git</prefix>
+                    <verbose>false</verbose>
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties
+                    </generateGitPropertiesFilename>
+                    <format>json</format>
+                    <gitDescribe>
+                        <skip>false</skip>
+                        <always>false</always>
+                        <dirty>-dirty</dirty>
+                    </gitDescribe>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <from>
+                        <image>docker.esf.fangdd.net/fdd-java:8</image>
+                    </from>
+                    <to>
+                        <image>docker.esf.fangdd.net/${docker.project.id}:${git.commit.id}</image>
+                    </to>
+                    <container>
+                        <entrypoint>INHERIT</entrypoint>
+                        <args>
+                            <arg>/bin/sh</arg>
+                            <arg>-c</arg>
+                            <arg>java $FDD_JVM_OPTS -javaagent:/data0/java/deploy/pinpoint.agent/pinpoint-bootstrap.jar -Dpinpoint.agentId=$(hostname -i | cut -d' ' -f1) -Dpinpoint.applicationName=${docker.project.id} -XX:MaxMetaspaceSize=256M -XX:MetaspaceSize=256M -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+ParallelRefProcEnabled -XX:+DisableExplicitGC -DLOGS_DIR=/data0/logs/java/${docker.project.id} -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/data0/logs/java/${docker.project.id}/ -cp /app/resources:/app/classes:/app/libs/* ${docker.starter.app}</arg>
+                        </args>
+                    </container>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <release>dev</release>
+                <env>dev</env>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>server-dev</name>
+                </property>
+            </activation>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <release>prod</release>
+                <env>prod</env>
+            </properties>
+            <activation>
+                <property>
+                    <name>server-prod</name>
+                </property>
+            </activation>
+        </profile>
+    </profiles>
+</project>

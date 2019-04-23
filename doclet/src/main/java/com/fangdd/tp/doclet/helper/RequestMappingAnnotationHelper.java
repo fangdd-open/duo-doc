@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/18
  */
 public class RequestMappingAnnotationHelper {

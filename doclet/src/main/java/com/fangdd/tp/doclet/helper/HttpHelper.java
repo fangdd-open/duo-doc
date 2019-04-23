@@ -1,6 +1,6 @@
 package com.fangdd.tp.doclet.helper;
 
-import com.squareup.okhttp.*;
+import okhttp3.*;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.io.StringWriter;
 import java.nio.charset.Charset;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/23
  */
 public class HttpHelper {

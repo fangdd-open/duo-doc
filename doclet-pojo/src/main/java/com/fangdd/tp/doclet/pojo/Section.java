@@ -4,7 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import java.util.List;
 
-public class Section {
+public class Section implements Comparable<Section> {
 
     /**
      * 章节名称
@@ -22,14 +22,14 @@ public class Section {
     private String comment;
 
     /**
-     * 排序,越大越前
-     */
-    private Integer rank;
-
-    /**
      * 章节内的接口
      */
     private List<Api> apis;
+
+    /**
+     * 排序值，越小越前
+     */
+    private Integer order;
 
     @JSONField(deserialize = false, serialize = false)
     private Chapter chapter;
@@ -58,14 +58,6 @@ public class Section {
         this.comment = comment;
     }
 
-    public Integer getRank() {
-        return rank;
-    }
-
-    public void setRank(Integer rank) {
-        this.rank = rank;
-    }
-
     public List<Api> getApis() {
         return apis;
     }
@@ -80,5 +72,18 @@ public class Section {
 
     public void setChapter(Chapter chapter) {
         this.chapter = chapter;
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
+
+    @Override
+    public int compareTo(Section o) {
+        return this.order - o.order;
     }
 }

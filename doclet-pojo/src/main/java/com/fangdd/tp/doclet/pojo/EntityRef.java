@@ -1,7 +1,7 @@
 package com.fangdd.tp.doclet.pojo;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/13
  */
 public class EntityRef {
@@ -29,6 +29,11 @@ public class EntityRef {
      * 默认值
      */
     private String demo;
+
+    /**
+     * 默认值
+     */
+    private String defaultValue;
 
     /**
      * 参数注解，在RestFul参数中有，比如@PathVariable / @RequestBody等
@@ -81,5 +86,13 @@ public class EntityRef {
 
     public void setAnnotation(String annotation) {
         this.annotation = annotation;
+    }
+
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
     }
 }

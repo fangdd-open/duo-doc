@@ -6,20 +6,20 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/5
  */
 public class TpDocletTest {
     /**
      * maven仓库地址
      */
-    private static final String mavenRepositoryPath = "/Users/ycoe/Software/maven/repository/";
+    private static final String mavenRepositoryPath = "/Users/xuwenzhen/Software/apache-maven-3.6.0/repository/";
 
     /**
      * 需要引入的包
      */
     private static final String[] jars = new String[]{
-            "com/alibaba/dubbo/2.8.4/dubbo-2.8.4.jar",
+            "com/alibaba/dubbo/2.8.5/dubbo-2.8.5.jar",
             "org/springframework/boot/spring-boot/1.5.6.RELEASE/spring-boot-1.5.6.RELEASE.jar",
             "org/springframework/boot/spring-boot-autoconfigure/1.5.6.RELEASE/spring-boot-autoconfigure-1.5.6.RELEASE.jar",
             "org/springframework/spring-web/4.3.10.RELEASE/spring-web-4.3.10.RELEASE.jar",
@@ -37,16 +37,20 @@ public class TpDocletTest {
 
     public static void main(String[] args) throws IOException {
         projectPath = System.getProperty("user.dir");
+//        projectPath = projectPath + "/doclet-test";
 
+        System.setProperty("exporter", "console");
+        System.setProperty("basedir", projectPath);
         String projectSrcDirs = getProjectSrcDirs();
+        System.out.println("扫描目录：" + projectSrcDirs);
         String[] docArgs = new String[]{
 //                "-public",
 //                "-d",
 //                "/Users/ycoe/Projects/fdd/tp/tp-doc/tp-demo-server/target/docs",
-                "com.fangdd.tp.controller.api",
-//                "com.fangdd.tp.service.impl.test",
+                "com.fangdd.doclet.test.controller",
+
                 "-subpackages",
-                projectPath + "/server/target/tp-server.jar",
+                projectPath + "/doclet-test/target/doclet-test-1.2-SNAPSHOT.jar",
                 "-cp",
                 getLibs(),
                 "-sourcepath",
@@ -69,25 +73,9 @@ public class TpDocletTest {
 
 
     public static String getProjectSrcDirs() {
-        String projectPath = System.getProperty("user.dir");
-
-        StringBuilder srcPath = new StringBuilder();
-        File projectDir = new File(projectPath);
-        File[] fs = projectDir.listFiles();
-        for (File f : fs) {
-            if (f.isFile())
-                continue;
-
-            File srcDir = new File(f.getAbsolutePath() + "/src/main/java");
-            if (!srcDir.exists())
-                continue;
-
-            if (srcPath.length() > 0) {
-                srcPath.append(":");
-            }
-            srcPath.append(srcDir.getAbsolutePath());
-        }
-        return srcPath.toString();
+        String srcPath = projectPath + "/doclet-test/src/main/java";
+        srcPath += ":" + projectPath + "/doclet-test-api/src/main/java";
+        return srcPath;
     }
 
 }

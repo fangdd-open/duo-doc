@@ -38,8 +38,10 @@ public class ChapterDubboAnalyser {
         Section section = BookHelper.getSections(chapter, sectionName);
         section.setCode(classFullName);
 
-        String rankStr = TagHelper.getStringValue(tags, "@rank", "0");
-        section.setRank(Integer.parseInt(rankStr));
+        Integer order = TagHelper.getIntegerValue(tags, "@c2");
+        if (order != null) {
+            section.setOrder(order);
+        }
         section.setComment(comment);
         return section;
     }

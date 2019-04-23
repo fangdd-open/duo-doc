@@ -3,7 +3,7 @@ package com.fangdd.tp.doclet.render.markdown;
 import com.fangdd.tp.doclet.pojo.Api;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/15
  */
 public class ApiMarkdownRender {

@@ -3,7 +3,7 @@ package com.fangdd.tp.doclet.pojo;
 import java.util.Set;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/20
  */
 public class Book {

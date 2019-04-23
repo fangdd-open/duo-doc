@@ -84,11 +84,11 @@ TP-DOC是在公司spring boot种子项目上，依赖代码注释，自动生成
 
 目前接口文档支持两种类型：
 
-1. RestFul接口： [批量获取多个广告位接口](http://10.0.1.86:17010/doc/com.fangdd.cp:m-web-cp-server/?code=com.fangdd.cp.m.controller.AdvertApiController.getEsfAdvertMap)
+1. RestFul接口： [批量获取多个广告位接口](http://tp-doc.fangdd.net/doc/com.fangdd.cp:m-web-cp-server/?code=com.fangdd.cp.m.controller.AdvertApiController.getEsfAdvertMap)
 
-2. Dubbo接口：[通过ID获取文章](http://10.0.1.86:17010/doc/com.fangdd.cp:article-ctc-cp-server/?code=com.fangdd.cp.ctc.article.service.ArticleService.queryArticleById)
+2. Dubbo接口：[通过ID获取文章](http://tp-doc.fangdd.net/doc/com.fangdd.cp:article-ctc-cp-server/?code=com.fangdd.cp.ctc.article.service.ArticleService.queryArticleById)
 
-3. 目前接入的项目文档：[项目索引](http://10.0.1.86:17010/index.html)
+3. 目前接入的项目文档：[项目索引](http://tp-doc.fangdd.net/index.html)
 <br>
 
 
@@ -158,9 +158,10 @@ Controller里面的方法，只要被注解为`@RequestMapping`，就会被当�
 
 支持`spring mvc`的参数注解：
 
-`@PathVariable` `@RequestBody` `@RequestParam`
+`@PathVariable` `@RequestBody` `@RequestParam` `@RequestHeader`
 
 使用 `@RequestAttribute`注解的，一般是由Filter或拦截器注入的，所以不把它当成是请求参数
+暂不支持其它自定义注解
 
 
 ### 5. 响应体
@@ -266,19 +267,11 @@ dubbo文档的生成规则与RestFul的完全一致，请参考上面RestFul说�
 
 ### 2. 配置方式声明
 
-目前仅支持配置文件名且目录为：`/src/main/resources/applicationContext-dubbo.xml`
+需要在插件中声明变量
 
-<br>
-## 五、已知问题
-
-1. 暂对html标签的注释支持不好
-
-2. 暂不支持README.md文件
-
-
-## Next Step
-
-1.  支持markdown文档
-
+```xml
+<!-- 多个dubbo配置文件使用半角逗号隔开 -->
+<additionalJOption>-J-Ddubbo-xml=applicationContext-dubbo.xml,applicationContext-dubbo2.xml</additionalJOption>
+```
 
 

@@ -1,7 +1,7 @@
 package com.fangdd.tp.doclet.exception;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/9
  */
 public class DocletException extends RuntimeException {

@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/16
  */
 public class EntityJsonMarkdownRender {
@@ -206,8 +206,10 @@ public class EntityJsonMarkdownRender {
         List<EntityRef> parameteredEntityRefs = entity.getParameteredEntityRefs();
         if (parameteredEntityRefs != null && !parameteredEntityRefs.isEmpty()) {
             EntityRef parameterEntityRef = parameteredEntityRefs.get(0);
-            Entity parameteredEntity = EntityHandle.getEntity(parameterEntityRef.getEntityName());
-            sb.append(render(parameteredEntity, level + 1));
+            if (parameterEntityRef != null) {
+                Entity parameteredEntity = EntityHandle.getEntity(parameterEntityRef.getEntityName());
+                sb.append(render(parameteredEntity, level + 1));
+            }
         }
         sb.append("\n");
         sb.append(Strings.repeat("\t", level));

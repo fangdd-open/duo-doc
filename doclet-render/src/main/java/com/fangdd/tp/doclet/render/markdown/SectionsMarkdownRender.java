@@ -6,7 +6,7 @@ import com.fangdd.tp.doclet.pojo.Section;
 import java.util.List;
 
 /**
- * @auth ycoe
+ * @author ycoe
  * @date 18/1/15
  */
 public class SectionsMarkdownRender {
