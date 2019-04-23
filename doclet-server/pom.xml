@@ -151,19 +151,6 @@
                                     <fileset dir="${project.basedir}/src/main/dist/"/>
                                 </copy>
 
-                                <copy file="${project.basedir}/src/main/resources/logback-product.xml"
-                                      tofile="${project.build.directory}/distributions/service/conf/logback.xml"/>
-
-                                <delete file="${project.build.directory}/classes/logback.xml"/>
-                                <copy file="${project.basedir}/src/main/resources/logback-product.xml"
-                                      tofile="${project.build.directory}/classes/logback.xml"/>
-                                <delete file="${project.build.directory}/classes/logback-product.xml"/>
-
-                                <delete file="${project.build.directory}/classes/application.properties"/>
-                                <copy file="${project.basedir}/src/main/resources/application-prod.properties"
-                                      tofile="${project.build.directory}/classes/application.properties"/>
-                                <delete file="${project.build.directory}/classes/application-prod.properties"/>
-
                                 <!-- 生成zip压缩包 -->
                                 <zip destfile="${project.build.directory}/distributions/${project.artifactId}.zip">
                                     <zipfileset dir="${project.build.directory}/distributions/service"/>
