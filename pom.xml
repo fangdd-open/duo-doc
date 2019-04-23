@@ -21,6 +21,7 @@
         <module>doclet</module>
         <module>doclet-pojo</module>
         <module>doclet-render</module>
+        <module>doclet-server</module>
     </modules>
 
     <distributionManagement>
