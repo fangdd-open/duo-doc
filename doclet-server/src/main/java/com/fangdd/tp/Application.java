@@ -13,9 +13,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 /**
  * @author xuwenzhen
  */
-@EnableWebMvc
 @EnableAsync
-@SpringBootApplication(exclude = {MongoAutoConfiguration.class})
+@EnableWebMvc
+@SpringBootApplication(scanBasePackages = "com.fangdd", exclude = {MongoAutoConfiguration.class})
 public class Application {
     private static final String APPLICATION_NAME = "tp-doc.op.fdd";
 
