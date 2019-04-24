@@ -4,13 +4,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.common.collect.Lists;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,15 +22,19 @@ import java.util.List;
  * @date 2019/4/14
  */
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+public class WebConverterConfig implements WebMvcConfigurer {
     private static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        //注册jackson序列化方法
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         ObjectMapper mapper = getObjectMapper();
         converter.setObjectMapper(mapper);
         converters.add(converter);
+
+        //注册二进制响应
+        converters.add(byteArrayHttpMessageConverter());
     }
 
     @Bean
@@ -44,5 +52,16 @@ public class WebConfig implements WebMvcConfigurer {
                 //下面一个配置是集合返回为空时，不显示
                 .configure(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS, false)
                 ;
+    }
+
+    /**
+     * 参考文档：https://www.baeldung.com/spring-mvc-image-media-data
+     * @return
+     */
+    @Bean
+    public ByteArrayHttpMessageConverter byteArrayHttpMessageConverter() {
+        ByteArrayHttpMessageConverter arrayHttpMessageConverter = new ByteArrayHttpMessageConverter();
+        arrayHttpMessageConverter.setSupportedMediaTypes(Lists.newArrayList(MediaType.APPLICATION_OCTET_STREAM));
+        return arrayHttpMessageConverter;
     }
 }

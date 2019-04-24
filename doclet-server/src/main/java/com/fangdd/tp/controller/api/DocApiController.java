@@ -10,7 +10,6 @@ import com.fangdd.tp.dto.BaseResponse;
 import com.fangdd.tp.dto.request.DocLogQuery;
 import com.fangdd.tp.dto.request.DocQuery;
 import com.fangdd.tp.dto.response.SimpleUserDto;
-import com.fangdd.tp.entity.User;
 import com.fangdd.tp.helper.GzipHelper;
 import com.fangdd.tp.helper.MD5Utils;
 import com.fangdd.tp.service.ApiUnwindService;
@@ -20,10 +19,12 @@ import com.fangdd.tp.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -105,16 +106,22 @@ public class DocApiController {
      * @return 文档的全部数据
      */
     @GetMapping("/app/{appId}")
-    public byte[] get(
+    public ResponseEntity<byte[]> get(
             @PathVariable String appId,
-            @RequestParam String vcsId
+            @RequestParam String vcsId,
+            HttpServletResponse response
     ) {
-        ProviderApiDto byAppId = docService.getByAppId(appId, vcsId);
-        if (byAppId == null) {
-            return new byte[0];
+        ProviderApiDto providerApiDto = docService.getByAppId(appId, vcsId);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        if (providerApiDto == null) {
+            return new ResponseEntity<>(new byte[0], headers, HttpStatus.NOT_FOUND);
         }
         try {
-            return GzipHelper.compress(JSONObject.toJSONString(byAppId));
+            byte[] compressedBytes = GzipHelper.compress(JSONObject.toJSONString(providerApiDto));
+            return new ResponseEntity<>(compressedBytes, headers, HttpStatus.OK);
         } catch (IOException e) {
             throw new DocletException("压缩失败！", e);
         }
