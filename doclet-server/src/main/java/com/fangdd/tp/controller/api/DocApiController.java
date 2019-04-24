@@ -22,6 +22,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 
@@ -57,10 +59,18 @@ public class DocApiController {
      * @return 可访问的文档URL
      */
     @PostMapping
-    public BaseResponse<String> save(@RequestBody byte[] request) {
+    public BaseResponse<String> save(HttpServletRequest request) {
+        int len = request.getContentLength();
+        byte[] buffer = new byte[len];
+        try(ServletInputStream iii = request.getInputStream()) {
+            iii.read(buffer, 0, len);
+        } catch (Exception e) {
+            logger.error("读取请求体失败！", e);
+        }
+
         String docStr;
         try {
-            docStr = GzipHelper.decompress(request);
+            docStr = GzipHelper.decompress(buffer);
         } catch (IOException e) {
             logger.error("gzip解压失败！", e);
             return BaseResponse.error(501, "gzip解压失败！");
