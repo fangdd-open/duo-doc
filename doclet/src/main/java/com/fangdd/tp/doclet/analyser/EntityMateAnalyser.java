@@ -2,6 +2,7 @@ package com.fangdd.tp.doclet.analyser;
 
 import com.fangdd.tp.doclet.analyser.entity.DateTimeFormatFieldAnnotationAnalyser;
 import com.fangdd.tp.doclet.analyser.entity.EntityFieldAnnotationAnalyser;
+import com.fangdd.tp.doclet.analyser.entity.GraphqlFieldAnnotationAnalyser;
 import com.fangdd.tp.doclet.analyser.entity.NotNullFieldAnnotationAnalyser;
 import com.fangdd.tp.doclet.constant.EntityConstant;
 import com.fangdd.tp.doclet.helper.BookHelper;
@@ -37,6 +38,7 @@ public class EntityMateAnalyser {
         FIELD_ANNOTATION_ANALYSER_MAP.put(EntityConstant.JAVAX_VALIDATION_CONSTRAINTS_NULL, new NotNullFieldAnnotationAnalyser());
         FIELD_ANNOTATION_ANALYSER_MAP.put(EntityConstant.HIBERNATE_VALIDATOR_ANNOTATION_NOT_BLANK, new NotNullFieldAnnotationAnalyser());
         FIELD_ANNOTATION_ANALYSER_MAP.put(EntityConstant.HIBERNATE_VALIDATOR_ANNOTATION_NOT_EMPTY, new NotNullFieldAnnotationAnalyser());
+        FIELD_ANNOTATION_ANALYSER_MAP.put(EntityConstant.GRAPHQL_FIELD, new GraphqlFieldAnnotationAnalyser());
     }
 
     private static final Set<String> CURRENT_CLASS_FIELD_NAMES = Sets.newHashSet();
@@ -75,8 +77,12 @@ public class EntityMateAnalyser {
                         String typeParameterName = typeParameters[i].typeName();
                         Type parameterType = typeArgument;
                         if (typeArgument.asTypeVariable() != null) {
-                            parameterType = parentParameterizedTypeMap.get(typeArgument.toString());
-                            parameterizedTypeMap.put(typeArgument.toString(), parameterType);
+                            String typeArgumentName = typeArgument.toString();
+                            if (typeArgumentName.contains(" extends "))  {
+                                typeArgumentName =  typeArgumentName.substring(0, typeArgumentName.indexOf(' '));
+                            }
+                            parameterType = parentParameterizedTypeMap.get(typeArgumentName);
+                            parameterizedTypeMap.put(typeArgumentName, parameterType);
                         } else {
                             parameterizedTypeMap.put(typeParameterName, typeArgument);
                         }

@@ -14,4 +14,7 @@ public class EntityConstant {
 
     public static final String HIBERNATE_VALIDATOR_ANNOTATION_NOT_BLANK = "org.hibernate.validator.constraints.NotBlank";
     public static final String HIBERNATE_VALIDATOR_ANNOTATION_NOT_EMPTY = "org.hibernate.validator.constraints.NotEMPTY";
+
+    // @GraphqlField
+    public static final String GRAPHQL_FIELD = "com.fangdd.graphql.provider.tpdoc.GraphqlField";
 }

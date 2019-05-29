@@ -100,6 +100,16 @@ public class Chapter extends MongoDbEntity implements Comparable<Chapter> {
     }
 
     @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && Chapter.class.isInstance(obj) && this.name.equals(((Chapter) obj).getName());
+    }
+
+    @Override
     public int compareTo(Chapter o) {
         return this.order - o.order;
     }

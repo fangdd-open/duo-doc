@@ -40,6 +40,11 @@ public class EntityRef {
      */
     private String annotation;
 
+    /**
+     * GraphqlField注解
+     */
+    private String graphqlField;
+
     public String getEntityName() {
         return entityName;
     }
@@ -94,5 +99,13 @@ public class EntityRef {
 
     public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
+    }
+
+    public void setGraphqlField(String graphqlField) {
+        this.graphqlField = graphqlField;
+    }
+
+    public String getGraphqlField() {
+        return graphqlField;
     }
 }

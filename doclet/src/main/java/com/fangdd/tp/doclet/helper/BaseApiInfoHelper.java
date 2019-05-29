@@ -44,9 +44,10 @@ public class BaseApiInfoHelper {
         }
 
 
-        //获取响应
         BookHelper.setApiMethod(method);
         BookHelper.setApiPosition(ApiPositionEnum.RESPONSE);
+
+        //获取响应
         EntityRef response = EntityMateAnalyser.analyse(method.returnType());
         response.setComment(returnComment);
 
