@@ -1,17 +1,23 @@
 package com.fangdd.tp.doclet.analyser.entity;
 
+import com.fangdd.tp.doclet.helper.AnnotationHelper;
 import com.fangdd.tp.doclet.pojo.EntityRef;
+import com.google.common.base.Strings;
 import com.sun.javadoc.AnnotationDesc;
 import com.sun.javadoc.FieldDoc;
 
 /**
  * GraphqlField注解
+ *
  * @author xuwenzhen
  * @date 2019/5/29
  */
 public class GraphqlFieldAnnotationAnalyser extends EntityFieldAnnotationAnalyser {
 
     private static final String VALUE = "value";
+    private static final String DEPENDENCY = "dependency";
+    private static final String METHOD = "method";
+    private static final int CLASS_LENGTH = ".class".length();
 
     /**
      * 解析注解
@@ -22,21 +28,14 @@ public class GraphqlFieldAnnotationAnalyser extends EntityFieldAnnotationAnalyse
      */
     @Override
     public void analyse(AnnotationDesc annotationDesc, EntityRef fieldRef, FieldDoc fieldDoc) {
-        AnnotationDesc.ElementValuePair[] fieldValues = annotationDesc.elementValues();
-        String controller = null;
-        String method = null;
-        for (AnnotationDesc.ElementValuePair kv : fieldValues) {
-            String name = kv.element().name();
-            String value = kv.value().toString();
-            if (VALUE.equals(name)) {
-                controller = value.substring(0, value.length() - ".class".length());
-            } else {
-                method = value.replaceAll("\"", "");
-            }
-        }
-        if (controller == null || method == null) {
+        String controller = AnnotationHelper.getStringValue(annotationDesc, VALUE);
+        String method = AnnotationHelper.getStringValue(annotationDesc, METHOD);
+        String dependency = AnnotationHelper.getStringValues(annotationDesc, DEPENDENCY, ",");
+        if (Strings.isNullOrEmpty(controller) || Strings.isNullOrEmpty(method) || Strings.isNullOrEmpty(dependency)) {
             //丢弃
+            return;
         }
-        fieldRef.setGraphqlField(controller + "." + method);
+        controller = controller.substring(0, controller.length() - CLASS_LENGTH);
+        fieldRef.setGraphqlField(controller + "." + method + ":" + dependency);
     }
 }

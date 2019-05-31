@@ -41,7 +41,9 @@ public class EntityRef {
     private String annotation;
 
     /**
-     * GraphqlField注解
+     * GraphqlField注解，格式： {apiCode}:{dependency}
+     *
+     * @demo com.fangdd.graphql.house.controller.HouseFollowApiController:id
      */
     private String graphqlField;
 
