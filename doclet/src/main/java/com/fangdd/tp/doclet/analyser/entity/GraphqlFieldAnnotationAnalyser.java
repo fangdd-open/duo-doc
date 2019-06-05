@@ -17,7 +17,7 @@ public class GraphqlFieldAnnotationAnalyser extends EntityFieldAnnotationAnalyse
     private static final String VALUE = "value";
     private static final String DEPENDENCY = "dependency";
     private static final String METHOD = "method";
-    private static final int CLASS_LENGTH = ".class".length();
+    private static final String CLASS_STR = ".class";
 
     /**
      * 解析注解
@@ -39,7 +39,9 @@ public class GraphqlFieldAnnotationAnalyser extends EntityFieldAnnotationAnalyse
             //丢弃
             return;
         }
-        controllerClazz = controllerClazz.substring(0, controllerClazz.length() - CLASS_LENGTH);
+        if (controllerClazz.endsWith(CLASS_STR)) {
+            controllerClazz = controllerClazz.substring(0, controllerClazz.length() - CLASS_STR.length());
+        }
         fieldRef.setGraphqlField(controllerClazz + "." + method + ":" + dependency);
     }
 }
