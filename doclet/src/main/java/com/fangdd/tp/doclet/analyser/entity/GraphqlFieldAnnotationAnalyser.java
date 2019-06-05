@@ -28,14 +28,18 @@ public class GraphqlFieldAnnotationAnalyser extends EntityFieldAnnotationAnalyse
      */
     @Override
     public void analyse(AnnotationDesc annotationDesc, EntityRef fieldRef, FieldDoc fieldDoc) {
-        String controller = AnnotationHelper.getStringValue(annotationDesc, VALUE);
+        String controllerClazz = AnnotationHelper.getStringValue(annotationDesc, VALUE);
+        String controllerStr = AnnotationHelper.getStringValue(annotationDesc, "controller");
         String method = AnnotationHelper.getStringValue(annotationDesc, METHOD);
         String dependency = AnnotationHelper.getStringValues(annotationDesc, DEPENDENCY, ",");
-        if (Strings.isNullOrEmpty(controller) || Strings.isNullOrEmpty(method) || Strings.isNullOrEmpty(dependency)) {
+        if (Strings.isNullOrEmpty(controllerClazz) && !Strings.isNullOrEmpty(controllerStr)) {
+            controllerClazz = controllerStr;
+        }
+        if (Strings.isNullOrEmpty(controllerClazz) || Strings.isNullOrEmpty(method) || Strings.isNullOrEmpty(dependency)) {
             //丢弃
             return;
         }
-        controller = controller.substring(0, controller.length() - CLASS_LENGTH);
-        fieldRef.setGraphqlField(controller + "." + method + ":" + dependency);
+        controllerClazz = controllerClazz.substring(0, controllerClazz.length() - CLASS_LENGTH);
+        fieldRef.setGraphqlField(controllerClazz + "." + method + ":" + dependency);
     }
 }
