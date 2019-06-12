@@ -25,18 +25,19 @@ import java.util.Map;
  */
 public class PomXmlAnalyser {
     private static final Map<File, Artifact> PATH_POM_MAP = Maps.newHashMap();
-    private static final List<File> pomPathList = Lists.newArrayList();
+    private static final List<File> POM_PATH_LIST = Lists.newArrayList();
     private static final Logger logger = new Logger();
 
     public static Artifact analyse(ClassDoc classDoc) {
         File classFile = classDoc.position().file();
         if (!classFile.exists()) {
-            throw new DocletException("java文件：" + classDoc.qualifiedName() + "的源码未配置进来！请在pom.xml 自动化文档的plugin > configuration > sourcepath元素里面添加源文件路径，多个路径使用冒号分隔");
+            logger.error("java文件：" + classDoc.qualifiedName() + "的源码未配置进来！请在pom.xml 自动化文档的plugin > configuration > sourcepath元素里面添加源文件路径，多个路径使用冒号分隔", null);
+            return null;
         }
         Artifact artifact = PATH_POM_MAP.get(classFile);
         if (artifact == null) {
             //尝试获取接口文件对应的pom.xml
-            pomPathList.clear();
+            POM_PATH_LIST.clear();
             artifact = getPomXml(classFile.getParentFile());
         }
         return artifact;
@@ -84,7 +85,7 @@ public class PomXmlAnalyser {
 
     private static Artifact getPomXml(File file) {
 //        logger.info("尝试寻找pom.xml at {}", file.getPath());
-        pomPathList.add(file);
+        POM_PATH_LIST.add(file);
         File[] pomXmlFiles = file.listFiles(new FileFilter() {
             public boolean accept(File pathname) {
                 return "pom.xml".equals(pathname.getName());
@@ -93,7 +94,7 @@ public class PomXmlAnalyser {
         if (pomXmlFiles != null && pomXmlFiles.length == 1) {
             logger.info("找到" + pomXmlFiles[0].getAbsolutePath());
             Artifact info = PomXmlAnalyser.analyse(pomXmlFiles[0]);
-            for (File path : pomPathList) {
+            for (File path : POM_PATH_LIST) {
                 PATH_POM_MAP.put(path, info);
             }
             return info;

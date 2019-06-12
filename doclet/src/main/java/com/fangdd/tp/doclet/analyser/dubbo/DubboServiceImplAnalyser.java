@@ -33,6 +33,9 @@ public class DubboServiceImplAnalyser {
         for (ClassDoc parent : interfaces) {
             //拆到每个接口
             Section section = DubboServiceInterfaceAnalyser.analyser(parent, dubboInfo);
+            if (section == null) {
+                continue;
+            }
             if(chapter == null) {
                 chapter = section.getChapter();
             }

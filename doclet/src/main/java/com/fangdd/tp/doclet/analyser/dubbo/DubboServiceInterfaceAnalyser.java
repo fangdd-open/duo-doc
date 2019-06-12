@@ -16,8 +16,11 @@ import com.sun.javadoc.MethodDoc;
  */
 public class DubboServiceInterfaceAnalyser {
     public static Section analyser(ClassDoc classDoc, DubboInfo dubboInfo) {
-        Section section = ChapterDubboAnalyser.analyse(classDoc);
         Artifact artifact = PomXmlAnalyser.analyse(classDoc);
+        if (artifact == null) {
+            return null;
+        }
+        Section section = ChapterDubboAnalyser.analyse(classDoc);
 
         MethodDoc[] methods = classDoc.methods();
         for (MethodDoc method : methods) {
