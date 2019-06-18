@@ -28,7 +28,7 @@ public class HttpHelper {
         try {
             response = client.newCall(request).execute();
         } catch (IOException e) {
-            logger.error("提交文档到服务器失败！", e);
+            logger.error("提交文档到服务器失败！url:" + url + "，body.length=" + bytes.length, e);
             return null;
         }
 
