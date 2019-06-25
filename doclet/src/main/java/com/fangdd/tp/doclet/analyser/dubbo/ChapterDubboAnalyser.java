@@ -1,5 +1,6 @@
 package com.fangdd.tp.doclet.analyser.dubbo;
 
+import com.fangdd.tp.doclet.DocletConfig;
 import com.fangdd.tp.doclet.constant.DocletConstant;
 import com.fangdd.tp.doclet.helper.BookHelper;
 import com.fangdd.tp.doclet.helper.StringHelper;
@@ -17,10 +18,10 @@ import com.sun.javadoc.Tag;
 public class ChapterDubboAnalyser {
     public static Section analyse(ClassDoc classDoc) {
         Tag[] tags = classDoc.tags();
-        String chapterName = TagHelper.getStringValue(tags, "@chapter", DocletConstant.DEFAULT_CHAPTER_NAME);
+        String chapterName = TagHelper.getStringValue(tags, DocletConfig.tagChapter, DocletConstant.DEFAULT_CHAPTER_NAME);
         Chapter chapter = BookHelper.getChapter(chapterName);
 
-        String sectionName = TagHelper.getStringValue(tags, "@section", null);
+        String sectionName = TagHelper.getStringValue(tags, DocletConfig.tagSection, null);
         String comment = classDoc.commentText();
         if (StringHelper.isEmpty(sectionName)) {
             //尝试使用注释第一行
@@ -38,7 +39,7 @@ public class ChapterDubboAnalyser {
         Section section = BookHelper.getSections(chapter, sectionName);
         section.setCode(classFullName);
 
-        Integer order = TagHelper.getIntegerValue(tags, "@c2");
+        Integer order = TagHelper.getIntegerValue(tags, DocletConfig.tagSectionSort);
         if (order != null) {
             section.setOrder(order);
         }

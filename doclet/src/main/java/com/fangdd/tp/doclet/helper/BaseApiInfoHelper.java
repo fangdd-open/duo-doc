@@ -1,5 +1,6 @@
 package com.fangdd.tp.doclet.helper;
 
+import com.fangdd.tp.doclet.DocletConfig;
 import com.fangdd.tp.doclet.analyser.EntityMateAnalyser;
 import com.fangdd.tp.doclet.annotation.ParamAnnotation;
 import com.fangdd.tp.doclet.enums.ApiPositionEnum;
@@ -23,12 +24,12 @@ public class BaseApiInfoHelper {
 
     public static Api getApiBase(MethodDoc method, Section section) {
         Tag[] tags = method.tags();
-        String apiName = TagHelper.getStringValue(tags, "@api", null);
-        String since = TagHelper.getStringValue(tags, "@since", null);
-        String author = TagHelper.getStringValue(tags, "@author", null);
-        String deprecated = TagHelper.getStringValue(tags, "@deprecated", null);
-        String returnComment = TagHelper.getStringValue(tags, "@return", null);
-        Integer order = TagHelper.getIntegerValue(tags, "@c3");
+        String apiName = TagHelper.getStringValue(tags, DocletConfig.tagApi, null);
+        String since = TagHelper.getStringValue(tags, DocletConfig.tagSince, null);
+        String author = TagHelper.getStringValue(tags, DocletConfig.tagAuthor, null);
+        String deprecated = TagHelper.getStringValue(tags, DocletConfig.tagDeprecated, null);
+        String returnComment = TagHelper.getStringValue(tags, DocletConfig.tagReturn, null);
+        Integer order = TagHelper.getIntegerValue(tags, DocletConfig.tagApiSort);
 
         String comment = method.commentText();
         if (Strings.isNullOrEmpty(apiName)) {
@@ -42,7 +43,6 @@ public class BaseApiInfoHelper {
             //如果接口名称还是为空，则使用方法名
             apiName = method.name();
         }
-
 
         BookHelper.setApiMethod(method);
         BookHelper.setApiPosition(ApiPositionEnum.RESPONSE);
@@ -82,6 +82,10 @@ public class BaseApiInfoHelper {
         api.setResponse(response);
         api.setRequestParams(params);
         api.setCode(apiCode);
+//
+//        api.setProviderName();
+//        api.setBatchProvider();
+
         if (order != null) {
             api.setOrder(order);
         }

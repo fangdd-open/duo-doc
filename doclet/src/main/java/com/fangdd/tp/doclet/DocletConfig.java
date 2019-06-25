@@ -1,7 +1,10 @@
 package com.fangdd.tp.doclet;
 
 /**
- * Created by xuwenzhen on 2019/3/7.
+ * TP-DOC配置
+ *
+ * @author xuwenzhen
+ * @date 2019/3/7
  */
 public class DocletConfig {
     /**
@@ -38,6 +41,61 @@ public class DocletConfig {
      * markdown文档目录
      */
     public static String markdownDir;
+
+    /**
+     * chapter
+     */
+    public static String tagChapter = "@chapter";
+
+    /**
+     * section
+     */
+    public static String tagSection = "@section";
+
+    /**
+     * api
+     */
+    public static String tagApi = "@api";
+
+    /**
+     * chapter排序
+     */
+    public static String tagChapterSort = "@c1";
+
+    /**
+     * section排序
+     */
+    public static String tagSectionSort = "@c2";
+
+    /**
+     * api排序
+     */
+    public static String tagApiSort = "@c3";
+
+    /**
+     * 自XXX起
+     */
+    public static String tagSince = "@since";
+
+    /**
+     * 作者
+     */
+    public static String tagAuthor = "@author";
+
+    /**
+     * 废弃
+     */
+    public static String tagDeprecated = "@deprecated";
+
+    /**
+     * 返回
+     */
+    public static String tagReturn = "@return";
+
+    /**
+     * 禁止
+     */
+    public static String tagDisable = "@disable";
 
     static {
         baseDir = System.getProperty("basedir", "/Users/ycoe/Projects/fdd/tp/tp-doc/doclet-test");

@@ -13,11 +13,13 @@ import com.sun.javadoc.FieldDoc;
  * @date 2019/5/29
  */
 public class GraphqlFieldAnnotationAnalyser extends EntityFieldAnnotationAnalyser {
-
     private static final String VALUE = "value";
     private static final String DEPENDENCY = "dependency";
     private static final String METHOD = "method";
     private static final String CLASS_STR = ".class";
+    private static final String CONTROLLER = "controller";
+    private static final String JOINER = ",";
+    private static final String NAME = "name";
 
     /**
      * 解析注解
@@ -28,10 +30,16 @@ public class GraphqlFieldAnnotationAnalyser extends EntityFieldAnnotationAnalyse
      */
     @Override
     public void analyse(AnnotationDesc annotationDesc, EntityRef fieldRef, FieldDoc fieldDoc) {
+        String providerName = AnnotationHelper.getStringValue(annotationDesc, NAME);
+        String dependency = AnnotationHelper.getStringValues(annotationDesc, DEPENDENCY, JOINER);
+        if (!Strings.isNullOrEmpty(providerName)) {
+            fieldRef.setGraphqlField("@" + providerName + ":" + dependency);
+            return;
+        }
+
         String controllerClazz = AnnotationHelper.getStringValue(annotationDesc, VALUE);
-        String controllerStr = AnnotationHelper.getStringValue(annotationDesc, "controller");
+        String controllerStr = AnnotationHelper.getStringValue(annotationDesc, CONTROLLER);
         String method = AnnotationHelper.getStringValue(annotationDesc, METHOD);
-        String dependency = AnnotationHelper.getStringValues(annotationDesc, DEPENDENCY, ",");
         if (Strings.isNullOrEmpty(controllerClazz) && !Strings.isNullOrEmpty(controllerStr)) {
             controllerClazz = controllerStr;
         }
@@ -42,6 +50,8 @@ public class GraphqlFieldAnnotationAnalyser extends EntityFieldAnnotationAnalyse
         if (controllerClazz.endsWith(CLASS_STR)) {
             controllerClazz = controllerClazz.substring(0, controllerClazz.length() - CLASS_STR.length());
         }
-        fieldRef.setGraphqlField(controllerClazz + "." + method + ":" + dependency);
+
+        String graphqlField = controllerClazz + "." + method + ":" + dependency;
+        fieldRef.setGraphqlField(graphqlField);
     }
 }

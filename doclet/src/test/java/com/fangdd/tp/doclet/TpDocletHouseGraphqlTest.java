@@ -8,7 +8,7 @@ import java.io.IOException;
  * @author ycoe
  * @date 18/1/5
  */
-public class TpDocletGraphqlTest {
+public class TpDocletHouseGraphqlTest {
     /**
      * maven仓库地址
      */

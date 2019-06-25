@@ -1,6 +1,8 @@
 package com.fangdd.tp.doclet.analyser.rest;
 
+import com.fangdd.tp.doclet.DocletConfig;
 import com.fangdd.tp.doclet.constant.DocletConstant;
+import com.fangdd.tp.doclet.constant.EntityConstant;
 import com.fangdd.tp.doclet.enums.ApiTypeEnum;
 import com.fangdd.tp.doclet.helper.*;
 import com.fangdd.tp.doclet.pojo.Api;
@@ -22,25 +24,31 @@ import java.util.List;
  */
 public class RestFulAnalyser {
     private static final String URL_SPLITTER = "/";
+    private static final String METHOD_POST = "POST";
+    private static final String METHOD = "method";
+    private static final String VALUE = "value";
+    private static final String BATCH = "batch";
+    private static final String FALSE = "false";
+    private static final String ID_SPLITTER = "idSplitter";
 
     public static void analyse(ClassDoc classDoc) {
         //@RequestMapping
         AnnotationDesc requestMappingAnnotation = BookHelper.requestMappingAnnotation;
         AnnotationDesc.ElementValuePair[] vs = requestMappingAnnotation.elementValues();
-        List<String> basePaths = RequestMappingAnnotationHelper.getRequestMappingAnnotationValues(vs, "value");
+        List<String> basePaths = RequestMappingAnnotationHelper.getRequestMappingAnnotationValues(vs, VALUE);
         if (basePaths.isEmpty()) {
             basePaths.add("");
         }
 
         Tag[] tags = classDoc.tags();
-        String chapterName = TagHelper.getStringValue(tags, "@chapter", DocletConstant.DEFAULT_CHAPTER_NAME);
+        String chapterName = TagHelper.getStringValue(tags, DocletConfig.tagChapter, DocletConstant.DEFAULT_CHAPTER_NAME);
         Chapter chapter = BookHelper.getChapter(StringHelper.firstLine(chapterName));
 
-        Integer order = TagHelper.getIntegerValue(tags, "@c1");
+        Integer order = TagHelper.getIntegerValue(tags, DocletConfig.tagChapterSort);
         if (order != null) {
             chapter.setOrder(order);
         }
-        String sectionName = TagHelper.getStringValue(tags, "@section", null);
+        String sectionName = TagHelper.getStringValue(tags, DocletConfig.tagSection, null);
         String comment = classDoc.commentText();
         if (StringHelper.isEmpty(sectionName)) {
             //尝试使用注释第一行
@@ -58,17 +66,17 @@ public class RestFulAnalyser {
         Section section = BookHelper.getSections(chapter, sectionName);
         section.setCode(classFullName);
 
-        Integer sectionOrder = TagHelper.getIntegerValue(tags, "@c2");
+        Integer sectionOrder = TagHelper.getIntegerValue(tags, DocletConfig.tagSectionSort);
         if (sectionOrder != null) {
             section.setOrder(sectionOrder);
         }
         section.setComment(comment);
 
-        String deprecated = TagHelper.getStringValue(tags, "@deprecated", null);
+        String deprecated = TagHelper.getStringValue(tags, DocletConfig.tagDeprecated, null);
 
         MethodDoc[] methods = classDoc.methods();
         for (MethodDoc method : methods) {
-            if (TagHelper.contendTag(method.tags(), "@disable")) {
+            if (TagHelper.contendTag(method.tags(), DocletConfig.tagDisable)) {
                 continue;
             }
             Api api = analyseApi(method, section, basePaths);
@@ -94,7 +102,7 @@ public class RestFulAnalyser {
             if (requestMappingAnnotation != null) {
                 vs = requestMappingAnnotation.elementValues();
                 if (Strings.isNullOrEmpty(methodMap[1])) {
-                    methods = RequestMappingAnnotationHelper.getRequestMappingAnnotationValues(vs, "method");
+                    methods = RequestMappingAnnotationHelper.getRequestMappingAnnotationValues(vs, METHOD);
                 } else {
                     methods = Lists.newArrayList(methodMap[1]);
                 }
@@ -105,7 +113,7 @@ public class RestFulAnalyser {
         if (vs == null) {
             return null;
         }
-        List<String> paths = RequestMappingAnnotationHelper.getRequestMappingAnnotationValues(vs, "value");
+        List<String> paths = RequestMappingAnnotationHelper.getRequestMappingAnnotationValues(vs, VALUE);
         if (paths.isEmpty()) {
             paths.add("");
         }
@@ -136,16 +144,41 @@ public class RestFulAnalyser {
         }
 
         Api api = BaseApiInfoHelper.getApiBase(methodDoc, section);
+
+        setGraphqlProviderName(methodDoc, api);
+
         api.setPaths(apiPaths);
         api.setType(ApiTypeEnum.RESTFUL.getType());
         if (methods != null && !methods.isEmpty()) {
             api.setMethods(methods);
         }
         //如果是RestFul接口，且参数有@RequestBody时，强制为 POST ??
-        if (hasRequestBodyParam(api) && (api.getMethods() == null || api.getMethods().isEmpty())) {
-            api.setMethods(Lists.newArrayList("POST"));
+        boolean isMethodEmpty = api.getMethods() == null || api.getMethods().isEmpty();
+        if (hasRequestBodyParam(api) && isMethodEmpty) {
+            api.setMethods(Lists.newArrayList(METHOD_POST));
         }
         return api;
+    }
+
+    private static void setGraphqlProviderName(MethodDoc methodDoc, Api api) {
+        AnnotationDesc graphqlProviderAnnotation = AnnotationHelper.getAnnotation(
+                methodDoc.annotations(), EntityConstant.ANNOTATION_GRAPHQL_PROVIDER
+        );
+        if (graphqlProviderAnnotation == null) {
+            return;
+        }
+        String providerName = AnnotationHelper.getStringValue(graphqlProviderAnnotation, VALUE);
+        if (Strings.isNullOrEmpty(providerName)) {
+            return;
+        }
+        String batchProvier = AnnotationHelper.getStringValue(graphqlProviderAnnotation, BATCH, FALSE);
+        api.setProviderName(providerName);
+        boolean batchProvider = Boolean.parseBoolean(batchProvier);
+        api.setBatchProvider(batchProvider);
+        if (batchProvider) {
+            String idSplitter = AnnotationHelper.getStringValue(graphqlProviderAnnotation, ID_SPLITTER, ",");
+            api.setIdSplitter(idSplitter);
+        }
     }
 
     private static boolean hasRequestBodyParam(Api api) {

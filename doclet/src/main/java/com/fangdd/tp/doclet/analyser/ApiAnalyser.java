@@ -1,5 +1,6 @@
 package com.fangdd.tp.doclet.analyser;
 
+import com.fangdd.tp.doclet.DocletConfig;
 import com.fangdd.tp.doclet.analyser.dubbo.DubboServiceImplAnalyser;
 import com.fangdd.tp.doclet.analyser.dubbo.XmlDubboServiceAnalyser;
 import com.fangdd.tp.doclet.analyser.rest.RestFulAnalyser;
@@ -80,7 +81,7 @@ public class ApiAnalyser {
 
         // 检查是否添加了 @disable 标签
         Tag[] tags = classDoc.tags();
-        if (TagHelper.contendTag(tags, "@disable")) {
+        if (TagHelper.contendTag(tags, DocletConfig.tagDisable)) {
             return false;
         }
 

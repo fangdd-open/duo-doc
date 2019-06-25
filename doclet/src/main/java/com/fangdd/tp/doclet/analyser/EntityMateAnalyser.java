@@ -1,5 +1,6 @@
 package com.fangdd.tp.doclet.analyser;
 
+import com.fangdd.tp.doclet.DocletConfig;
 import com.fangdd.tp.doclet.analyser.entity.DateTimeFormatFieldAnnotationAnalyser;
 import com.fangdd.tp.doclet.analyser.entity.EntityFieldAnnotationAnalyser;
 import com.fangdd.tp.doclet.analyser.entity.GraphqlFieldAnnotationAnalyser;
@@ -122,8 +123,8 @@ public class EntityMateAnalyser {
         entity.setEnumerate(classDoc.isEnum());
 
         Tag[] tags = classDoc.tags();
-        String since = TagHelper.getStringValue(tags, "@since", null);
-        String deprecated = TagHelper.getStringValue(tags, "@deprecated", null);
+        String since = TagHelper.getStringValue(tags, DocletConfig.tagSince, null);
+        String deprecated = TagHelper.getStringValue(tags, DocletConfig.tagDeprecated, null);
         String comment = classDoc.commentText();
 
         entity.setSince(since);

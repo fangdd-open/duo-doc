@@ -91,6 +91,21 @@ public class Api implements Comparable<Api> {
      */
     private Integer order;
 
+    /**
+     * Graphql的DataProvider名称
+     */
+    private String providerName;
+
+    /**
+     * 是否批量接口，与上面的providerName配套使用
+     */
+    private Boolean batchProvider;
+
+    /**
+     * batchProvider=true时，多个ID的串连字符
+     */
+    private String idSplitter;
+
     public String getCode() {
         return code;
     }
@@ -227,8 +242,33 @@ public class Api implements Comparable<Api> {
         this.order = order;
     }
 
+    public String getProviderName() {
+        return providerName;
+    }
+
+    public void setProviderName(String providerName) {
+        this.providerName = providerName;
+    }
+
+    public Boolean getBatchProvider() {
+        return batchProvider;
+    }
+
+    public void setBatchProvider(Boolean batchProvider) {
+        this.batchProvider = batchProvider;
+    }
+
+    public String getIdSplitter() {
+        return idSplitter;
+    }
+
+    public void setIdSplitter(String idSplitter) {
+        this.idSplitter = idSplitter;
+    }
+
     @Override
     public int compareTo(Api o) {
         return this.order - o.order;
     }
+
 }
