@@ -18,7 +18,6 @@ public class EntityConstant {
     /**
      * GraphqlField
      */
-    public static final String GRAPHQL_FIELD = "com.fangdd.graphql.provider.tpdoc.GraphqlField";
-    public static final String GRAPHQL_PROVIDER = "com.fangdd.graphql.provider.tpdoc.GraphqlProvider";
-    public static final String ANNOTATION_GRAPHQL_PROVIDER = "com.fangdd.graphql.provider.tpdoc.GraphqlProvider";
+    public static final String GRAPHQL_FIELD = "com.fangdd.graphql.provider.annotation.GraphqlField";
+    public static final String ANNOTATION_GRAPHQL_PROVIDER = "com.fangdd.graphql.provider.annotation.GraphqlProvider";
 }
