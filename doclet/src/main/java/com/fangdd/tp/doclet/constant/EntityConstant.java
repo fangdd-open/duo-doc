@@ -20,4 +20,5 @@ public class EntityConstant {
      */
     public static final String GRAPHQL_FIELD = "com.fangdd.graphql.provider.annotation.GraphqlField";
     public static final String ANNOTATION_GRAPHQL_PROVIDER = "com.fangdd.graphql.provider.annotation.GraphqlProvider";
+    public static final String ANNOTATION_GRAPHQL_DIRECTIVE = "com.fangdd.graphql.provider.annotation.GraphqlDirective";
 }

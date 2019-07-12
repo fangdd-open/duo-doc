@@ -47,6 +47,13 @@ public class EntityRef {
      */
     private String graphqlField;
 
+    /**
+     * GraphqlDirective注解，多个以半角逗号分隔
+     *
+     * @demo fddImg, subList
+     */
+    private String graphqlDirective;
+
     public String getEntityName() {
         return entityName;
     }
@@ -109,5 +116,13 @@ public class EntityRef {
 
     public String getGraphqlField() {
         return graphqlField;
+    }
+
+    public String getGraphqlDirective() {
+        return graphqlDirective;
+    }
+
+    public void setGraphqlDirective(String graphqlDirective) {
+        this.graphqlDirective = graphqlDirective;
     }
 }

@@ -1,10 +1,7 @@
 package com.fangdd.tp.doclet.analyser;
 
 import com.fangdd.tp.doclet.DocletConfig;
-import com.fangdd.tp.doclet.analyser.entity.DateTimeFormatFieldAnnotationAnalyser;
-import com.fangdd.tp.doclet.analyser.entity.EntityFieldAnnotationAnalyser;
-import com.fangdd.tp.doclet.analyser.entity.GraphqlFieldAnnotationAnalyser;
-import com.fangdd.tp.doclet.analyser.entity.NotNullFieldAnnotationAnalyser;
+import com.fangdd.tp.doclet.analyser.entity.*;
 import com.fangdd.tp.doclet.constant.EntityConstant;
 import com.fangdd.tp.doclet.helper.BookHelper;
 import com.fangdd.tp.doclet.helper.Logger;
@@ -32,6 +29,11 @@ public class EntityMateAnalyser {
     private static final String BOOLEAN = "boolean";
     private static final Logger logger = new Logger();
     private static final Map<String, EntityFieldAnnotationAnalyser> FIELD_ANNOTATION_ANALYSER_MAP = Maps.newHashMap();
+    private static final String STR_LT = "<";
+    private static final String STR_GT = ">";
+    private static final String STR_SQUARE_LEFT = "[";
+    private static final String STR_SQUARE_RIGHT = "]";
+    private static final String JAVA_PACKAGE = "java.";
 
     static {
         FIELD_ANNOTATION_ANALYSER_MAP.put(EntityConstant.ANNOTATION_DATE_TIME_FORMAT, new DateTimeFormatFieldAnnotationAnalyser());
@@ -40,6 +42,7 @@ public class EntityMateAnalyser {
         FIELD_ANNOTATION_ANALYSER_MAP.put(EntityConstant.HIBERNATE_VALIDATOR_ANNOTATION_NOT_BLANK, new NotNullFieldAnnotationAnalyser());
         FIELD_ANNOTATION_ANALYSER_MAP.put(EntityConstant.HIBERNATE_VALIDATOR_ANNOTATION_NOT_EMPTY, new NotNullFieldAnnotationAnalyser());
         FIELD_ANNOTATION_ANALYSER_MAP.put(EntityConstant.GRAPHQL_FIELD, new GraphqlFieldAnnotationAnalyser());
+        FIELD_ANNOTATION_ANALYSER_MAP.put(EntityConstant.ANNOTATION_GRAPHQL_DIRECTIVE, new GraphqlDirectiveAnnotationAnalyser());
     }
 
     private static final Set<String> CURRENT_CLASS_FIELD_NAMES = Sets.newHashSet();
@@ -61,11 +64,66 @@ public class EntityMateAnalyser {
             return getPrimitiveTypeEntity(type);
         }
         ClassDoc classDoc = type.asClassDoc();
-        String className = classDoc.toString();
 
         List<EntityRef> parameterizedEntityRefList = Lists.newArrayList();
+        Map<String, Type> parameterizedTypeMap = getParameterizedTypeMap(type, parentParameterizedTypeMap, parameterizedEntityRefList);
+
+        String fullName = getFullName(type, parameterizedTypeMap);
+
+        Entity entity = EntityHandle.getEntity(fullName);
+        if (entity != null) {
+            return entity;
+        }
+        entity = new Entity();
+        entity.setName(fullName);
+        entity.setPrimitive(false);
+        entity.setEnumerate(classDoc.isEnum());
+
+        Tag[] tags = classDoc.tags();
+        String since = TagHelper.getStringValue(tags, DocletConfig.tagSince, null);
+        String deprecated = TagHelper.getStringValue(tags, DocletConfig.tagDeprecated, null);
+        String comment = classDoc.commentText();
+
+        entity.setSince(since);
+        entity.setDeprecated(deprecated);
+        entity.setComment(comment);
+        entity.setDefaultValue("");
+        if (!parameterizedEntityRefList.isEmpty()) {
+            entity.setParameteredEntityRefs(parameterizedEntityRefList);
+            //设置是否Map or List
+            if (isCollection(type)) {
+                entity.setCollection(true);
+            } else if (isMap(type)) {
+                entity.setMap(true);
+            }
+        }
+
+        List<EntityRef> fieldItems = Lists.newArrayList();
+        entity.setFields(fieldItems);
+
+        EntityHandle.addEntity(entity);
+
+        if (fullName.startsWith(JAVA_PACKAGE)) {
+            return entity;
+        }
+
+        if (classDoc.isEnum()) {
+            //如果是枚举，处理枚举元素
+            analyseEnumItems(classDoc, fieldItems);
+        } else {
+            //处理实体类属性
+            analyseEntityFields(classDoc, parameterizedTypeMap, fieldItems);
+        }
+
+        return entity;
+    }
+
+    private static Map<String, Type> getParameterizedTypeMap(Type type, Map<String, Type> parentParameterizedTypeMap, List<EntityRef> parameterizedEntityRefList) {
+        ClassDoc classDoc = type.asClassDoc();
+        String className = classDoc.toString();
         Map<String, Type> parameterizedTypeMap = Maps.newHashMap();
-        if (className.contains("<") || className.contains(">") && parentParameterizedTypeMap != null) {
+        boolean isParameterizedType = className.contains(STR_LT) || className.contains(STR_GT) && parentParameterizedTypeMap != null;
+        if (isParameterizedType) {
             //有泛型
             ParameterizedType parameterizedType = type.asParameterizedType();
             if (parameterizedType != null) {
@@ -109,56 +167,7 @@ public class EntityMateAnalyser {
                 }
             }
         }
-
-
-        String fullName = getFullName(type, parameterizedTypeMap);
-
-        Entity entity = EntityHandle.getEntity(fullName);
-        if (entity != null) {
-            return entity;
-        }
-        entity = new Entity();
-        entity.setName(fullName);
-        entity.setPrimitive(false);
-        entity.setEnumerate(classDoc.isEnum());
-
-        Tag[] tags = classDoc.tags();
-        String since = TagHelper.getStringValue(tags, DocletConfig.tagSince, null);
-        String deprecated = TagHelper.getStringValue(tags, DocletConfig.tagDeprecated, null);
-        String comment = classDoc.commentText();
-
-        entity.setSince(since);
-        entity.setDeprecated(deprecated);
-        entity.setComment(comment);
-        entity.setDefaultValue("");
-        if (!parameterizedEntityRefList.isEmpty()) {
-            entity.setParameteredEntityRefs(parameterizedEntityRefList);
-            //设置是否Map or List
-            if (isCollection(type)) {
-                entity.setCollection(true);
-            } else if (isMap(type)) {
-                entity.setMap(true);
-            }
-        }
-
-        List<EntityRef> fieldItems = Lists.newArrayList();
-        entity.setFields(fieldItems);
-
-        EntityHandle.addEntity(entity);
-
-        if (fullName.startsWith("java.")) {
-            return entity;
-        }
-
-        if (classDoc.isEnum()) {
-            //如果是枚举，处理枚举元素
-            analyseEnumItems(classDoc, fieldItems);
-        } else {
-            //处理实体类属性
-            analyseEntityFields(classDoc, parameterizedTypeMap, fieldItems);
-        }
-
-        return entity;
+        return parameterizedTypeMap;
     }
 
     private static void analyseEnumItems(ClassDoc classDoc, List<EntityRef> fieldItems) {
@@ -194,8 +203,8 @@ public class EntityMateAnalyser {
                 Entity fieldEntity = getEntity(fieldType, parameterizedTypeMap);
 
                 Tag[] fieldTags = field.tags();
-                String required = TagHelper.getStringValue(fieldTags, "@required", null);
-                String demo = TagHelper.getStringValue(fieldTags, "@demo", null);
+                String required = TagHelper.getStringValue(fieldTags, DocletConfig.tagRequired, null);
+                String demo = TagHelper.getStringValue(fieldTags, DocletConfig.tagDemo, null);
                 if (Strings.isNullOrEmpty(demo) && fieldEntity.getEnumerate() != null && fieldEntity.getEnumerate()) {
                     //如果是枚举，且@demo为空
                     FieldDoc[] enumConstants = ((ClassDocImpl) fieldType).enumConstants();
@@ -353,7 +362,8 @@ public class EntityMateAnalyser {
 
     private static boolean isCollection(Type type) {
         String typeName = type.toString();
-        if ((typeName.contains("[") && typeName.contains("]")) || typeName.startsWith(COLLECTION_CLASS_NAME)) {
+        boolean isCollection = (typeName.contains(STR_SQUARE_LEFT) && typeName.contains(STR_SQUARE_RIGHT)) || typeName.startsWith(COLLECTION_CLASS_NAME);
+        if (isCollection) {
             return true;
         }
         ClassDoc classDoc = type.asClassDoc();
@@ -375,7 +385,7 @@ public class EntityMateAnalyser {
             return typeName;
         }
 
-        if (!typeName.contains("<")) {
+        if (!typeName.contains(STR_LT)) {
             return typeName;
         }
 

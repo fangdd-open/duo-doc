@@ -1,5 +1,7 @@
 package com.fangdd.tp.doclet;
 
+import java.io.File;
+
 /**
  * TP-DOC配置
  *
@@ -97,6 +99,18 @@ public class DocletConfig {
      */
     public static String tagDisable = "@disable";
 
+    /**
+     * 必填
+     */
+    public static String tagRequired = "@required";
+
+    /**
+     * Demo值
+     */
+    public static String tagDemo = "@demo";
+
+    private static final String CURRENT_DIR = "./";
+
     static {
         baseDir = System.getProperty("basedir", "/Users/ycoe/Projects/fdd/tp/tp-doc/doclet-test");
         exporter = System.getProperty("exporter", "server");
@@ -105,10 +119,10 @@ public class DocletConfig {
         dubboConfXmls = System.getProperty("dubboXmlConfigs", "applicationContext-dubbo.xml");
         markdownDir = System.getProperty("markdownDir", "doc");
         commitId = System.getProperty("commitId", "");
-        if (markdownDir.startsWith("/")) {
+        if (markdownDir.startsWith(File.separator)) {
             markdownDir = markdownDir.substring(1);
         }
-        if (markdownDir.startsWith("./")) {
+        if (markdownDir.startsWith(CURRENT_DIR)) {
             markdownDir = markdownDir.substring(2);
         }
     }
