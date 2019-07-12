@@ -36,6 +36,6 @@ public class GraphqlDirectiveAnnotationAnalyser extends EntityFieldAnnotationAna
         } else {
             directives = NAME_SPLITTER + directiveName;
         }
-        fieldRef.setGraphqlField(directives);
+        fieldRef.setGraphqlDirective(directives);
     }
 }
