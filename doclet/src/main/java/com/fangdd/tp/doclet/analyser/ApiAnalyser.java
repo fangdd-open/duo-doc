@@ -4,7 +4,6 @@ import com.fangdd.tp.doclet.DocletConfig;
 import com.fangdd.tp.doclet.analyser.dubbo.DubboServiceImplAnalyser;
 import com.fangdd.tp.doclet.analyser.dubbo.XmlDubboServiceAnalyser;
 import com.fangdd.tp.doclet.analyser.rest.RestFulAnalyser;
-import com.fangdd.tp.doclet.constant.DocletConstant;
 import com.fangdd.tp.doclet.constant.DubboConstant;
 import com.fangdd.tp.doclet.constant.SpringMvcConstant;
 import com.fangdd.tp.doclet.helper.AnnotationHelper;
@@ -43,7 +42,11 @@ public class ApiAnalyser {
     }
 
     private static boolean isAvailableDubboApi(ClassDoc classDoc) {
-        AnnotationDesc serviceAnnotation = AnnotationHelper.getAnnotation(classDoc.annotations(), DubboConstant.ANNOTATION_SERVICE);
+        AnnotationDesc serviceAnnotation = AnnotationHelper.getAnnotation(classDoc.annotations(), DubboConstant.ANNOTATION_ALIBABA_SERVICE);
+        if (serviceAnnotation == null) {
+            //尝试检查apache版本的
+            serviceAnnotation = AnnotationHelper.getAnnotation(classDoc.annotations(), DubboConstant.ANNOTATION_APACHE_SERVICE);
+        }
         return serviceAnnotation != null;
     }
 

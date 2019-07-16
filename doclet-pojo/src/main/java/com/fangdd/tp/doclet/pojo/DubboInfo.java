@@ -17,6 +17,11 @@ public class DubboInfo {
      */
     private String version;
 
+    /**
+     * 超时时间，单位：毫秒
+     */
+    private Integer timeout;
+
     public String getInterfaceName() {
         return interfaceName;
     }
@@ -31,5 +36,13 @@ public class DubboInfo {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public void setTimeout(Integer timeout) {
+        this.timeout = timeout;
+    }
+
+    public Integer getTimeout() {
+        return timeout;
     }
 }
