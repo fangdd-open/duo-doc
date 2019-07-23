@@ -1,5 +1,7 @@
 package com.fangdd.tp.doclet;
 
+import com.fangdd.tp.doclet.helper.Logger;
+
 import java.io.File;
 
 /**
@@ -9,10 +11,17 @@ import java.io.File;
  * @date 2019/3/7
  */
 public class DocletConfig {
+    private static final Logger logger = new Logger();
+
     /**
      * 项目目录
      */
     public static String baseDir;
+
+    /**
+     * 输出文件路径
+     */
+    public static String outputDirectory;
 
     /**
      * appId
@@ -43,6 +52,11 @@ public class DocletConfig {
      * markdown文档目录
      */
     public static String markdownDir;
+
+    /**
+     * 导出文件名称，默认为：api.json
+     */
+    public static String apiJson;
 
     /**
      * chapter
@@ -111,9 +125,20 @@ public class DocletConfig {
 
     private static final String CURRENT_DIR = "./";
 
+    public static final String USER_DIR = "user.dir";
+
     static {
-        baseDir = System.getProperty("basedir", "/Users/ycoe/Projects/fdd/tp/tp-doc/doclet-test");
+        baseDir = System.getProperty("basedir", System.getProperty(USER_DIR));
+        outputDirectory = System.getProperty("outputDirectory");
+        File baseDirFile = new File(baseDir);
+        if (!baseDirFile.isDirectory() || !baseDirFile.exists()) {
+            baseDir = System.getProperty(USER_DIR);
+            logger.error("basedir目录未配置！使用user.dir=" + baseDir, null);
+        } else {
+            logger.info("basedir=" + baseDir);
+        }
         exporter = System.getProperty("exporter", "server");
+        apiJson = System.getProperty("apiJson", "api.json");
         appId = System.getProperty("appId");
         server = System.getProperty("server", "http://tp-doc.fangdd.net");
         dubboConfXmls = System.getProperty("dubboXmlConfigs", "applicationContext-dubbo.xml");

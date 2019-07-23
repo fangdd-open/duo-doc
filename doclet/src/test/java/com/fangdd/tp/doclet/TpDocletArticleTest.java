@@ -15,7 +15,7 @@ public class TpDocletArticleTest extends BaseTpDocTest {
 
     public static void main(String[] args) throws IOException {
         System.setProperty("exporter", "console");
-        projectPath = System.getProperty("user.dir");
+        projectPath = System.getProperty(DocletConfig.USER_DIR);
 
         String projectSrcDirs = getProjectSrcDirs();
         System.out.println("扫描目录：" + projectSrcDirs);

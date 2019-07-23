@@ -12,12 +12,12 @@ public class TpDocletHouseGraphqlTest {
     /**
      * maven仓库地址
      */
-    private static final String mavenRepositoryPath = "/Users/xuwenzhen/Software/apache-maven-3.6.0/repository/";
+    private static final String MAVEN_REPOSITORY_PATH = "/Users/xuwenzhen/Software/apache-maven-3.6.0/repository/";
 
     /**
      * 需要引入的包
      */
-    private static final String[] jars = new String[]{
+    private static final String[] JARS = new String[]{
             "org/springframework/boot/spring-boot-autoconfigure/2.1.3.RELEASE/spring-boot-autoconfigure-2.1.3.RELEASE.jar",
             "org/springframework/boot/spring-boot/2.1.3.RELEASE/spring-boot-2.1.3.RELEASE.jar",
             "org/springframework/spring-web/5.1.5.RELEASE/spring-web-5.1.5.RELEASE.jar",
@@ -36,7 +36,7 @@ public class TpDocletHouseGraphqlTest {
 
     public static void main(String[] args) throws IOException {
         System.setProperty("exporter", "console");
-        projectPath = System.getProperty("user.dir");
+        projectPath = System.getProperty(DocletConfig.USER_DIR);
 
         String projectSrcDirs = getProjectSrcDirs();
         System.out.println("扫描目录：" + projectSrcDirs);
@@ -55,11 +55,11 @@ public class TpDocletHouseGraphqlTest {
 
     private static String getLibs() {
         StringBuilder sb = new StringBuilder();
-        for (String jar : jars) {
+        for (String jar : JARS) {
             if (sb.length() > 0) {
                 sb.append(":");
             }
-            sb.append(mavenRepositoryPath + jar);
+            sb.append(MAVEN_REPOSITORY_PATH + jar);
         }
         return sb.toString();
     }

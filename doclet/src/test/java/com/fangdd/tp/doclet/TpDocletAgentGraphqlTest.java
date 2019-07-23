@@ -1,6 +1,7 @@
 package com.fangdd.tp.doclet;
 
 import com.sun.tools.javadoc.Main;
+import org.junit.Test;
 
 import java.io.IOException;
 
@@ -9,12 +10,12 @@ import java.io.IOException;
  * @date 18/1/5
  */
 public class TpDocletAgentGraphqlTest extends BaseTpDocTest {
-
     private static String projectPath;
 
-    public static void main(String[] args) throws IOException {
-        System.setProperty("exporter", "console");
-        projectPath = System.getProperty("user.dir");
+    @Test
+    public void doc() throws IOException {
+        System.setProperty("exporter", "file");
+        projectPath = System.getProperty(DocletConfig.USER_DIR);
 
         String projectSrcDirs = getProjectSrcDirs();
         System.out.println("扫描目录：" + projectSrcDirs);

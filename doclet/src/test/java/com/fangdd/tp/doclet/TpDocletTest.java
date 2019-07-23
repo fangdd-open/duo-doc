@@ -2,7 +2,6 @@ package com.fangdd.tp.doclet;
 
 import com.sun.tools.javadoc.Main;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -13,12 +12,12 @@ public class TpDocletTest {
     /**
      * maven仓库地址
      */
-    private static final String mavenRepositoryPath = "/Users/xuwenzhen/Software/apache-maven-3.6.0/repository/";
+    private static final String MAVEN_REPOSITORY_PATH = "/Users/xuwenzhen/Software/apache-maven-3.6.0/repository/";
 
     /**
      * 需要引入的包
      */
-    private static final String[] jars = new String[]{
+    private static final String[] JARS = new String[]{
             "com/alibaba/dubbo/2.8.5/dubbo-2.8.5.jar",
             "org/springframework/boot/spring-boot/1.5.6.RELEASE/spring-boot-1.5.6.RELEASE.jar",
             "org/springframework/boot/spring-boot-autoconfigure/1.5.6.RELEASE/spring-boot-autoconfigure-1.5.6.RELEASE.jar",
@@ -36,7 +35,7 @@ public class TpDocletTest {
     private static String projectPath;
 
     public static void main(String[] args) throws IOException {
-        projectPath = System.getProperty("user.dir");
+        projectPath = System.getProperty(DocletConfig.USER_DIR);
 //        projectPath = projectPath + "/doclet-test";
 
         System.setProperty("exporter", "console");
@@ -62,11 +61,11 @@ public class TpDocletTest {
 
     private static String getLibs() {
         StringBuilder sb = new StringBuilder();
-        for (String jar : jars) {
+        for (String jar : JARS) {
             if (sb.length() > 0) {
                 sb.append(":");
             }
-            sb.append(mavenRepositoryPath + jar);
+            sb.append(MAVEN_REPOSITORY_PATH + jar);
         }
         return sb.toString();
     }

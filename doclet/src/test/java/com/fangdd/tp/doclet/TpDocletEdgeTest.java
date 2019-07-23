@@ -13,12 +13,12 @@ public class TpDocletEdgeTest {
     /**
      * maven仓库地址
      */
-    private static final String mavenRepositoryPath = "/Users/ycoe/Software/maven/repository/";
+    private static final String MAVEN_REPOSITORY_PATH = "/Users/ycoe/Software/maven/repository/";
 
     /**
      * 需要引入的包
      */
-    private static final String[] jars = new String[]{
+    private static final String[] JARS = new String[]{
             "com/alibaba/dubbo/2.8.5/dubbo-2.8.5.jar",
             "org/springframework/boot/spring-boot/1.5.6.RELEASE/spring-boot-1.5.6.RELEASE.jar",
             "org/springframework/boot/spring-boot-autoconfigure/1.5.6.RELEASE/spring-boot-autoconfigure-1.5.6.RELEASE.jar",
@@ -36,7 +36,7 @@ public class TpDocletEdgeTest {
     private static String projectPath;
 
     public static void main(String[] args) throws IOException {
-        projectPath = System.getProperty("user.dir");
+        projectPath = System.getProperty(DocletConfig.USER_DIR);
 
         String projectSrcDirs = getProjectSrcDirs();
         System.out.println("扫描目录：" + projectSrcDirs);
@@ -59,11 +59,11 @@ public class TpDocletEdgeTest {
 
     private static String getLibs() {
         StringBuilder sb = new StringBuilder();
-        for (String jar : jars) {
+        for (String jar : JARS) {
             if (sb.length() > 0) {
                 sb.append(":");
             }
-            sb.append(mavenRepositoryPath + jar);
+            sb.append(MAVEN_REPOSITORY_PATH + jar);
         }
         return sb.toString();
     }
@@ -76,12 +76,14 @@ public class TpDocletEdgeTest {
         File projectDir = new File(projectPath);
         File[] fs = projectDir.listFiles();
         for (File f : fs) {
-            if (f.isFile())
+            if (f.isFile()) {
                 continue;
+            }
 
             File srcDir = new File(f.getAbsolutePath() + "/src/main/java");
-            if (!srcDir.exists())
+            if (!srcDir.exists()) {
                 continue;
+            }
 
             if (srcPath.length() > 0) {
                 srcPath.append(":");
