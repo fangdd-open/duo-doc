@@ -208,12 +208,12 @@ public class DocServiceImpl implements DocService {
         Bson filter;
         Bson appIdFilter = Filters.eq(APP_ID, appId);
         if (Strings.isNullOrEmpty(vcsId)) {
+            filter = appIdFilter;
+        } else {
             filter = Filters.and(
                     appIdFilter,
                     Filters.eq(COMMIT_ID, vcsId)
             );
-        } else {
-            filter = appIdFilter;
         }
         Bson projection = Projections.include(GROUP_ID, ARTIFACT_ID, DOC_VERSION);
         Artifact doc = docDao.getEntity(filter, projection);
