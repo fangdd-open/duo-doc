@@ -1,6 +1,7 @@
 package com.fangdd.tp.doclet;
 
 import com.sun.tools.javadoc.Main;
+import org.junit.Test;
 
 import java.io.IOException;
 
@@ -34,7 +35,8 @@ public class TpDocletTest {
     };
     private static String projectPath;
 
-    public static void main(String[] args) throws IOException {
+    @Test
+    public void doc() throws IOException {
         projectPath = System.getProperty(DocletConfig.USER_DIR);
 //        projectPath = projectPath + "/doclet-test";
 

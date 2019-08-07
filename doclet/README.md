@@ -71,6 +71,14 @@ TP-DOC是在公司spring boot种子项目上，依赖代码注释，自动生成
 > 3. `plugin`配置需要添加到打包部署包的模块上
 >
 > 4. maven的勾子可设置为`package`，代码提交时会由CI触发，即每次代码提交都会更新文档，如果不需要自动触发，可配置为`site`，然后手工执行：mvn clean site，手工更新文档
+>
+> 5. 如果需要输出到本地`targe > classes`目录，需要配置以下信息：
+
+```xml
+<additionalJOption>-J-Dexporter=file</additionalJOption>
+<additionalJOption>-J-DoutputDirectory=${project.build.outputDirectory}</additionalJOption>
+```
+
 
 创建完成后，会在日志里面打印出文档的地址：
  

@@ -63,7 +63,7 @@ public class DocApiController {
     public BaseResponse<String> save(HttpServletRequest request) {
         int len = request.getContentLength();
         byte[] buffer = new byte[len];
-        try(ServletInputStream iii = request.getInputStream()) {
+        try (ServletInputStream iii = request.getInputStream()) {
             iii.read(buffer, 0, len);
         } catch (Exception e) {
             logger.error("读取请求体失败！", e);
@@ -101,14 +101,16 @@ public class DocApiController {
     /**
      * 通过appId获取某个文档数据
      *
-     * @param appId appId
-     * @param vcsId 版本ID
+     * @param appId    appId
+     * @param vcsId    版本ID
+     * @param apiCodes 需要拉取的接口
      * @return 文档的全部数据
      */
     @GetMapping("/app/{appId}")
     public ResponseEntity<byte[]> get(
             @PathVariable String appId,
-            @RequestParam String vcsId,
+            @RequestParam(required = false) String vcsId,
+            @RequestParam(required = false) String apiCodes,
             HttpServletResponse response
     ) {
         ProviderApiDto providerApiDto = docService.getByAppId(appId, vcsId);

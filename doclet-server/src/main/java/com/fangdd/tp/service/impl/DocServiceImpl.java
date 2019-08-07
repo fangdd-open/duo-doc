@@ -205,22 +205,32 @@ public class DocServiceImpl implements DocService {
 
     @Override
     public ProviderApiDto getByAppId(String appId, String vcsId) {
-        Bson filter = Filters.and(
-                Filters.eq(APP_ID, appId),
-                Filters.eq(COMMIT_ID, vcsId)
-        );
+        Bson filter;
+        Bson appIdFilter = Filters.eq(APP_ID, appId);
+        if (Strings.isNullOrEmpty(vcsId)) {
+            filter = Filters.and(
+                    appIdFilter,
+                    Filters.eq(COMMIT_ID, vcsId)
+            );
+        } else {
+            filter = appIdFilter;
+        }
         Bson projection = Projections.include(GROUP_ID, ARTIFACT_ID, DOC_VERSION);
         Artifact doc = docDao.getEntity(filter, projection);
 
         if (doc == null) {
-            doc = docLogDao.getEntity(filter, projection);
+            doc = docLogDao
+                    .find(filter)
+                    .projection(projection)
+                    .sort(Sorts.descending(DOC_VERSION))
+                    .first();
         }
 
-        if (doc != null) {
-            return getProviderApiDto(doc.getGroupId(), doc.getArtifactId(), doc.getDocVersion());
+        if (doc == null) {
+            return null;
         }
+        return getProviderApiDto(doc.getGroupId(), doc.getArtifactId(), doc.getDocVersion());
 
-        return null;
     }
 
     private ProviderApiDto getProviderApiDto(String groupId, String artifactId, long version) {
