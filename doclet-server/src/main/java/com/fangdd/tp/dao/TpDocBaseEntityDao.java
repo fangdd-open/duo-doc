@@ -17,8 +17,13 @@ public abstract class TpDocBaseEntityDao<T> extends BaseEntityDao<T> {
         return "tp_doc";
     }
 
+    /**
+     * 在spring中注册的YMongoClient类名称
+     *
+     * @return
+     */
     @Override
-    protected YMongoClient getYMongoClient() {
-        return mongoClient;
+    protected String getMongoClientName() {
+        return "yMongoClient";
     }
 }

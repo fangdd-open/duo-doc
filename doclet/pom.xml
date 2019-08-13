@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.fangdd</groupId>
         <artifactId>tp-doc</artifactId>
-        <version>1.2-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <artifactId>doclet</artifactId>
@@ -64,12 +64,12 @@
         <dependency>
             <groupId>com.fangdd</groupId>
             <artifactId>doclet-render</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.fangdd</groupId>
             <artifactId>doclet-pojo</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>

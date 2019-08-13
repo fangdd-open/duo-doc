@@ -17,7 +17,7 @@ public class MongoDataSourceConfig {
      *
      * @return
      */
-    @Bean
+    @Bean("yMongoClient")
     @ConfigurationProperties(prefix = "mongodb.db")
     public YMongoClient getMongoClient() {
         return new YMongoClient();

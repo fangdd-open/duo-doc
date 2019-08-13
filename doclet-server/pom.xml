@@ -12,12 +12,12 @@
 
     <groupId>com.fangdd</groupId>
     <artifactId>doclet-server</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <description>自动化文档后台服务</description>
     <packaging>jar</packaging>
 
     <properties>
-        <doclet.version>1.2-SNAPSHOT</doclet.version>
+        <doclet.version>1.0.0</doclet.version>
         <docker.project.id>tp-doc.op.fdd</docker.project.id>
         <docker.starter.app>com.fangdd.tp.Application</docker.starter.app>
     </properties>
@@ -29,23 +29,28 @@
             <version>1.2.39</version>
         </dependency>
 
+        <!-- dubbo -->
         <dependency>
-            <groupId>com.fangdd</groupId>
-            <artifactId>spring-boot-starter-config-superdiamond</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <groupId>com.alibaba.boot</groupId>
+            <artifactId>dubbo-spring-boot-starter</artifactId>
+            <version>0.2.0</version>
         </dependency>
 
+        <!-- 下面为dubbo注册中心依赖到的包 -->
         <dependency>
-            <groupId>com.fangdd</groupId>
-            <artifactId>spring-boot-starter-fdd-dubbo</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-
-        <!-- Http请求日志 -->
-        <dependency>
-            <groupId>com.fangdd</groupId>
-            <artifactId>spring-boot-starter-rest-filter</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>3.4.13</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -63,10 +68,11 @@
             <artifactId>doclet-render</artifactId>
             <version>${doclet.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>com.fangdd.traffic</groupId>
+            <groupId>com.fangdd</groupId>
             <artifactId>common-mongodb</artifactId>
-            <version>2.5.2-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>
@@ -229,64 +235,6 @@
                     </gitDescribe>
                 </configuration>
             </plugin>
-
-            <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-                <version>1.0.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <from>
-                        <image>docker.esf.fangdd.net/fdd-java:8</image>
-                    </from>
-                    <to>
-                        <image>docker.esf.fangdd.net/${docker.project.id}:${git.commit.id}</image>
-                    </to>
-                    <container>
-                        <entrypoint>INHERIT</entrypoint>
-                        <args>
-                            <arg>/bin/sh</arg>
-                            <arg>-c</arg>
-                            <arg>java $FDD_JVM_OPTS -javaagent:/data0/java/deploy/pinpoint.agent/pinpoint-bootstrap.jar -Dpinpoint.agentId=$(hostname -i | cut -d' ' -f1) -Dpinpoint.applicationName=${docker.project.id} -XX:MaxMetaspaceSize=256M -XX:MetaspaceSize=256M -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+ParallelRefProcEnabled -XX:+DisableExplicitGC -DLOGS_DIR=/data0/logs/java/${docker.project.id} -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/data0/logs/java/${docker.project.id}/ -cp /app/resources:/app/classes:/app/libs/* ${docker.starter.app}</arg>
-                        </args>
-                    </container>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>dev</id>
-            <properties>
-                <release>dev</release>
-                <env>dev</env>
-            </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-                <property>
-                    <name>server-dev</name>
-                </property>
-            </activation>
-        </profile>
-        <profile>
-            <id>prod</id>
-            <properties>
-                <release>prod</release>
-                <env>prod</env>
-            </properties>
-            <activation>
-                <property>
-                    <name>server-prod</name>
-                </property>
-            </activation>
-        </profile>
-    </profiles>
 </project>
