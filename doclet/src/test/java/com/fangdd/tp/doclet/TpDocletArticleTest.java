@@ -1,6 +1,7 @@
 package com.fangdd.tp.doclet;
 
 import com.sun.tools.javadoc.Main;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,7 +14,8 @@ public class TpDocletArticleTest extends BaseTpDocTest {
 
     private static String projectPath;
 
-    public static void main(String[] args) throws IOException {
+    @Test
+    public void test() throws IOException {
         System.setProperty("exporter", "console");
         projectPath = System.getProperty(DocletConfig.USER_DIR);
 

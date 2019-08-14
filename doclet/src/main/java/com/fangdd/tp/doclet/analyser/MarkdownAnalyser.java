@@ -18,14 +18,14 @@ public class MarkdownAnalyser {
     private static final String PATH_SPLITER = "/";
 
     public static void readMarkdown() {
-        File baseDir = new File(DocletConfig.baseDir, DocletConfig.markdownDir);
-        if (!baseDir.exists()) {
-            return;
-        }
 
         File readme = new File(DocletConfig.baseDir, "README.md");
         if (readme.exists()) {
             readMarkdownDoc(readme, PATH_SPLITER);
+        }
+        File baseDir = new File(DocletConfig.baseDir, DocletConfig.markdownDir);
+        if (!baseDir.exists()) {
+            return;
         }
 
         readMarkdown(baseDir, PATH_SPLITER + DocletConfig.markdownDir + PATH_SPLITER);
