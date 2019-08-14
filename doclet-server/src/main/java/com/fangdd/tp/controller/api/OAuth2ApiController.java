@@ -13,10 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -38,9 +41,7 @@ public class OAuth2ApiController {
      * @return
      */
     @GetMapping("/{authServiceCode}")
-    public
-    @ResponseBody
-    BaseResponse<String> getLoginUrl(
+    public RedirectView getLoginUrl(
             @PathVariable String authServiceCode,
             @RequestParam String returnUrl
     ) {
@@ -51,7 +52,7 @@ public class OAuth2ApiController {
 
         Site site = UserContextHelper.getSite();
         String url = oAuth2Service.getLoginUrl(site.getId(), returnUrl);
-        return BaseResponse.success(url);
+        return new RedirectView(url);
     }
 
     /**
@@ -74,19 +75,24 @@ public class OAuth2ApiController {
     }
 
     @RequestMapping("/{authServiceCode}/callback")
-    public
-    @ResponseBody
-    String callback(@PathVariable String authServiceCode, HttpServletRequest req, HttpServletResponse response) {
+    public RedirectView callback(
+            @PathVariable String authServiceCode,
+            HttpServletRequest req,
+            HttpServletResponse response,
+            RedirectAttributes attrs
+    ) {
         OAuth2Service oAuth2Service = getOAuth2Service(authServiceCode);
         if (oAuth2Service == null) {
-            return "非法请求";
+            attrs.addAttribute("error", "非法请求");
+            return logRedirect(attrs, "非法请求");
         }
-        String state = req.getParameter("state");
-        String error = req.getParameter("error");
 
+        String error = req.getParameter("error");
         if (!Strings.isNullOrEmpty(error)) {
-            return req.getParameter("error_description");
+            return logRedirect(attrs, req.getParameter("error_description"));
         }
+
+        String state = req.getParameter("state");
         String code = req.getParameter("code");
         UserContent content = UserContextHelper.getUserContext();
         OAuth2TokenReq request = new OAuth2TokenReq();
@@ -103,20 +109,15 @@ public class OAuth2ApiController {
         cookie.setPath("/");
 //        cookie.setMaxAge(300);
         response.addCookie(cookie);
-        return "登录成功，正在写入数据，请稍候..." +
-                "<script>" +
-                "   setTimeout(function(){" +
-                "       window.localStorage.setItem('tp_doc_token', ' " + user.getToken() + "');" +
-                "       var iframe=parent.document.getElementById(\"loginFrame\");" +
-                "       var innerDoc;" +
-                "       if(iframe){" +
-                "           innerDoc=iframe.contentDocument || iframe.contentWindow.document;" +
-                "       } else {" +
-                "           innerDoc=window;" +
-                "       }" +
-                "       innerDoc.location.href='/user/oauth';" +
-                "   }, 2000)" +
-                "</script>";
+
+        return new RedirectView("/user/oauth/" + user.getToken());
+    }
+
+    private RedirectView logRedirect(RedirectAttributes attrs, String error) {
+        if (!Strings.isNullOrEmpty(error)) {
+            attrs.addAttribute("error", error);
+        }
+        return new RedirectView("/user/oauth");
     }
 
     /**
