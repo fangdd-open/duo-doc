@@ -204,6 +204,10 @@ public class EntityMateAnalyser {
 
                 Tag[] fieldTags = field.tags();
                 String required = TagHelper.getStringValue(fieldTags, DocletConfig.tagRequired, null);
+                String disable = TagHelper.getStringValue(fieldTags, DocletConfig.tagDisable, null);
+                if (disable != null) {
+                    continue;
+                }
                 String demo = TagHelper.getStringValue(fieldTags, DocletConfig.tagDemo, null);
                 if (Strings.isNullOrEmpty(demo) && fieldEntity.getEnumerate() != null && fieldEntity.getEnumerate()) {
                     //如果是枚举，且@demo为空
@@ -221,25 +225,30 @@ public class EntityMateAnalyser {
                 fieldRef.setDemo(demo);
 
                 //设置各属性的注解
-                readFieldAnnotation(fieldRef, field);
+                if (!readFieldAnnotation(fieldRef, field)) {
+                    continue;
+                }
 
                 fieldItems.add(fieldRef);
             }
         }
     }
 
-    private static void readFieldAnnotation(EntityRef fieldRef, FieldDoc field) {
+    private static boolean readFieldAnnotation(EntityRef fieldRef, FieldDoc field) {
         AnnotationDesc[] annotations = field.annotations();
         if (annotations == null || annotations.length == 0) {
-            return;
+            return true;
         }
 
         for (AnnotationDesc annotationDesc : annotations) {
             EntityFieldAnnotationAnalyser analyser = FIELD_ANNOTATION_ANALYSER_MAP.get(annotationDesc.annotationType().qualifiedName());
             if (analyser != null && analyser.check(fieldRef, field)) {
-                analyser.analyse(annotationDesc, fieldRef, field);
+                if (!analyser.analyse(annotationDesc, fieldRef, field)) {
+                    return false;
+                }
             }
         }
+        return true;
     }
 
     private static boolean isPrimitive(Type type) {

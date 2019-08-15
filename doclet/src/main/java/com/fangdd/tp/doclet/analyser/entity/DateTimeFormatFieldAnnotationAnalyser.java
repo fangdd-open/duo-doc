@@ -21,7 +21,7 @@ public class DateTimeFormatFieldAnnotationAnalyser extends EntityFieldAnnotation
     }
 
     @Override
-    public void analyse(AnnotationDesc dateTimeFormatAnnotation, EntityRef fieldRef, FieldDoc fieldDoc) {
+    public boolean analyse(AnnotationDesc dateTimeFormatAnnotation, EntityRef fieldRef, FieldDoc fieldDoc) {
         String pattern = null;
         String iso = AnnotationHelper.getStringValue(dateTimeFormatAnnotation, "iso");
         if (EntityConstant.DATE_TIME_FORMAT_ISO_DATE.equals(iso)) {
@@ -40,5 +40,6 @@ public class DateTimeFormatFieldAnnotationAnalyser extends EntityFieldAnnotation
             SimpleDateFormat sdf = new SimpleDateFormat(pattern);
             fieldRef.setDemo(sdf.format(new Date()));
         }
+        return true;
     }
 }

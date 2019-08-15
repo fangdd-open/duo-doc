@@ -24,18 +24,18 @@ public class GraphqlDirectiveAnnotationAnalyser extends EntityFieldAnnotationAna
      * @param fieldDoc       当前属性的javadoc信息
      */
     @Override
-    public void analyse(AnnotationDesc annotationDesc, EntityRef fieldRef, FieldDoc fieldDoc) {
+    public boolean analyse(AnnotationDesc annotationDesc, EntityRef fieldRef, FieldDoc fieldDoc) {
         String directiveName = AnnotationHelper.getStringValues(annotationDesc, VALUE, NAME_SPLITTER);
-        if (Strings.isNullOrEmpty(directiveName)) {
-            return;
+        if (!Strings.isNullOrEmpty(directiveName)) {
+            String directives = fieldRef.getGraphqlDirective();
+            if (Strings.isNullOrEmpty(directives)) {
+                directives = directiveName;
+            } else {
+                directives = NAME_SPLITTER + directiveName;
+            }
+            fieldRef.setGraphqlDirective(directives);
         }
 
-        String directives = fieldRef.getGraphqlDirective();
-        if (Strings.isNullOrEmpty(directives)) {
-            directives = directiveName;
-        } else {
-            directives = NAME_SPLITTER + directiveName;
-        }
-        fieldRef.setGraphqlDirective(directives);
+        return true;
     }
 }

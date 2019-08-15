@@ -9,8 +9,9 @@ import com.sun.javadoc.FieldDoc;
  * @date 18/2/11
  */
 public class NullFieldAnnotationAnalyser extends EntityFieldAnnotationAnalyser {
-    public void analyse(AnnotationDesc annotationDesc, EntityRef fieldRef, FieldDoc fieldDoc) {
+    public boolean analyse(AnnotationDesc annotationDesc, EntityRef fieldRef, FieldDoc fieldDoc) {
         //被标注了  @Null
         fieldRef.setRequired(false);
+        return true;
     }
 }

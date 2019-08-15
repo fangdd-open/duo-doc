@@ -29,12 +29,12 @@ public class GraphqlFieldAnnotationAnalyser extends EntityFieldAnnotationAnalyse
      * @param fieldDoc       当前属性的javadoc信息
      */
     @Override
-    public void analyse(AnnotationDesc annotationDesc, EntityRef fieldRef, FieldDoc fieldDoc) {
+    public boolean analyse(AnnotationDesc annotationDesc, EntityRef fieldRef, FieldDoc fieldDoc) {
         String providerName = AnnotationHelper.getStringValue(annotationDesc, NAME);
         String dependency = AnnotationHelper.getStringValues(annotationDesc, DEPENDENCY, JOINER);
         if (!Strings.isNullOrEmpty(providerName)) {
             fieldRef.setGraphqlField("@" + providerName + ":" + dependency);
-            return;
+            return true;
         }
 
         String controllerClazz = AnnotationHelper.getStringValue(annotationDesc, VALUE);
@@ -45,7 +45,7 @@ public class GraphqlFieldAnnotationAnalyser extends EntityFieldAnnotationAnalyse
         }
         if (Strings.isNullOrEmpty(controllerClazz) || Strings.isNullOrEmpty(method) || Strings.isNullOrEmpty(dependency)) {
             //丢弃
-            return;
+            return true;
         }
         if (controllerClazz.endsWith(CLASS_STR)) {
             controllerClazz = controllerClazz.substring(0, controllerClazz.length() - CLASS_STR.length());
@@ -53,5 +53,6 @@ public class GraphqlFieldAnnotationAnalyser extends EntityFieldAnnotationAnalyse
 
         String graphqlField = controllerClazz + "." + method + ":" + dependency;
         fieldRef.setGraphqlField(graphqlField);
+        return true;
     }
 }

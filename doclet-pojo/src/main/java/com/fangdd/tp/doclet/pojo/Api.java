@@ -4,6 +4,9 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import java.util.List;
 
+/**
+ * @author xuwenzhen
+ */
 public class Api implements Comparable<Api> {
     /**
      * API编码，即{className}.{methodName}
