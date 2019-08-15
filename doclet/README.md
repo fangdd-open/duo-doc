@@ -40,7 +40,10 @@ TP-DOC是在公司spring boot种子项目上，依赖代码注释，自动生成
              <version>1.2-SNAPSHOT</version>
          </docletArtifact>
          <sourcepath>
-             <!-- 指定源码路径，如果多个模块，需要包含进去 -->
+             <!-- 
+             指定源码路径，如果多个模块，需要包含进去，可以是src目录，也可以是xxx-sources.jar包
+             比如：${settings.localRepository}/com/fangdd/cp/m-web-cp-base/1.2.2-SNAPSHOT/m-web-cp-base-1.2.2-SNAPSHOT-sources.jar
+              -->
              ${project.basedir}/src/main/java:${project.basedir}/../m-web-cp-api/src/main/java
          </sourcepath>
          <useStandardDocletOptions>false</useStandardDocletOptions>

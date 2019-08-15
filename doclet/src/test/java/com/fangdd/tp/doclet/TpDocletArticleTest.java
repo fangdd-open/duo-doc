@@ -12,12 +12,10 @@ import java.util.List;
  */
 public class TpDocletArticleTest extends BaseTpDocTest {
 
-    private static String projectPath;
-
     @Test
     public void test() throws IOException {
         System.setProperty("exporter", "console");
-        projectPath = System.getProperty(DocletConfig.USER_DIR);
+        String projectPath = getProjectPath();
 
         String projectSrcDirs = getProjectSrcDirs();
         System.out.println("扫描目录：" + projectSrcDirs);
@@ -25,8 +23,8 @@ public class TpDocletArticleTest extends BaseTpDocTest {
         TpDocletArticleTest articleTest = new TpDocletArticleTest();
         String[] docArgs = new String[]{
                 "com.fangdd.cp.ctc.article.service.impl",
-                "-subpackages",
-                projectPath + "/server/target/tp-server.jar",
+//                "-subpackages",
+//                projectPath + "/server/target/tp-server.jar",
                 "-cp",
                 articleTest.getLibs(),
                 "-sourcepath",
@@ -34,10 +32,6 @@ public class TpDocletArticleTest extends BaseTpDocTest {
         };
 
         Main.execute("myJavadoc", TpDoclet.class.getName(), docArgs);
-    }
-
-    private static String getProjectSrcDirs() {
-        return "/Users/xuwenzhen/Projects/fdd/common/house.graphql.cp.fdd/src/main/java:/Users/xuwenzhen/Projects/fdd/common/graphql-engine.cp.fdd/graphql-provider/src/main/java";
     }
 
     @Override
@@ -57,5 +51,10 @@ public class TpDocletArticleTest extends BaseTpDocTest {
                 "com/fasterxml/jackson/core/jackson-annotations/2.9.0/jackson-annotations-2.9.0.jar",
                 "org/hibernate/validator/hibernate-validator/6.0.14.Final/hibernate-validator-6.0.14.Final.jar"
         };
+    }
+
+    @Override
+    protected String getProjectPath() {
+        return "/Users/xuwenzhen/Projects/fdd/common/house.graphql.cp.fdd";
     }
 }

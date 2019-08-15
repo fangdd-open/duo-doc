@@ -40,11 +40,8 @@ public class TpDocletScanTest extends BaseTpDocTest {
         String projectSrcDirs = getProjectSrcDirs();
         System.out.println("扫描目录：" + projectSrcDirs);
 
-        System.setProperty("basedir", BASE_DIR);
+        System.setProperty("basedir", getProjectPath());
         String[] docArgs = new String[]{
-//                "-public",
-//                "-d",
-//                "/Users/ycoe/Projects/fdd/tp/tp-doc/tp-demo-server/target/docs",
                 "com.fangdd.tp.dict.service.impl",
 
                 "-subpackages",
@@ -68,7 +65,8 @@ public class TpDocletScanTest extends BaseTpDocTest {
         return JARS;
     }
 
-    private String getProjectSrcDirs() {
-        return BASE_DIR + "scanengine-dp-server/src/main/java:" + BASE_DIR + "scanengine-dp-api/src/main/java";
+    @Override
+    protected String getProjectPath() {
+        return BASE_DIR;
     }
 }

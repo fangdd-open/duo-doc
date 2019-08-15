@@ -34,10 +34,6 @@ public class TpDocletAgentGraphqlTest extends BaseTpDocTest {
         Main.execute("myJavadoc", TpDoclet.class.getName(), docArgs);
     }
 
-    private static String getProjectSrcDirs() {
-        return "/Users/xuwenzhen/Projects/fdd/common/agent.graphql.cp.fdd/src/main/java:/Users/xuwenzhen/Projects/fdd/common/graphql-engine.cp.fdd/graphql-provider/src/main/java";
-    }
-
     @Override
     protected String[] getJars() {
         return new String[]{
@@ -55,6 +51,11 @@ public class TpDocletAgentGraphqlTest extends BaseTpDocTest {
                 "com/fasterxml/jackson/core/jackson-annotations/2.9.0/jackson-annotations-2.9.0.jar",
                 "org/hibernate/validator/hibernate-validator/6.0.14.Final/hibernate-validator-6.0.14.Final.jar"
         };
+    }
+
+    @Override
+    protected String getProjectPath() {
+        return "/Users/xuwenzhen/Projects/fdd/common/agent.graphql.cp.fdd";
     }
 
 }

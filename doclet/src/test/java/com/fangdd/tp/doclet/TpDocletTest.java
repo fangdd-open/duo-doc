@@ -9,7 +9,7 @@ import java.io.IOException;
  * @author ycoe
  * @date 18/1/5
  */
-public class TpDocletTest {
+public class TpDocletTest extends BaseTpDocTest {
     /**
      * maven仓库地址
      */
@@ -37,7 +37,7 @@ public class TpDocletTest {
 
     @Test
     public void doc() throws IOException {
-        projectPath = System.getProperty(DocletConfig.USER_DIR);
+        projectPath = getProjectPath();
 //        projectPath = projectPath + "/doclet-test";
 
         System.setProperty("exporter", "console");
@@ -50,33 +50,29 @@ public class TpDocletTest {
 //                "/Users/ycoe/Projects/fdd/tp/tp-doc/tp-demo-server/target/docs",
                 "com.fangdd.doclet.test.controller",
 
-                "-subpackages",
-                projectPath + "/doclet-test/target/doclet-test-1.2-SNAPSHOT.jar",
+//                "-subpackages",
+//                MAVEN_REPOSITORY_PATH + "com/fangdd/cp/m-web-cp-base/1.2.2-SNAPSHOT/m-web-cp-base-1.2.2-SNAPSHOT-sources.jar",
                 "-cp",
                 getLibs(),
                 "-sourcepath",
-                projectSrcDirs
+                projectSrcDirs + ":" + MAVEN_REPOSITORY_PATH + "com/fangdd/cp/m-web-cp-base/1.2.2-SNAPSHOT/m-web-cp-base-1.2.2-SNAPSHOT-sources.jar"
         };
 
         Main.execute("myJavadoc", TpDoclet.class.getName(), docArgs);
     }
 
-    private static String getLibs() {
-        StringBuilder sb = new StringBuilder();
-        for (String jar : JARS) {
-            if (sb.length() > 0) {
-                sb.append(":");
-            }
-            sb.append(MAVEN_REPOSITORY_PATH + jar);
-        }
-        return sb.toString();
+    /**
+     * 获取依赖包
+     *
+     * @return
+     */
+    @Override
+    protected String[] getJars() {
+        return JARS;
     }
 
-
-    public static String getProjectSrcDirs() {
-        String srcPath = projectPath + "/doclet-test/src/main/java";
-        srcPath += ":" + projectPath + "/doclet-test-api/src/main/java";
-        return srcPath;
+    @Override
+    protected String getProjectPath() {
+        return "/Users/xuwenzhen/Projects/duoec/tp-doc/tp-doc/doclet-test-api";
     }
-
 }

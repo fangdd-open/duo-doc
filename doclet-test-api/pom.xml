@@ -9,4 +9,50 @@
     <version>1.0.0</version>
 
     <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.fangdd.cp</groupId>
+            <artifactId>m-web-cp-base</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
+                <configuration>
+                    <doclet>com.fangdd.tp.doclet.TpDoclet</doclet>
+                    <docletArtifact>
+                        <groupId>com.fangdd</groupId>
+                        <artifactId>doclet</artifactId>
+                        <version>1.2-SNAPSHOT</version>
+                    </docletArtifact>
+                    <sourcepath>
+                        <!-- 指定源码路径，如果多个模块，需要包含进去 -->
+                        ${project.basedir}/src/main/java:${settings.localRepository}com/fangdd/cp/m-web-cp-base/1.2.2-SNAPSHOT/m-web-cp-base-1.2.2-SNAPSHOT-sources.jar
+                    </sourcepath>
+                    <useStandardDocletOptions>false</useStandardDocletOptions>
+
+                    <additionalJOptions>
+                        <additionalJOption>-J-Dbasedir=${project.basedir}</additionalJOption>
+                        <additionalJOption>-J-Dexporter=console</additionalJOption>
+                    </additionalJOptions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <!-- package可以在提交代码后由CI自动触发，如果不需要自动触发，可以设置为site，届时需要手工执行：mvn clean site -->
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>javadoc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

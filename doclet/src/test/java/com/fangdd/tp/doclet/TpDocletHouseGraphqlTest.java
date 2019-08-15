@@ -1,6 +1,7 @@
 package com.fangdd.tp.doclet;
 
 import com.sun.tools.javadoc.Main;
+import org.junit.Test;
 
 import java.io.IOException;
 
@@ -8,12 +9,7 @@ import java.io.IOException;
  * @author ycoe
  * @date 18/1/5
  */
-public class TpDocletHouseGraphqlTest {
-    /**
-     * maven仓库地址
-     */
-    private static final String MAVEN_REPOSITORY_PATH = "/Users/xuwenzhen/Software/apache-maven-3.6.0/repository/";
-
+public class TpDocletHouseGraphqlTest extends BaseTpDocTest {
     /**
      * 需要引入的包
      */
@@ -32,18 +28,18 @@ public class TpDocletHouseGraphqlTest {
             "com/fasterxml/jackson/core/jackson-annotations/2.9.0/jackson-annotations-2.9.0.jar",
             "org/hibernate/validator/hibernate-validator/6.0.14.Final/hibernate-validator-6.0.14.Final.jar"};
 
-    private static String projectPath;
 
-    public static void main(String[] args) throws IOException {
+    @Test
+    public void test() throws IOException {
         System.setProperty("exporter", "console");
-        projectPath = System.getProperty(DocletConfig.USER_DIR);
+        String projectPath = getProjectPath();
 
         String projectSrcDirs = getProjectSrcDirs();
         System.out.println("扫描目录：" + projectSrcDirs);
         String[] docArgs = new String[]{
                 "com.fangdd.graphql.house.controller",
-                "-subpackages",
-                projectPath + "/server/target/tp-server.jar",
+//                "-subpackages",
+//                projectPath + "/server/target/tp-server.jar",
                 "-cp",
                 getLibs(),
                 "-sourcepath",
@@ -53,19 +49,18 @@ public class TpDocletHouseGraphqlTest {
         Main.execute("myJavadoc", TpDoclet.class.getName(), docArgs);
     }
 
-    private static String getLibs() {
-        StringBuilder sb = new StringBuilder();
-        for (String jar : JARS) {
-            if (sb.length() > 0) {
-                sb.append(":");
-            }
-            sb.append(MAVEN_REPOSITORY_PATH + jar);
-        }
-        return sb.toString();
+    /**
+     * 获取依赖包
+     *
+     * @return
+     */
+    @Override
+    protected String[] getJars() {
+        return JARS;
     }
 
-    private static String getProjectSrcDirs() {
-        return "/Users/xuwenzhen/Projects/fdd/common/house.graphql.cp.fdd/src/main/java:/Users/xuwenzhen/Projects/fdd/common/graphql-engine.cp.fdd/graphql-provider/src/main/java";
+    @Override
+    protected String getProjectPath() {
+        return "/Users/xuwenzhen/Projects/fdd/common/house.graphql.cp.fdd";
     }
-
 }
