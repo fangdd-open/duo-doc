@@ -3,6 +3,7 @@ package com.fangdd.tp.doclet.analyser.rest;
 import com.fangdd.tp.doclet.DocletConfig;
 import com.fangdd.tp.doclet.constant.DocletConstant;
 import com.fangdd.tp.doclet.constant.EntityConstant;
+import com.fangdd.tp.doclet.constant.SpringMvcConstant;
 import com.fangdd.tp.doclet.enums.ApiTypeEnum;
 import com.fangdd.tp.doclet.helper.*;
 import com.fangdd.tp.doclet.pojo.Api;
@@ -145,7 +146,7 @@ public class RestFulAnalyser {
 
         Api api = BaseApiInfoHelper.getApiBase(methodDoc, section);
 
-        setGraphqlProviderName(methodDoc, api);
+        setGraphqlInfo(methodDoc, api);
 
         api.setPaths(apiPaths);
         api.setType(ApiTypeEnum.RESTFUL.getType());
@@ -160,7 +161,15 @@ public class RestFulAnalyser {
         return api;
     }
 
-    private static void setGraphqlProviderName(MethodDoc methodDoc, Api api) {
+    private static void setGraphqlInfo(MethodDoc methodDoc, Api api) {
+        AnnotationDesc graphqlJsonAnnotation = AnnotationHelper.getAnnotation(
+                methodDoc.annotations(), EntityConstant.ANNOTATION_GRAPHQL_JSON
+        );
+        if (graphqlJsonAnnotation != null) {
+            //标注了@GraphqlJson
+            api.setGraphqlJson(true);
+        }
+
         AnnotationDesc graphqlProviderAnnotation = AnnotationHelper.getAnnotation(
                 methodDoc.annotations(), EntityConstant.ANNOTATION_GRAPHQL_PROVIDER
         );
@@ -187,7 +196,7 @@ public class RestFulAnalyser {
             return false;
         }
         for (EntityRef er : params) {
-            if ("@RequestBody".equals(er.getAnnotation())) {
+            if (SpringMvcConstant.ANNOTATION_REQUEST_BODY.equals(er.getAnnotation())) {
                 return true;
             }
         }

@@ -1,6 +1,7 @@
 package com.fangdd.tp.doclet.annotation.param;
 
 import com.fangdd.tp.doclet.annotation.ParamAnnotation;
+import com.fangdd.tp.doclet.constant.SpringMvcConstant;
 import com.fangdd.tp.doclet.pojo.EntityRef;
 import com.sun.javadoc.AnnotationDesc;
 
@@ -29,7 +30,7 @@ public class RequestBodyAnnotation implements ParamAnnotation {
      */
     @Override
     public String getDocAnnotation() {
-        return "@RequestBody";
+        return SpringMvcConstant.ANNOTATION_REQUEST_BODY;
     }
 
     /**

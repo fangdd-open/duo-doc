@@ -15,6 +15,7 @@ public class SpringMvcConstant {
     public static final String ANNOTATION_PUT_MAPPING = "org.springframework.web.bind.annotation.PutMapping";
     public static final String ANNOTATION_PATCH_MAPPING = "org.springframework.web.bind.annotation.PatchMapping";
     public static final String ANNOTATION_DELETE_MAPPING = "org.springframework.web.bind.annotation.DeleteMapping";
+    public static final String ANNOTATION_REQUEST_BODY = "@RequestBody";
 
     private SpringMvcConstant(){}
 

@@ -106,6 +106,11 @@ public class Api implements Comparable<Api> {
      */
     private String idSplitter;
 
+    /**
+     * 是否被标识为 GraphqlJson
+     */
+    private Boolean graphqlJson;
+
     public String getCode() {
         return code;
     }
@@ -264,6 +269,14 @@ public class Api implements Comparable<Api> {
 
     public void setIdSplitter(String idSplitter) {
         this.idSplitter = idSplitter;
+    }
+
+    public Boolean getGraphqlJson() {
+        return graphqlJson;
+    }
+
+    public void setGraphqlJson(Boolean graphqlJson) {
+        this.graphqlJson = graphqlJson;
     }
 
     @Override
