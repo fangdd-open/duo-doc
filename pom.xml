@@ -28,12 +28,12 @@
         <repository>
             <id>sonatype-releases</id>
             <name>sonatype-release</name>
-            <url>http://nexus.nh.fangdd.cn/nexus/content/repositories/releases/</url>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
         <snapshotRepository>
             <id>sonatype-snapshots</id>
             <name>sonatype-snapshots</name>
-            <url>http://nexus.nh.fangdd.cn/nexus/content/repositories/snapshots/</url>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 </project>
