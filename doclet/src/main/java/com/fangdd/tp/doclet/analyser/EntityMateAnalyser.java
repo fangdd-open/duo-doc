@@ -34,6 +34,8 @@ public class EntityMateAnalyser {
     private static final String STR_SQUARE_LEFT = "[";
     private static final String STR_SQUARE_RIGHT = "]";
     private static final String JAVA_PACKAGE = "java.";
+    private static final String SERIAL_VERSION_UID = "serialVersionUID";
+    private static final String LOMBOK_DATA = "@lombok.Data";
 
     static {
         FIELD_ANNOTATION_ANALYSER_MAP.put(EntityConstant.ANNOTATION_DATE_TIME_FORMAT, new DateTimeFormatFieldAnnotationAnalyser());
@@ -187,11 +189,12 @@ public class EntityMateAnalyser {
         CURRENT_CLASS_FIELD_NAMES.clear();
         List<FieldDoc> fields = getFields(classDoc);
         if (fields != null) {
+            boolean lombok = isLombok(classDoc);
             Set<String> setterFields = getGetterFields(classDoc);
 
             for (FieldDoc field : fields) {
                 //解析属性类型
-                if (!availableField(setterFields, field)) {
+                if (!lombok && !availableField(setterFields, field)) {
                     continue;
                 }
                 String fieldComment = field.commentText();
@@ -234,6 +237,19 @@ public class EntityMateAnalyser {
         }
     }
 
+    private static boolean isLombok(ClassDoc classDoc) {
+        AnnotationDesc[] annotations = classDoc.annotations();
+        if (annotations.length > 0) {
+            for (int i = 0; i < annotations.length; i++) {
+                AnnotationDesc annotation = annotations[0];
+                if (LOMBOK_DATA.equals(annotation.toString())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private static boolean readFieldAnnotation(EntityRef fieldRef, FieldDoc field) {
         AnnotationDesc[] annotations = field.annotations();
         if (annotations == null || annotations.length == 0) {
@@ -271,6 +287,9 @@ public class EntityMateAnalyser {
         FieldDoc[] fieldArray = classDoc.fields(false);
         for (int i = 0; i < fieldArray.length; i++) {
             FieldDoc field = fieldArray[i];
+            if (SERIAL_VERSION_UID.equals(field.name())) {
+                continue;
+            }
             if (CURRENT_CLASS_FIELD_NAMES.contains(field.name())) {
                 continue;
             }

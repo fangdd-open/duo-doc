@@ -74,6 +74,20 @@ public class EntityJsonMarkdownRender {
             return sb.toString();
         }
 
+        List<EntityRef> fields = entity.getFields();
+        boolean isEnumerate = entity.getEnumerate() != null && entity.getEnumerate();
+        if (isEnumerate) {
+            //是枚举
+            sb.append("\"");
+            if (fields != null && !fields.isEmpty()) {
+                sb.append(fields.get(0).getEntityName());
+            }
+            sb.append("\"");
+            sb.append(" // @");
+            sb.append(renderTypeName(entity.getName()));
+            return sb.toString();
+        }
+
         entryRenderPath.add(entity);
 
         sb.append(Strings.repeat("\t", level));
@@ -87,7 +101,6 @@ public class EntityJsonMarkdownRender {
         }
         sb.append("\n");
 
-        List<EntityRef> fields = entity.getFields();
         if (fields != null && !fields.isEmpty()) {
             //渲染每个属性
             for (int i = 0; i < fields.size(); i++) {
@@ -106,7 +119,7 @@ public class EntityJsonMarkdownRender {
                     sb.append(" #");
                     sb.append(fieldRef.getComment());
                 }
-                if(fieldRef.isRequired()) {
+                if (fieldRef.isRequired()) {
                     sb.append(" @NotNull");
                 }
                 if (i < fields.size() - 1) {
