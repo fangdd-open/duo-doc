@@ -4,10 +4,8 @@ import com.fangdd.tp.doclet.analyser.ApiAnalyser;
 import com.fangdd.tp.doclet.analyser.MarkdownAnalyser;
 import com.fangdd.tp.doclet.analyser.PomAnalyser;
 import com.fangdd.tp.doclet.analyser.dubbo.DubboConfigureXmlAnalyser;
-import com.fangdd.tp.doclet.exporter.Exporter;
 import com.fangdd.tp.doclet.helper.BookHelper;
 import com.fangdd.tp.doclet.helper.DocHelper;
-import com.fangdd.tp.doclet.helper.Logger;
 import com.fangdd.tp.doclet.pojo.Chapter;
 import com.google.common.collect.Lists;
 import com.sun.javadoc.ClassDoc;
@@ -23,8 +21,6 @@ import java.util.Map;
  * @date 18/1/5
  */
 public class TpDoclet extends Doclet {
-    private static final Logger logger = new Logger();
-
     public static boolean start(RootDoc root) {
         //读取主服务的信息
         PomAnalyser.analyse();
@@ -48,17 +44,10 @@ public class TpDoclet extends Doclet {
         BookHelper.sort(chapterSet);
 
         //导出
-        Exporter exporter = DocHelper.getExporter();
-        if (exporter != null) {
-            return exporter.export(chapterSet);
-        } else {
-            logger.info("未指定或无法找到对应的导出方式：exporter=" + DocletConfig.exporter);
-        }
+        DocHelper.export(chapterSet);
 
         return true;
     }
-
-
 
     public static LanguageVersion languageVersion() {
         return LanguageVersion.JAVA_1_5;

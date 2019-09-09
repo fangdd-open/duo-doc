@@ -1,16 +1,21 @@
 package com.fangdd.tp.doclet.helper;
 
-import com.fangdd.tp.doclet.DocletConfig;
 import com.fangdd.tp.doclet.annotation.ParamAnnotation;
 import com.fangdd.tp.doclet.annotation.param.*;
 import com.fangdd.tp.doclet.constant.SpringMvcConstant;
 import com.fangdd.tp.doclet.exporter.Exporter;
+import com.fangdd.tp.doclet.exporter.impl.ApiJson4GraphQLExporter;
 import com.fangdd.tp.doclet.exporter.impl.ApiJsonExporter;
 import com.fangdd.tp.doclet.exporter.impl.ConsoleMarkdownExporter;
 import com.fangdd.tp.doclet.exporter.impl.ServerExporter;
+import com.fangdd.tp.doclet.pojo.Chapter;
+import com.google.common.base.Splitter;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static com.fangdd.tp.doclet.DocletConfig.exporter;
 
 /**
  * 本Helper方法提供了各种自定义的配置
@@ -19,6 +24,7 @@ import java.util.Map;
  * @date 2019/3/4
  */
 public class DocHelper {
+    private static final Logger logger = new Logger();
     private static final String METHOD_GET = "GET";
     private static final String METHOD_POST = "POST";
     private static final String METHOD_PUT = "PUT";
@@ -60,6 +66,7 @@ public class DocHelper {
         registExporter(new ConsoleMarkdownExporter());
         registExporter(new ServerExporter());
         registExporter(new ApiJsonExporter());
+        registExporter(new ApiJson4GraphQLExporter());
     }
 
     public static ParamAnnotation getRestApiParamAnnotation(String annotationStr) {
@@ -74,8 +81,25 @@ public class DocHelper {
         EXPORTER_MAP.put(exporter.exporterName(), exporter);
     }
 
-    public static Exporter getExporter() {
-        String exporter = DocletConfig.exporter;
-        return EXPORTER_MAP.get(exporter);
+    /**
+     * 导出文档
+     *
+     * @param chapterSet chapterSet
+     */
+    public static void export(final List<Chapter> chapterSet) {
+        String exporters = exporter;
+        Iterable<String> iterable = Splitter
+                .on(",")
+                .omitEmptyStrings()
+                .trimResults()
+                .split(exporters);
+        for (String exporterName : iterable) {
+            Exporter existsExporter = EXPORTER_MAP.get(exporterName);
+            if (existsExporter != null) {
+                existsExporter.export(chapterSet);
+            } else {
+                logger.info("未指定或无法找到对应的导出方式：exporter=" + exporterName);
+            }
+        }
     }
 }
