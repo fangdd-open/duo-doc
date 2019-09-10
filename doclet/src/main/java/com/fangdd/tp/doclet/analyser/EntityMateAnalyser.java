@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/1/9
  */
 public class EntityMateAnalyser {

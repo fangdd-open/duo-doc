@@ -3,7 +3,7 @@ package com.fangdd.tp.doclet.helper;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/1/25
  */
 public class Logger {

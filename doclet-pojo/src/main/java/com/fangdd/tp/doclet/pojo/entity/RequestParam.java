@@ -1,7 +1,7 @@
 package com.fangdd.tp.doclet.pojo.entity;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/11/23
  */
 public class RequestParam {

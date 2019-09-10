@@ -15,7 +15,7 @@ import com.sun.javadoc.*;
 import java.util.List;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/1/18
  */
 public class BaseApiInfoHelper {

@@ -3,7 +3,7 @@ package com.fangdd.tp.entity;
 import java.util.List;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 19/2/15
  */
 public class ApiRequestDubbo {

@@ -13,7 +13,7 @@ import java.io.File;
 import java.util.List;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/1/10
  */
 public class DubboXmlAnalyser {

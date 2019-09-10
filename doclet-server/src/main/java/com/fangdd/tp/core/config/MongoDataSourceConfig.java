@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  *
- * @author ycoe
+ * @author xuwenzhen
  * @date 17/10/20
  */
 @Configuration

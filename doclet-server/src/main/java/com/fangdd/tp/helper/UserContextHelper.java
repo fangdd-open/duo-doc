@@ -5,7 +5,7 @@ import com.fangdd.tp.entity.Site;
 import com.fangdd.tp.entity.User;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/11/28
  */
 public class UserContextHelper {

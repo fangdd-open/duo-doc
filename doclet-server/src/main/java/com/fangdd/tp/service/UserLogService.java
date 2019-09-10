@@ -6,7 +6,7 @@ import com.fangdd.tp.entity.User;
 import com.fangdd.tp.entity.UserLog;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/12/4
  */
 public interface UserLogService {

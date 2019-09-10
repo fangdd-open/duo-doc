@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/1/5
  */
 public class TpDocletArticleTest extends BaseTpDocTest {

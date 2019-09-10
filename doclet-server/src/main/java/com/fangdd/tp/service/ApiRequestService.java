@@ -9,7 +9,7 @@ import com.fangdd.tp.entity.User;
 import java.util.List;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/12/4
  */
 public interface ApiRequestService {

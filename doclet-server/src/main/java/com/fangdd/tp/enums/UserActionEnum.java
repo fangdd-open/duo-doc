@@ -1,7 +1,7 @@
 package com.fangdd.tp.enums;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/12/4
  */
 public enum UserActionEnum {

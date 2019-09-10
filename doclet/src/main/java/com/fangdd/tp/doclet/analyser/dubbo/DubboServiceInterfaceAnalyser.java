@@ -11,7 +11,7 @@ import com.sun.javadoc.MethodDoc;
 /**
  * 分析Dubbo接口
  *
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/1/9
  */
 public class DubboServiceInterfaceAnalyser {

@@ -5,7 +5,7 @@ import com.sun.javadoc.AnnotationDesc;
 import com.sun.javadoc.FieldDoc;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/2/11
  */
 public class NullFieldAnnotationAnalyser extends EntityFieldAnnotationAnalyser {

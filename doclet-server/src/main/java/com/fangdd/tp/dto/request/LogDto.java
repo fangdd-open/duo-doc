@@ -4,7 +4,7 @@ import com.fangdd.tp.entity.ApiRequestDubbo;
 import com.fangdd.tp.enums.UserActionEnum;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/12/4
  */
 public class LogDto {

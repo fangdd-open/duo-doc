@@ -1,7 +1,9 @@
 package com.fangdd.tp.doclet.constant;
 
 /**
- * Created by ycoe on 16/3/17.
+ *
+ * @author xuwenzhen
+ * @date 16/3/17
  */
 public class DocletConstant {
 

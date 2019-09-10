@@ -1,7 +1,7 @@
 package com.fangdd.tp.enums;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/11/28
  */
 public enum RoleEnum {

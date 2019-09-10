@@ -4,7 +4,7 @@ import com.fangdd.tp.doclet.pojo.Artifact;
 import org.springframework.stereotype.Repository;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/1/23
  */
 @Repository

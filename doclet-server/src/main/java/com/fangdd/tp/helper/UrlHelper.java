@@ -7,7 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/11/30
  */
 public class UrlHelper {

@@ -6,7 +6,7 @@ import com.fangdd.tp.doclet.pojo.entity.RequestParam;
 import java.util.List;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/11/23
  */
 public class ApiRequest {

@@ -1,7 +1,7 @@
 package com.fangdd.tp.entity;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/11/28
  */
 public class AuthInfo {

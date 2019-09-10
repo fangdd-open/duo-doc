@@ -17,7 +17,7 @@ import java.util.Optional;
  * 房多多OAuth2服务
  * 文档：http://confluence.fangdd.cn/pages/viewpage.action?pageId=144736412
  *
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/11/28
  */
 @Service

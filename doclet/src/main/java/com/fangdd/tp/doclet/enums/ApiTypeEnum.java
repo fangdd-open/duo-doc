@@ -1,7 +1,7 @@
 package com.fangdd.tp.doclet.enums;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/1/12
  */
 public enum ApiTypeEnum {

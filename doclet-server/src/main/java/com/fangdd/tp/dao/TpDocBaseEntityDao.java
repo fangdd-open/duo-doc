@@ -5,7 +5,7 @@ import com.fangdd.traffic.common.mongo.core.YMongoClient;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/1/23
  */
 public abstract class TpDocBaseEntityDao<T> extends BaseEntityDao<T> {

@@ -3,7 +3,7 @@ package com.fangdd.tp.doclet.pojo.entity;
 import java.util.List;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/10/26
  */
 public class Env {

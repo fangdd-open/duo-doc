@@ -20,7 +20,7 @@ import com.sun.javadoc.Tag;
 import java.util.List;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/1/9
  */
 public class RestFulAnalyser {

@@ -1,7 +1,7 @@
 package com.fangdd.tp.doclet.pojo;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/1/24
  */
 public class MongoDbEntity {

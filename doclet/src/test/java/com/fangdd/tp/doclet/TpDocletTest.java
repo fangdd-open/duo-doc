@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/1/5
  */
 public class TpDocletTest extends BaseTpDocTest {

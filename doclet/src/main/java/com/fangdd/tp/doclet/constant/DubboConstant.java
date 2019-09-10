@@ -1,7 +1,7 @@
 package com.fangdd.tp.doclet.constant;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/1/9
  */
 public class DubboConstant {

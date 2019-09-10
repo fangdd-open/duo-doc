@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/2/11
  */
 public class DateTimeFormatFieldAnnotationAnalyser extends EntityFieldAnnotationAnalyser {

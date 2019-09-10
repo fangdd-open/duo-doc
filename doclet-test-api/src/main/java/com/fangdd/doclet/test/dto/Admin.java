@@ -3,7 +3,7 @@ package com.fangdd.doclet.test.dto;
 import java.util.List;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 19/1/4
  */
 public class Admin extends User {

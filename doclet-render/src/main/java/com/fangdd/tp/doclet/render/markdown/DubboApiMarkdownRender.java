@@ -8,7 +8,7 @@ import com.fangdd.tp.doclet.pojo.EntityRef;
 import java.util.List;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/1/15
  */
 public class DubboApiMarkdownRender {

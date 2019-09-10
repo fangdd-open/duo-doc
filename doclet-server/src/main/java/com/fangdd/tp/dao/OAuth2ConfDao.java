@@ -4,7 +4,7 @@ import com.fangdd.tp.entity.OAuth2Conf;
 import org.springframework.stereotype.Repository;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/11/28
  */
 @Repository

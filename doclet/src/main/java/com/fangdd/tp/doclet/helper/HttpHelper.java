@@ -8,7 +8,7 @@ import java.io.StringWriter;
 import java.nio.charset.Charset;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/1/23
  */
 public class HttpHelper {

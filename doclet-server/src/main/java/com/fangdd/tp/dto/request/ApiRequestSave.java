@@ -1,7 +1,7 @@
 package com.fangdd.tp.dto.request;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/12/4
  */
 public class ApiRequestSave extends WebRestInvokeData {

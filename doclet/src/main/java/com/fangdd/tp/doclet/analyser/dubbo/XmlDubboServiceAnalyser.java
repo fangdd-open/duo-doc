@@ -5,7 +5,7 @@ import com.fangdd.tp.doclet.pojo.DubboInfo;
 import com.sun.javadoc.ClassDoc;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/3/2
  */
 public class XmlDubboServiceAnalyser {

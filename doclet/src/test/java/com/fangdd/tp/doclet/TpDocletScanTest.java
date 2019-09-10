@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/1/5
  */
 public class TpDocletScanTest extends BaseTpDocTest {

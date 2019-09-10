@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/3/12
  */
 public class FileHelper {

@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 16/1/27
  */
 public class AnnotationHelper {

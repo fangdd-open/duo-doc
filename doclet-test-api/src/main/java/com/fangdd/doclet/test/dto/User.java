@@ -1,7 +1,7 @@
 package com.fangdd.doclet.test.dto;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 19/1/4
  */
 public class User {

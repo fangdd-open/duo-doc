@@ -5,7 +5,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/1/2
  */
 public class GzipHelper {

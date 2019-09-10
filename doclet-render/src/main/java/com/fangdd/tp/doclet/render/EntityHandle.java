@@ -6,7 +6,7 @@ import com.google.common.collect.Maps;
 import java.util.Map;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/1/21
  */
 public class EntityHandle {

@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/10/25
  */
 public class DubboGenericInvoker {

@@ -3,7 +3,7 @@ package com.fangdd.tp.doclet.pojo.entity;
 import com.fangdd.tp.doclet.pojo.Artifact;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/1/23
  */
 public class DocLog extends Artifact {

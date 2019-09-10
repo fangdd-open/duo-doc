@@ -4,7 +4,7 @@ import com.fangdd.tp.service.DubboService;
 import org.springframework.stereotype.Service;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 18/10/15
  */
 @Service

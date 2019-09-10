@@ -5,7 +5,7 @@ import com.fangdd.tp.dto.request.DubboGenericInvokeDto;
 import org.junit.Test;
 
 /**
- * @author ycoe
+ * @author xuwenzhen
  * @date 19/1/21
  */
 public class DubboCallbackUtilsTest {
