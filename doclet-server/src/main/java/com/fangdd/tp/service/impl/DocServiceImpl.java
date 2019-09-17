@@ -38,6 +38,7 @@ public class DocServiceImpl implements DocService {
     private static final String GROUP_ID = "groupId";
     private static final String APP_ID = "appId";
     private static final String COMMIT_ID = "commitId";
+    private static final String LAST = "last";
 
     @Autowired
     private DocDao docDao;
@@ -207,7 +208,7 @@ public class DocServiceImpl implements DocService {
     public ProviderApiDto getByAppId(String appId, String vcsId) {
         Bson filter;
         Bson appIdFilter = Filters.eq(APP_ID, appId);
-        if (Strings.isNullOrEmpty(vcsId)) {
+        if (Strings.isNullOrEmpty(vcsId) || LAST.equalsIgnoreCase(vcsId)) {
             filter = appIdFilter;
         } else {
             filter = Filters.and(
