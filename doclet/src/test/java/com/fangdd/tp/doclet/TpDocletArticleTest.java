@@ -4,7 +4,6 @@ import com.sun.tools.javadoc.Main;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * @author xuwenzhen
@@ -22,7 +21,7 @@ public class TpDocletArticleTest extends BaseTpDocTest {
 
         TpDocletArticleTest articleTest = new TpDocletArticleTest();
         String[] docArgs = new String[]{
-                "com.fangdd.cp.ctc.article.service.impl",
+                "com.fangdd.cp.ctc.article.service.impl.expose",
 //                "-subpackages",
 //                projectPath + "/server/target/tp-server.jar",
                 "-cp",
@@ -49,12 +48,16 @@ public class TpDocletArticleTest extends BaseTpDocTest {
                 "com/fangdd/graphql/graphql-provider-remote/1.0.0-SNAPSHOT/graphql-provider-remote-1.0.0-SNAPSHOT.jar",
                 "com/fangdd/graphql/spring-boot-starter-fdd-graphql-provider-tpdoc/1.0.0-SNAPSHOT/spring-boot-starter-fdd-graphql-provider-tpdoc-1.0.0-SNAPSHOT.jar",
                 "com/fasterxml/jackson/core/jackson-annotations/2.9.0/jackson-annotations-2.9.0.jar",
+                "com/alibaba/dubbo/2.8.4/dubbo-2.8.4.jar",
+                "com/fangdd/common-mongodb/1.0.0/common-mongodb-1.0.0.jar",
+                "org/mongodb/mongo-java-driver/3.3.0/mongo-java-driver-3.3.0.jar",
+                "org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar",
                 "org/hibernate/validator/hibernate-validator/6.0.14.Final/hibernate-validator-6.0.14.Final.jar"
         };
     }
 
     @Override
     protected String getProjectPath() {
-        return "/Users/xuwenzhen/Projects/fdd/common/house.graphql.cp.fdd";
+        return "/Users/xuwenzhen/Projects/fdd/c/article-ctc-cp-service";
     }
 }

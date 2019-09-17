@@ -16,7 +16,7 @@ public class GzipHelper {
         ByteArrayOutputStream obj = new ByteArrayOutputStream();
         GZIPOutputStream gzip = new GZIPOutputStream(obj);
         gzip.write(str.getBytes("UTF-8"));
-//        gzip.flush();
+        gzip.flush();
         gzip.close();
         return obj.toByteArray();
     }

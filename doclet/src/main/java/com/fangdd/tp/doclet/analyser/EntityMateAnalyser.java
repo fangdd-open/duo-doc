@@ -33,6 +33,7 @@ public class EntityMateAnalyser {
     private static final String STR_GT = ">";
     private static final String STR_SQUARE_LEFT = "[";
     private static final String STR_SQUARE_RIGHT = "]";
+    private static final String STR_SQUARES = "[]";
     private static final String JAVA_PACKAGE = "java.";
     private static final String SERIAL_VERSION_UID = "serialVersionUID";
     private static final String LOMBOK_DATA = "@lombok.Data";
@@ -90,6 +91,10 @@ public class EntityMateAnalyser {
         entity.setDeprecated(deprecated);
         entity.setComment(comment);
         entity.setDefaultValue("");
+        if (type.dimension().startsWith(STR_SQUARES)) {
+            //数组
+            entity.setArray(true);
+        }
         if (!parameterizedEntityRefList.isEmpty()) {
             entity.setParameteredEntityRefs(parameterizedEntityRefList);
             //设置是否Map or List

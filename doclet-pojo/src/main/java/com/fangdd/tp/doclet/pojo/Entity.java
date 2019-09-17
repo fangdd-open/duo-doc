@@ -49,6 +49,11 @@ public class Entity extends MongoDbEntity {
     private Boolean collection;
 
     /**
+     * 是否数组
+     */
+    private Boolean array;
+
+    /**
      * 是否Map
      */
     private Boolean map;
@@ -157,5 +162,13 @@ public class Entity extends MongoDbEntity {
 
     public void setEnumerate(Boolean enumerate) {
         this.enumerate = enumerate;
+    }
+
+    public Boolean getArray() {
+        return array;
+    }
+
+    public void setArray(Boolean array) {
+        this.array = array;
     }
 }
