@@ -41,6 +41,10 @@ public class InvokeServiceImpl implements InvokeService {
     private static final String RAW = "raw";
     private static final String X_WWW_FORM_URLENCODED = "x-www-form-urlencoded";
     private static final String FORM_DATA = "form-data";
+    private static final int TYPE_COLLECTION = 3;
+    private static final int TYPE_ARRAY = 5;
+    private static final int TYPE_MAP = 4;
+    private static final int TYPE_OBJ = 2;
 
     @Autowired
     private InvokeLogService invokeLogService;
@@ -147,13 +151,14 @@ public class InvokeServiceImpl implements InvokeService {
             String paramTypeName = reqItem.getTypeName();
             methodParamTypes[i] = paramTypeName;
             Integer type = reqItem.getType();
-            if (type == 3 || type == 4) {
+            if (type == TYPE_COLLECTION || type == TYPE_MAP) {
                 // collect | map
                 int startIndex = paramTypeName.indexOf('<');
                 if (startIndex > -1) {
                     methodParamTypes[i] = paramTypeName.substring(0, startIndex);
                 }
             }
+
             methodParams[i] = getValue(reqItem);
         }
 
@@ -207,7 +212,7 @@ public class InvokeServiceImpl implements InvokeService {
         }
         //类型：0=基本类型 1=枚举 2=pojo 3=collection 4=map
         int type = item.getType();
-        if (type == 2) {
+        if (type == TYPE_OBJ) {
             //pojo
             Map<String, Object> objValue = Maps.newHashMap();
             //类名
@@ -224,7 +229,7 @@ public class InvokeServiceImpl implements InvokeService {
                 return null;
             }
             return objValue;
-        } else if (type == 3) {
+        } else if (type == TYPE_COLLECTION || type == TYPE_ARRAY) {
             // collection
             List<ApiRequestDubboParamItem> fields = JSONObject.parseArray(itemStrValue, ApiRequestDubboParamItem.class);
             Object[] values = new Object[fields.size()];
@@ -236,7 +241,7 @@ public class InvokeServiceImpl implements InvokeService {
                 }
             }
             return values;
-        } else if (type == 4) {
+        } else if (type == TYPE_MAP) {
             // map
             List<ApiRequestDubboParamItem> fields = JSONObject.parseArray(itemStrValue, ApiRequestDubboParamItem.class);
             Map<String, Object> map = Maps.newHashMap();

@@ -1,5 +1,8 @@
 package com.fangdd.tp.entity;
 
+import com.fangdd.tp.core.config.RawJsonDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 /**
  * 从web前端发起的dubbo请求
  *
@@ -15,6 +18,7 @@ public class ApiRequestDubboParamItem {
     /**
      * 参数值，有可能是一个对象的json字符串
      */
+    @JsonDeserialize(using = RawJsonDeserializer.class)
     private String value;
 
     /**
