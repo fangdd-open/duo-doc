@@ -5,10 +5,9 @@ import com.fangdd.tp.doclet.helper.AnnotationHelper;
 import com.fangdd.tp.doclet.pojo.Chapter;
 import com.fangdd.tp.doclet.pojo.DubboInfo;
 import com.fangdd.tp.doclet.pojo.Section;
-import com.google.common.base.Strings;
+import com.google.common.primitives.Ints;
 import com.sun.javadoc.AnnotationDesc;
 import com.sun.javadoc.ClassDoc;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -71,7 +70,7 @@ public class DubboServiceImplAnalyser {
             dubboInfo.setVersion(version);
         } else if (TIMEOUT.equals(tagName)) {
             String timeout = tagValue.toString();
-            if (NumberUtils.isDigits(timeout)) {
+            if (Ints.tryParse(timeout) != null) {
                 dubboInfo.setTimeout(Integer.parseInt(timeout));
             }
         }

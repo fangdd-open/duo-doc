@@ -37,7 +37,7 @@ TP-DOC是在公司spring boot种子项目上，依赖代码注释，自动生成
          <docletArtifact>
              <groupId>com.fangdd</groupId>
              <artifactId>doclet</artifactId>
-             <version>1.2-SNAPSHOT</version>
+             <version>1.2.0</version>
          </docletArtifact>
          <sourcepath>
              <!-- 

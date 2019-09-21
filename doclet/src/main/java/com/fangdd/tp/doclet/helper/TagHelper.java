@@ -1,9 +1,8 @@
 package com.fangdd.tp.doclet.helper;
 
-import com.google.common.base.Strings;
+import com.google.common.primitives.Ints;
 import com.sun.javadoc.ParamTag;
 import com.sun.javadoc.Tag;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,8 +69,8 @@ public class TagHelper {
 
     public static Integer getIntegerValue(Tag[] tags, String tagName) {
         List<String> values = getValues(tags, tagName);
-        if (!values.isEmpty() && NumberUtils.isDigits(values.get(0))) {
-            return Integer.parseInt(values.get(0));
+        if (!values.isEmpty()) {
+            return Ints.tryParse(values.get(0));
         }
         return null;
     }

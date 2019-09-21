@@ -61,7 +61,7 @@ public class DocImportServiceImpl implements DocImportService {
 
         String md5 = artifact.getMd5();
         if (Strings.isNullOrEmpty(md5)) {
-            return "ERROR: 版本过低，请更新包：com.fangdd:tp-doc:1.2-SNAPSHOT";
+            return "ERROR: 版本过低，请更新包：com.fangdd:tp-doc:1.2.0";
         }
 
         //检查是否一致

@@ -36,7 +36,7 @@ TP-DOC是对javadoc的扩展，对代码无任何入侵或污染，通过读取�
          <docletArtifact>
              <groupId>com.fangdd</groupId>
              <artifactId>doclet</artifactId>
-             <version>1.2-SNAPSHOT</version>
+             <version>1.2.0</version>
          </docletArtifact>
          <sourcepath>
              <!-- 指定源码路径，如果多个模块，需要包含进去 -->

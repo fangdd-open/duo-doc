@@ -29,7 +29,7 @@
                     <docletArtifact>
                         <groupId>com.fangdd</groupId>
                         <artifactId>doclet</artifactId>
-                        <version>1.2-SNAPSHOT</version>
+                        <version>1.2.0</version>
                     </docletArtifact>
                     <sourcepath>
                         <!-- 指定源码路径，如果多个模块，需要包含进去 -->
