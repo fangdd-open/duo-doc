@@ -5,7 +5,6 @@ import com.fangdd.tp.doclet.pojo.*;
 import com.fangdd.tp.doclet.pojo.entity.DocLog;
 import com.fangdd.tp.doclet.pojo.entity.MarkdownDoc;
 import com.fangdd.tp.dto.request.DocCreateDto;
-import com.fangdd.tp.dto.request.LogDto;
 import com.fangdd.tp.helper.UserContextHelper;
 import com.fangdd.tp.service.ApiUnwindService;
 import com.fangdd.tp.service.DocImportService;

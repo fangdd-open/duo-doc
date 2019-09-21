@@ -3,11 +3,11 @@ package com.fangdd.tp.doclet.analyser.dubbo;
 import com.fangdd.tp.doclet.exception.DocletException;
 import com.fangdd.tp.doclet.helper.BookHelper;
 import com.fangdd.tp.doclet.pojo.DubboInfo;
-import org.jdom2.Attribute;
-import org.jdom2.Content;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.input.SAXBuilder;
+import org.dom4j.Attribute;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
 import java.io.File;
 import java.util.List;
@@ -18,32 +18,31 @@ import java.util.List;
  */
 public class DubboXmlAnalyser {
     public static void analyse(File dubboXmlFile) {
-        SAXBuilder jdomBuilder = new SAXBuilder();
-        Document jdomDocument;
+        SAXReader saxReader = new SAXReader();
+        Document jdomDocument = null;
         try {
-            jdomDocument = jdomBuilder.build(dubboXmlFile);
-        } catch (Exception e) {
-            throw new DocletException("解析pom.xml出错！", e);
+            jdomDocument = saxReader.read(dubboXmlFile);
+        } catch (DocumentException e) {
+            throw new DocletException("解析pom.xml出错！" + dubboXmlFile.getAbsolutePath(), e);
         }
-        Element beans = jdomDocument.getRootElement();
-        List<Content> contentList = beans.getContent();
-        for (Content content : contentList) {
-            if (content instanceof Element) {
-                Element dubboServiceNode = (Element) content;
-                if (!"service".equals(dubboServiceNode.getName())) {
-                    continue;
-                }
-                String interfaceClass = dubboServiceNode.getAttribute("interface").getValue();
-                String version = "";
-                Attribute versionAttribute = dubboServiceNode.getAttribute("version");
-                if (versionAttribute != null) {
-                    version = versionAttribute.getValue();
-                }
-                DubboInfo dubboInfo = new DubboInfo();
-                dubboInfo.setVersion(version == null ? "" : version);
 
-                BookHelper.addDubboInterface(interfaceClass, dubboInfo);
+        Element root = jdomDocument.getRootElement();
+        List<Element> contentList = root.elements();
+        for (Element content : contentList) {
+            Element dubboServiceNode = content;
+            if (!"service".equals(dubboServiceNode.getName())) {
+                continue;
             }
+            String interfaceClass = dubboServiceNode.attributeValue("interface");
+            String version = "";
+            Attribute versionAttribute = dubboServiceNode.attribute("version");
+            if (versionAttribute != null) {
+                version = versionAttribute.getValue();
+            }
+            DubboInfo dubboInfo = new DubboInfo();
+            dubboInfo.setVersion(version == null ? "" : version);
+
+            BookHelper.addDubboInterface(interfaceClass, dubboInfo);
         }
     }
 }

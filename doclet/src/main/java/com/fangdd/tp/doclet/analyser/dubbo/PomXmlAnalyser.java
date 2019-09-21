@@ -9,10 +9,10 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.sun.javadoc.ClassDoc;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.filter.Filters;
-import org.jdom2.input.SAXBuilder;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -27,6 +27,7 @@ public class PomXmlAnalyser {
     private static final Map<File, Artifact> PATH_POM_MAP = Maps.newHashMap();
     private static final List<File> POM_PATH_LIST = Lists.newArrayList();
     private static final Logger logger = new Logger();
+    private static final String PATH_SPLITTER = "/";
 
     public static Artifact analyse(ClassDoc classDoc) {
         File classFile = classDoc.position().file();
@@ -45,13 +46,14 @@ public class PomXmlAnalyser {
 
     public static Artifact analyse(File file) {
         Artifact info = new Artifact();
-        SAXBuilder jdomBuilder = new SAXBuilder();
-        Document jdomDocument;
+        SAXReader saxReader = new SAXReader();
+        Document jdomDocument = null;
         try {
-            jdomDocument = jdomBuilder.build(file);
-        } catch (Exception e) {
+            jdomDocument = saxReader.read(file);
+        } catch (DocumentException e) {
             throw new DocletException("解析pom.xml出错！", e);
         }
+
         Element project = jdomDocument.getRootElement();
         String artifactId = XmlHelper.getChildElementText(project, "artifactId");
         String version = XmlHelper.getChildElementText(project, "version");
@@ -84,9 +86,9 @@ public class PomXmlAnalyser {
     }
 
     private static Artifact getPomXml(File file) {
-//        logger.info("尝试寻找pom.xml at {}", file.getPath());
         POM_PATH_LIST.add(file);
         File[] pomXmlFiles = file.listFiles(new FileFilter() {
+            @Override
             public boolean accept(File pathname) {
                 return "pom.xml".equals(pathname.getName());
             }
@@ -100,7 +102,7 @@ public class PomXmlAnalyser {
             return info;
         }
         File parent = file.getParentFile();
-        if ("/".equals(parent.getPath())) {
+        if (PATH_SPLITTER.equals(parent.getPath())) {
             return null;
         }
         return getPomXml(parent);
