@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.fangdd</groupId>
         <artifactId>duo-doc</artifactId>
-        <version>1.0.0</version>
+        <version>1.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>doclet-server</artifactId>
@@ -15,7 +15,7 @@
     <packaging>jar</packaging>
 
     <properties>
-        <doclet.version>1.0.0</doclet.version>
+        <doclet.version>1.2-SNAPSHOT</doclet.version>
         <docker.project.id>tp-doc.op.fdd</docker.project.id>
         <docker.starter.app>com.fangdd.tp.Application</docker.starter.app>
     </properties>

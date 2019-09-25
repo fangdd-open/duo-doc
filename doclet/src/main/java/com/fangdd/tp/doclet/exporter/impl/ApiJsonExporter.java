@@ -3,6 +3,7 @@ package com.fangdd.tp.doclet.exporter.impl;
 import com.fangdd.tp.doclet.DocletConfig;
 import com.fangdd.tp.doclet.helper.Logger;
 import com.fangdd.tp.doclet.pojo.Chapter;
+import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
 import java.io.File;
@@ -40,7 +41,7 @@ public class ApiJsonExporter extends BaseApiJsonExporter {
         }
         File file = new File(DocletConfig.outputDirectory + File.separator + DocletConfig.apiJson);
         try {
-            Files.write(docData.getBytes(), file);
+            Files.asCharSink(file, Charsets.UTF_8).write(docData);
         } catch (IOException e) {
             logger.error("写入文件失败：" + file.getAbsolutePath(), e);
         }

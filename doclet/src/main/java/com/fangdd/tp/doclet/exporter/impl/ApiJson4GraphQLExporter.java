@@ -7,6 +7,7 @@ import com.fangdd.tp.doclet.helper.CollectionUtils;
 import com.fangdd.tp.doclet.helper.Logger;
 import com.fangdd.tp.doclet.pojo.*;
 import com.fangdd.tp.doclet.render.EntityHandle;
+import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 
@@ -46,7 +47,7 @@ public class ApiJson4GraphQLExporter implements Exporter {
         }
         File file = new File(DocletConfig.outputDirectory + File.separator + DocletConfig.apiJson);
         try {
-            Files.write(docData.getBytes(), file);
+            Files.asCharSink(file, Charsets.UTF_8).write(docData);
         } catch (IOException e) {
             logger.error("写入文件失败：" + file.getAbsolutePath(), e);
         }

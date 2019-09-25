@@ -6,7 +6,7 @@
 
     <groupId>com.fangdd</groupId>
     <artifactId>duo-doc</artifactId>
-    <version>1.0.0</version>
+    <version>1.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -15,7 +15,7 @@
         <java.version>1.8</java.version>
         <guava.version>26.0-jre</guava.version>
         <fastjson.version>1.2.61</fastjson.version>
-        <duo-doc.version>1.0.0</duo-doc.version>
+        <duo-doc.version>1.2-SNAPSHOT</duo-doc.version>
         <dom4j.version>2.1.1</dom4j.version>
         <okhttp.version>3.12.0</okhttp.version>
         <junit.version>4.12</junit.version>
