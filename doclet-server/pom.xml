@@ -147,72 +147,73 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>assembly-deploy-package</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <tasks>
-                                <copy todir="${project.build.directory}/distributions/service/lib" overwrite="true">
-                                    <fileset dir="${project.build.directory}">
-                                        <include name="${project.artifactId}.jar"/>
-                                    </fileset>
-                                </copy>
-                                <copy todir="${project.build.directory}/distributions/service/" overwrite="true">
-                                    <fileset dir="${project.basedir}/src/main/dist/"/>
-                                </copy>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-antrun-plugin</artifactId>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>assembly-deploy-package</id>-->
+                        <!--<phase>package</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>run</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<tasks>-->
+                                <!--<copy todir="${project.build.directory}/distributions/service/lib" overwrite="true">-->
+                                    <!--<fileset dir="${project.build.directory}">-->
+                                        <!--<include name="${project.artifactId}.jar"/>-->
+                                    <!--</fileset>-->
+                                <!--</copy>-->
+                                <!--<copy todir="${project.build.directory}/distributions/service/" overwrite="true">-->
+                                    <!--<fileset dir="${project.basedir}/src/main/dist/"/>-->
+                                <!--</copy>-->
 
-                                <!-- 生成zip压缩包 -->
-                                <zip destfile="${project.build.directory}/distributions/${project.artifactId}.zip">
-                                    <zipfileset dir="${project.build.directory}/distributions/service"/>
-                                </zip>
-                            </tasks>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+                                <!--&lt;!&ndash; 生成zip压缩包 &ndash;&gt;-->
+                                <!--<zip destfile="${project.build.directory}/distributions/${project.artifactId}.zip">-->
+                                    <!--<zipfileset dir="${project.build.directory}/distributions/service"/>-->
+                                <!--</zip>-->
+                            <!--</tasks>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.3</version>
-                <configuration>
-                    <doclet>com.fangdd.tp.doclet.TpDoclet</doclet>
-                    <docletArtifact>
-                        <groupId>com.fangdd</groupId>
-                        <artifactId>doclet</artifactId>
-                        <version>1.2-SNAPSHOT</version>
-                    </docletArtifact>
-                    <sourcepath>
-                        <!-- 指定源码路径，如果多个模块，需要包含进去 -->
-                        ${project.basedir}/src/main/java:${project.basedir}/../doclet-pojo/src/main/java:${project.basedir}/../doclet-render/src/main/java
-                    </sourcepath>
-                    <useStandardDocletOptions>false</useStandardDocletOptions>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-javadoc-plugin</artifactId>-->
+                <!--<version>2.10.3</version>-->
+                <!--<configuration>-->
+                    <!--<doclet>com.fangdd.tp.doclet.TpDoclet</doclet>-->
+                    <!--<docletArtifact>-->
+                        <!--<groupId>com.fangdd</groupId>-->
+                        <!--<artifactId>doclet</artifactId>-->
+                        <!--<version>1.0.0</version>-->
+                    <!--</docletArtifact>-->
+                    <!--<sourcepath>-->
+                        <!--&lt;!&ndash; 指定源码路径，如果多个模块，需要包含进去 &ndash;&gt;-->
+                        <!--${project.basedir}/src/main/java:${project.basedir}/../doclet-pojo/src/main/java:${project.basedir}/../doclet-render/src/main/java-->
+                    <!--</sourcepath>-->
+                    <!--<useStandardDocletOptions>false</useStandardDocletOptions>-->
 
-                    <additionalJOptions>
-                        <additionalJOption>-J-Dbasedir=${project.basedir}</additionalJOption>
-                    </additionalJOptions>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <!-- package可以在提交代码后由CI自动触发，如果不需要自动触发，可以设置为site，届时需要手工执行：mvn clean site -->
-                        <phase>package</phase>
-                        <goals>
-                            <goal>javadoc</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+                    <!--<additionalJOptions>-->
+                        <!--<additionalJOption>-J-Dbasedir=${project.basedir}</additionalJOption>-->
+                    <!--</additionalJOptions>-->
+                <!--</configuration>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>attach-javadocs</id>-->
+                        <!--&lt;!&ndash; package可以在提交代码后由CI自动触发，如果不需要自动触发，可以设置为site，届时需要手工执行：mvn clean site &ndash;&gt;-->
+                        <!--<phase>package</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>javadoc</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
