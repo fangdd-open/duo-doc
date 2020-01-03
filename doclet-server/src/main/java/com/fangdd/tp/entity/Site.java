@@ -1,6 +1,7 @@
 package com.fangdd.tp.entity;
 
 import com.fangdd.tp.doclet.pojo.entity.EnvItem;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
@@ -38,6 +39,17 @@ public class Site {
      * Dubbo ZooKeep配置
      */
     private List<EnvItem> dubbo;
+
+    /**
+     * 公钥，用于加密
+     */
+    private String publicKey;
+
+    /**
+     * 盐，可用于密码加盐
+     */
+    @JsonIgnore
+    private String salt;
 
     public String getId() {
         return id;
@@ -85,5 +97,21 @@ public class Site {
 
     public void setDubbo(List<EnvItem> dubbo) {
         this.dubbo = dubbo;
+    }
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 }

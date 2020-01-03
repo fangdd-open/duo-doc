@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
  * @date 18/1/23
  */
 @Repository
-public class ApiRequestDubboDao extends TpDocBaseEntityDao<ApiRequestDubbo> {
+public class ApiRequestDubboDao extends BaseDuoDocEntityDao<ApiRequestDubbo> {
     @Override
     protected String getCollectionName() {
         return "api_request_dubbo";

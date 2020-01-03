@@ -1,8 +1,8 @@
 package com.fangdd.tp.service.impl.oauth2;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fangdd.tp.core.exceptions.DuoServerException;
 import com.fangdd.tp.core.exceptions.Http401Exception;
-import com.fangdd.tp.core.exceptions.TpServerException;
 import com.fangdd.tp.dao.OAuth2ConfDao;
 import com.fangdd.tp.dto.oauth.OAuth2ServiceInfo;
 import com.fangdd.tp.dto.oauth.OAuth2TokenReq;
@@ -68,15 +68,15 @@ public abstract class BaseOAuth2Service implements OAuth2Service {
     public User login(OAuth2TokenReq request) {
         String state = request.getState();
         if (Strings.isNullOrEmpty(state)) {
-            throw new TpServerException(500, INVALID_REQUEST);
+            throw new DuoServerException(500, INVALID_REQUEST);
         }
         if (!checkState(state)) {
-            throw new TpServerException(501, INVALID_REQUEST);
+            throw new DuoServerException(501, INVALID_REQUEST);
         }
 
         String code = request.getToken();
         if (Strings.isNullOrEmpty(code)) {
-            throw new TpServerException(502, INVALID_REQUEST);
+            throw new DuoServerException(502, INVALID_REQUEST);
         }
 
         OAuth2ServiceInfo serviceInfo = getOAuth2ServiceInfo(request.getSite());
@@ -121,14 +121,14 @@ public abstract class BaseOAuth2Service implements OAuth2Service {
         InvokeResultDto userResp = invokeService.invoke(null, userInvokeRequest);
         if (userResp == null || Strings.isNullOrEmpty(userResp.getResponseBody())) {
             //获取用户信息失败
-            throw new TpServerException(505, "获取用户基本信息失败！");
+            throw new DuoServerException(505, "获取用户基本信息失败！");
         }
 
         logger.info("获取到的用户信息：{}", userResp.getResponseBody());
         OAuth2UserInfo userInfo = getUserInfo(userResp.getResponseBody());
 
         //需要注册
-        return userService.regist(getOAuth2ServiceCode(), tokenInfo, userInfo);
+        return userService.registy(getOAuth2ServiceCode(), tokenInfo, userInfo);
     }
 
     /**
@@ -201,7 +201,7 @@ public abstract class BaseOAuth2Service implements OAuth2Service {
 
         OAuth2Conf conf = oAuth2ConfDao.getEntityById(key);
         if (conf == null) {
-            throw new TpServerException(500, "未配置" + getOAuth2ServiceCode() + ".OAuth2");
+            throw new DuoServerException(500, "未配置" + getOAuth2ServiceCode() + ".OAuth2");
         }
         Map<String, String> confData = conf.getConf();
         String oAuthServer = confData.get(SERVER);

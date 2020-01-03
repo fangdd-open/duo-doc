@@ -23,6 +23,7 @@ public class BookHelper {
     private static final Map<String, DubboInfo> INTERFACE_CLASS_MAP = Maps.newHashMap();
     private static final Map<String, String> MARKDOWN_MAP = Maps.newHashMap();
     private static Artifact artifact = null;
+    private BookHelper(){}
 
     /**
      * 当前处理的api类型

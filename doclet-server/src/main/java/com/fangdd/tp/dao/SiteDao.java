@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
  * @date 18/11/28
  */
 @Repository
-public class SiteDao extends TpDocBaseEntityDao<Site> {
+public class SiteDao extends BaseDuoDocEntityDao<Site> {
     /**
      * 获取Collection名称
      *

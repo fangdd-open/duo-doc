@@ -25,6 +25,11 @@ public class AuthInfo {
      */
     private String refreshToken;
 
+    /**
+     * 密码
+     */
+    private String password;
+
     public String getCode() {
         return code;
     }
@@ -55,5 +60,13 @@ public class AuthInfo {
 
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

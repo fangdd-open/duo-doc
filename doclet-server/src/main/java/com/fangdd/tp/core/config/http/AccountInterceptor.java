@@ -1,9 +1,9 @@
 package com.fangdd.tp.core.config.http;
 
 import com.fangdd.tp.core.annotation.Account;
+import com.fangdd.tp.core.exceptions.DuoServerException;
 import com.fangdd.tp.core.exceptions.Http401Exception;
 import com.fangdd.tp.core.exceptions.Http403Exception;
-import com.fangdd.tp.core.exceptions.TpServerException;
 import com.fangdd.tp.dto.UserContent;
 import com.fangdd.tp.entity.Site;
 import com.fangdd.tp.entity.User;
@@ -12,9 +12,6 @@ import com.fangdd.tp.helper.UserContextHelper;
 import com.fangdd.tp.service.SiteService;
 import com.fangdd.tp.service.UserService;
 import com.google.common.base.Strings;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +22,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Account 注解的验证
@@ -35,16 +32,16 @@ import java.util.concurrent.TimeUnit;
  */
 public class AccountInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(AccountInterceptor.class);
+    private static final Map<String, Site> SITE_MAP = new ConcurrentHashMap<>();
     private static final String AUTH_TOKEN = "auth-token";
-
-    private static final Cache<String, Site> CACHE = CacheBuilder.newBuilder()
-            //1分钟后过期
-            .expireAfterWrite(1, TimeUnit.MINUTES)
-            //最多1万个key
-            .maximumSize(10000)
-            .build();
     private static final String DOMAIN = "domain";
+
     private static final String DOMAIN2 = "Host";
+    private static final String STR_SITE_INITED = "siteInited";
+    /**
+     * 是否已初始化过站点
+     */
+    private boolean initSite = false;
 
     @Autowired
     private UserService userService;
@@ -93,17 +90,30 @@ public class AccountInterceptor implements HandlerInterceptor {
     }
 
     private Site getSite(String domain) {
-        Site site;
-        try {
-            site = CACHE.get(domain, () -> siteService.getByHost(domain));
-        } catch (ExecutionException e) {
-            logger.error("获取site信息失败：domain={}", domain, e);
-            throw new TpServerException(500, "获取site信息失败");
-        } catch (CacheLoader.InvalidCacheLoadException e) {
-            //返回了空对象
-            throw new TpServerException(404, "无效域名！", e);
+        Site site = SITE_MAP.computeIfAbsent(domain, this::getByDomainOrInit);
+        if (site == null) {
+            throw new DuoServerException(404, "无效域名:" + domain);
         }
 
+        return site;
+    }
+
+    private Site getByDomainOrInit(String domain) {
+        Site site = siteService.getByHost(domain);
+        if (site != null) {
+            return site;
+        }
+        if (initSite) {
+            //如果已经初始化过
+            return null;
+        }
+
+        //检查站点是否有初始化过
+        if (siteService.isEmpty()) {
+            //如果没有初始化站点，则尝试初始化
+            site = siteService.init(domain);
+        }
+        initSite = true;
         return site;
     }
 

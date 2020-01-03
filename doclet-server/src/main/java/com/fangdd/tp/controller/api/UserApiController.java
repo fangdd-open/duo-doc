@@ -2,20 +2,18 @@ package com.fangdd.tp.controller.api;
 
 import com.fangdd.tp.core.annotation.Account;
 import com.fangdd.tp.dto.BaseResponse;
+import com.fangdd.tp.dto.request.PasswordLoginReq;
 import com.fangdd.tp.entity.User;
 import com.fangdd.tp.enums.RoleEnum;
 import com.fangdd.tp.helper.UserContextHelper;
 import com.fangdd.tp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
+ * @author xuwenzhen
  * @chapter Rest接口
  * @section 用户接口
- * @author xuwenzhen
  * @date 18/1/18
  * @disable
  */
@@ -58,5 +56,16 @@ public class UserApiController {
     @GetMapping(value = "/my")
     public BaseResponse<User> getMyInfo() {
         return BaseResponse.success(UserContextHelper.getUserContext().getUser());
+    }
+
+    /**
+     * 账号密码登录
+     *
+     * @return 用户基本信息
+     */
+    @PostMapping("password-login")
+    public BaseResponse<User> passwordLogin(@RequestBody PasswordLoginReq request) {
+        User user = userService.loginByPassword(request);
+        return BaseResponse.success(user);
     }
 }

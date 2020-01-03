@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
  * @date 18/1/23
  */
 @Repository
-public class EnvDao extends TpDocBaseEntityDao<Env> {
+public class EnvDao extends BaseDuoDocEntityDao<Env> {
     @Override
     protected String getCollectionName() {
         return "env";

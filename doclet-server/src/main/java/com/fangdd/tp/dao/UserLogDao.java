@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
  * @date 18/1/23
  */
 @Repository
-public class UserLogDao extends TpDocBaseEntityDao<UserLog> {
+public class UserLogDao extends BaseDuoDocEntityDao<UserLog> {
     @Override
     protected String getCollectionName() {
         return "user_log";

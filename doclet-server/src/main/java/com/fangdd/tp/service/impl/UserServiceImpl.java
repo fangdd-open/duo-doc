@@ -1,13 +1,17 @@
 package com.fangdd.tp.service.impl;
 
-import com.fangdd.tp.core.exceptions.TpServerException;
+import com.fangdd.tp.core.exceptions.DuoServerException;
 import com.fangdd.tp.dao.UserDao;
 import com.fangdd.tp.dto.oauth.OAuth2UserInfo;
 import com.fangdd.tp.dto.oauth.TokenInfo;
+import com.fangdd.tp.dto.request.PasswordLoginReq;
 import com.fangdd.tp.dto.response.SimpleUserDto;
 import com.fangdd.tp.entity.AuthInfo;
+import com.fangdd.tp.entity.Site;
 import com.fangdd.tp.entity.User;
 import com.fangdd.tp.enums.RoleEnum;
+import com.fangdd.tp.helper.MD5Utils;
+import com.fangdd.tp.helper.UserContextHelper;
 import com.fangdd.tp.service.UserService;
 import com.fangdd.traffic.common.mongo.utils.UUIDUtils;
 import com.google.common.collect.Lists;
@@ -16,12 +20,16 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;
 import org.bson.conversions.Bson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -30,6 +38,7 @@ import java.util.Set;
  */
 @Service
 public class UserServiceImpl implements UserService {
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     /**
      * 一个月过期
      */
@@ -46,6 +55,9 @@ public class UserServiceImpl implements UserService {
     private static final String NAME = "name";
     private static final String MOBILE = "mobile";
     private static final String EMAIL = "email";
+    private static final String STR_PWD = "pwd";
+    private static final String STR_ADMIN = "admin";
+    private static final String Str_GUEST = "guest";
 
     @Autowired
     private UserDao userDao;
@@ -57,19 +69,16 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             // token失效
             return null;
-//            throw new Http401Exception();
         }
         if (user.getStatus() == null || user.getStatus() < 0) {
             // 用户已被禁用
             logout(user);
             return null;
-//            throw new TpServerException(404, "账户已被禁用！");
         }
         if (user.getTokenExpired() != null && user.getTokenExpired() < System.currentTimeMillis()) {
             // token已过期
             logout(user);
             return null;
-//            throw new Http401Exception();
         }
         return user;
     }
@@ -120,7 +129,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User regist(String code, TokenInfo tokenInfo, OAuth2UserInfo userInfo) {
+    public User registy(String code, TokenInfo tokenInfo, OAuth2UserInfo userInfo) {
         User user = new User();
         user.setName(userInfo.getName());
         user.setSites(Lists.newArrayList(tokenInfo.getSite()));
@@ -145,7 +154,7 @@ public class UserServiceImpl implements UserService {
         Bson idFilter = Filters.eq(ID, userId);
         User user = userDao.getEntity(idFilter, Projections.include(DOCS_OWNER));
         if (user == null) {
-            throw new TpServerException(404, "无法找到此用户！");
+            throw new DuoServerException(404, "无法找到此用户！");
         }
         List<String> docList = user.getDocsOwner();
         if (docList == null || !docList.contains(docId)) {
@@ -159,7 +168,7 @@ public class UserServiceImpl implements UserService {
         Bson idFilter = Filters.eq(ID, userId);
         User user = userDao.getEntity(idFilter, Projections.include(DOCS_OWNER));
         if (user == null) {
-            throw new TpServerException(404, "无法找到此用户！");
+            throw new DuoServerException(404, "无法找到此用户！");
         }
         List<String> docList = user.getDocsOwner();
         if (!CollectionUtils.isEmpty(docList)) {
@@ -176,7 +185,7 @@ public class UserServiceImpl implements UserService {
                 .find(Filters.in(ID, userIds))
                 .projection(Projections.exclude(AUTHS, TOKEN_EXPIRED, TOKEN))
                 .into(Lists.newArrayList());
-        if (userList != null) {
+        if (!CollectionUtils.isEmpty(userList)) {
             userList.forEach(user -> userMap.put(user.getId(), user));
         }
         return userMap;
@@ -189,6 +198,96 @@ public class UserServiceImpl implements UserService {
                 .find(Filters.eq(DOCS_OWNER, docId))
                 .projection(Projections.include(NAME, MOBILE, EMAIL))
                 .into(Lists.newArrayList());
+    }
+
+    /**
+     * 初始化站点用户
+     * 会初始化两个用户：admin / guest
+     *
+     * @param site 站点
+     */
+    @Override
+    public void init(Site site) {
+        String siteId = site.getId();
+        String salt = site.getSalt();
+        String publishKey = site.getPublicKey();
+        AuthInfo pwdAuth = new AuthInfo();
+        pwdAuth.setCode(STR_PWD);
+        pwdAuth.setGid(STR_ADMIN);
+        String publishPwd = MD5Utils.md5(publishKey + STR_ADMIN);
+        pwdAuth.setPassword(MD5Utils.md5(publishPwd + salt));
+
+        User admin = new User();
+        admin.setName("管理员");
+        admin.setSites(Lists.newArrayList(siteId));
+        admin.setRole(RoleEnum.ADMIN.getRole());
+        admin.setStatus(1);
+        admin.setCreateTime(System.currentTimeMillis());
+        admin.setAuths(Lists.newArrayList(pwdAuth));
+        userDao.insertOne(admin);
+
+        AuthInfo guestPwdAuth = new AuthInfo();
+        guestPwdAuth.setCode(STR_PWD);
+        guestPwdAuth.setGid(Str_GUEST);
+        String guestPublishPwd = MD5Utils.md5(publishKey + Str_GUEST);
+        guestPwdAuth.setPassword(MD5Utils.md5(guestPublishPwd + salt));
+        User guest = new User();
+        guest.setName("游客");
+        guest.setSites(Lists.newArrayList(siteId));
+        guest.setRole(RoleEnum.USER.getRole());
+        guest.setStatus(1);
+        guest.setCreateTime(System.currentTimeMillis());
+        guest.setAuths(Lists.newArrayList(guestPwdAuth));
+        userDao.insertOne(guest);
+        logger.info("初始化网站普通用户:guest");
+    }
+
+    /**
+     * 使用账号密码登录
+     *
+     * @param request 登录请求
+     * @return 登录成功的用户，登录失败会抛异常
+     */
+    @Override
+    public User loginByPassword(PasswordLoginReq request) {
+        String userName = request.getUserName();
+        if (StringUtils.isEmpty(userName)) {
+            throw new DuoServerException(500, "用户名不能为空！");
+        }
+        String password = request.getPassword();
+        if (StringUtils.isEmpty(password)) {
+            throw new DuoServerException(500, "密码不能为空！");
+        }
+        User user = userDao.getEntity(
+                Filters.and(
+                        Filters.eq(AUTHS_GID, userName),
+                        Filters.eq(AUTHS_CODE, STR_PWD)
+                )
+        );
+        if (user == null) {
+            throw new DuoServerException(500, "用户不存在！");
+        }
+        Optional<AuthInfo> authOptional = user.getAuths().stream().filter(item -> STR_PWD.equals(item.getCode())).findFirst();
+        if (!authOptional.isPresent()) {
+            throw new DuoServerException(500, "数据异常！");
+        }
+
+        AuthInfo authInfo = authOptional.get();
+
+        Site site = UserContextHelper.getSite();
+        String salt = site.getSalt();
+        password = MD5Utils.md5(password + salt);
+        if (password == null || !password.equals(authInfo.getPassword())) {
+            throw new DuoServerException(500, "密码错误！");
+        }
+
+        long now = System.currentTimeMillis();
+        user.setTokenExpired(now + TOKEN_EXPIRE_IN);
+        user.setLoginCode(STR_PWD);
+        user.setToken(UUIDUtils.generateUUID());
+        user.setLastLoginTime(now);
+        userDao.updateEntity(user);
+        return user;
     }
 
     private AuthInfo newAuthInfo(String code, TokenInfo tokenInfo) {

@@ -140,7 +140,7 @@ public class DocletConfig {
         exporter = System.getProperty("exporter", "server");
         apiJson = System.getProperty("apiJson", "api.json");
         appId = System.getProperty("appId");
-        server = System.getProperty("server", "http://tp-doc.fangdd.net");
+        server = System.getProperty("server", "http://tp-doc.fangdd.me");
         dubboConfXmls = System.getProperty("dubboXmlConfigs", "applicationContext-dubbo.xml");
         markdownDir = System.getProperty("markdownDir", "doc");
         commitId = System.getProperty("commitId", "");

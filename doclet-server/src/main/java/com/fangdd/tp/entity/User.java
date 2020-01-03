@@ -1,6 +1,8 @@
 package com.fangdd.tp.entity;
 
+import com.fangdd.tp.enums.RoleEnum;
 import com.fangdd.traffic.common.mongo.annotation.AutoIncrement;
+import com.fangdd.traffic.common.mongo.annotation.Ignore;
 
 import java.util.List;
 
@@ -32,6 +34,7 @@ public class User {
 
     /**
      * 角色
+     * @see RoleEnum
      */
     private Integer role;
 
@@ -73,6 +76,7 @@ public class User {
     /**
      * 当前网站
      */
+    @Ignore
     private Site currentSite;
 
     /**

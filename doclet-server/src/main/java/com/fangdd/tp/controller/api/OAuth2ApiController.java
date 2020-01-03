@@ -1,6 +1,6 @@
 package com.fangdd.tp.controller.api;
 
-import com.fangdd.tp.core.exceptions.TpServerException;
+import com.fangdd.tp.core.exceptions.DuoServerException;
 import com.fangdd.tp.dto.BaseResponse;
 import com.fangdd.tp.dto.UserContent;
 import com.fangdd.tp.dto.oauth.OAuth2TokenReq;
@@ -19,7 +19,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -47,7 +46,7 @@ public class OAuth2ApiController {
     ) {
         OAuth2Service oAuth2Service = getOAuth2Service(authServiceCode);
         if (oAuth2Service == null) {
-            throw new TpServerException(404, "no oauth support");
+            throw new DuoServerException(404, "no oauth support");
         }
 
         Site site = UserContextHelper.getSite();

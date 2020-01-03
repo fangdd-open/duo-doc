@@ -5,7 +5,7 @@ import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.rpc.service.GenericService;
-import com.fangdd.tp.core.exceptions.TpServerException;
+import com.fangdd.tp.core.exceptions.DuoServerException;
 import com.fangdd.tp.dto.request.DubboGenericInvokeDto;
 
 import java.util.Map;
@@ -99,12 +99,12 @@ public class DubboGenericInvoker {
         } catch (Exception e) {
             referenceCache.remove(key);
             referenceConfig.destroy();
-            throw new TpServerException(500, "获取GenericService失败！", e);
+            throw new DuoServerException(500, "获取GenericService失败！", e);
         }
         if (genericService == null) {
             referenceCache.remove(key);
             referenceConfig.destroy();
-            throw new TpServerException(500, "GenericService创建失败");
+            throw new DuoServerException(500, "GenericService创建失败");
         }
         return genericService;
     }

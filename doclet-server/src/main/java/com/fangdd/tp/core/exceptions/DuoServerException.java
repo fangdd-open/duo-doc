@@ -4,7 +4,7 @@ package com.fangdd.tp.core.exceptions;
  * @author xuwenzhen
  * @date 17/11/30
  */
-public class TpServerException extends RuntimeException {
+public class DuoServerException extends RuntimeException {
     /**
      * 错误状态码
      *
@@ -12,24 +12,24 @@ public class TpServerException extends RuntimeException {
      */
     private Integer code;
 
-    public TpServerException(String message) {
+    public DuoServerException(String message) {
         super(message);
     }
 
-    public TpServerException(Throwable ex) {
+    public DuoServerException(Throwable ex) {
         super(ex);
     }
 
-    public TpServerException(String message, Throwable ex) {
+    public DuoServerException(String message, Throwable ex) {
         super(message, ex);
     }
 
-    public TpServerException(Integer code, String message) {
+    public DuoServerException(Integer code, String message) {
         super(message);
         this.code = code;
     }
 
-    public TpServerException(Integer code, String message, Throwable ex) {
+    public DuoServerException(Integer code, String message, Throwable ex) {
         super(message, ex);
         this.code = code;
     }

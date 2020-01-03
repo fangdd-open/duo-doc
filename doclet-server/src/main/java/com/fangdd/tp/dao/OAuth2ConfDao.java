@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
  * @date 18/11/28
  */
 @Repository
-public class OAuth2ConfDao extends TpDocBaseEntityDao<OAuth2Conf> {
+public class OAuth2ConfDao extends BaseDuoDocEntityDao<OAuth2Conf> {
     /**
      * 获取Collection名称
      *

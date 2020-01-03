@@ -143,7 +143,7 @@ public class InvokeServiceImpl implements InvokeService {
         Object[] methodParams = new Object[paramLen];
 
         List<ApiRequestDubboParamItem> params = request.getParams();
-        if (params.size() != paramLen) {
+        if (params != null && params.size() != paramLen) {
             return new InvokeResultDto(500, "Dubbo接口参数数量错误！", System.currentTimeMillis() - t1);
         }
         for (int i = 0; i < paramLen; i++) {

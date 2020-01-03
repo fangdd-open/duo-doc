@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public class TpDoclet extends Doclet {
     public static boolean start(RootDoc root) {
-        //读取主服务的信息
+        //读取主服务maven的信息
         PomAnalyser.analyse();
 
         // 从xml配置中读取dubbo配置

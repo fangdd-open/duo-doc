@@ -1,8 +1,8 @@
 package com.fangdd.tp.controller.api;
 
+import com.fangdd.tp.core.exceptions.DuoServerException;
 import com.fangdd.tp.core.exceptions.Http401Exception;
 import com.fangdd.tp.core.exceptions.Http403Exception;
-import com.fangdd.tp.core.exceptions.TpServerException;
 import com.fangdd.tp.dto.BaseResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +31,8 @@ public class ErrorHandleApiController {
         return BaseResponse.error(403, "权限不足！");
     }
 
-    @ExceptionHandler(TpServerException.class)
-    public BaseResponse handleTpServerException(TpServerException ex, HttpServletRequest request, HttpServletResponse response) {
+    @ExceptionHandler(DuoServerException.class)
+    public BaseResponse handleTpServerException(DuoServerException ex, HttpServletRequest request, HttpServletResponse response) {
         logger.error(ex.getMessage(), ex);
         return BaseResponse.error(ex.getCode(), ex.getMessage());
     }

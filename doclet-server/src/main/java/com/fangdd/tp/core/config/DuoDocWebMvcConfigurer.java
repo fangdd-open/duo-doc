@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @date 18/8/8
  */
 @Configuration
-public class TpDocWebMvcConfigurer implements WebMvcConfigurer {
+public class DuoDocWebMvcConfigurer implements WebMvcConfigurer {
     @Autowired
     private UserService userService;
 

@@ -1,7 +1,7 @@
 package com.fangdd.tp.controller.api;
 
 import com.fangdd.tp.core.annotation.Account;
-import com.fangdd.tp.core.exceptions.TpServerException;
+import com.fangdd.tp.core.exceptions.DuoServerException;
 import com.fangdd.tp.entity.User;
 import com.fangdd.tp.enums.RoleEnum;
 import com.fangdd.tp.helper.UserContextHelper;
@@ -32,7 +32,7 @@ public class DocOwnerApiController {
     public Boolean addAsDocOwner(@PathVariable String docId) {
         User user = UserContextHelper.getUser();
         if (user == null) {
-            throw new TpServerException(500, "用户不能为空！");
+            throw new DuoServerException(500, "用户不能为空！");
         }
         return userService.addDocOwner(docId, user.getId());
     }
@@ -47,7 +47,7 @@ public class DocOwnerApiController {
     public Boolean deleteDocOwner(@PathVariable String docId) {
         User user = UserContextHelper.getUser();
         if (user == null) {
-            throw new TpServerException(500, "用户不能为空！");
+            throw new DuoServerException(500, "用户不能为空！");
         }
         return userService.removeDocOwner(docId, user.getId());
     }

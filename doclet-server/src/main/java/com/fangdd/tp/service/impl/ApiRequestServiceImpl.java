@@ -1,13 +1,11 @@
 package com.fangdd.tp.service.impl;
 
-import com.fangdd.tp.core.exceptions.TpServerException;
+import com.fangdd.tp.core.exceptions.DuoServerException;
 import com.fangdd.tp.dao.ApiRequestDao;
 import com.fangdd.tp.dao.ApiRequestDubboDao;
-import com.fangdd.tp.dto.PagedListDto;
 import com.fangdd.tp.dto.request.*;
 import com.fangdd.tp.entity.ApiRequest;
 import com.fangdd.tp.entity.ApiRequestDubbo;
-import com.fangdd.tp.entity.InvokeLog;
 import com.fangdd.tp.entity.User;
 import com.fangdd.tp.enums.RoleEnum;
 import com.fangdd.tp.enums.UserActionEnum;
@@ -45,7 +43,7 @@ public class ApiRequestServiceImpl implements ApiRequestService {
         if (!Strings.isNullOrEmpty(apiRequestId)) {
             existsApiRequest = apiRequestDao.getEntityById(apiRequestId);
             if (existsApiRequest == null) {
-                throw new TpServerException(404, "记录找不到或已被删除！");
+                throw new DuoServerException(404, "记录找不到或已被删除！");
             }
         }
 
@@ -84,12 +82,12 @@ public class ApiRequestServiceImpl implements ApiRequestService {
     public void delete(User user, String apiRequestId) {
         ApiRequest apiRequest = apiRequestDao.getEntityById(apiRequestId);
         if (apiRequest == null) {
-            throw new TpServerException(404, "无法找到当前配置记录：id=" + apiRequestId);
+            throw new DuoServerException(404, "无法找到当前配置记录：id=" + apiRequestId);
         }
         if (!user.getId().equals(apiRequest.getUserId())) {
             //记录不是当前用户创建的，检查是否是管理员
             if (user.getRole() != RoleEnum.ADMIN.getRole()) {
-                throw new TpServerException(500, "没有权限删除此配置");
+                throw new DuoServerException(500, "没有权限删除此配置");
             }
         }
 
@@ -104,12 +102,12 @@ public class ApiRequestServiceImpl implements ApiRequestService {
     public void deleteDubbo(User user, String apiRequestId) {
         ApiRequestDubbo apiRequestDubbo = apiRequestDubboDao.getEntityById(apiRequestId);
         if (apiRequestDubbo == null) {
-            throw new TpServerException(404, "无法找到当前配置记录：id=" + apiRequestId);
+            throw new DuoServerException(404, "无法找到当前配置记录：id=" + apiRequestId);
         }
         if (!user.getId().equals(apiRequestDubbo.getUserId())) {
             //记录不是当前用户创建的，检查是否是管理员
             if (user.getRole() != RoleEnum.ADMIN.getRole()) {
-                throw new TpServerException(500, "没有权限删除此配置");
+                throw new DuoServerException(500, "没有权限删除此配置");
             }
         }
 
@@ -141,7 +139,7 @@ public class ApiRequestServiceImpl implements ApiRequestService {
         if (!Strings.isNullOrEmpty(apiRequestId)) {
             existsApiRequest = apiRequestDubboDao.getEntityById(apiRequestId);
             if (existsApiRequest == null) {
-                throw new TpServerException(404, "记录找不到或已被删除！");
+                throw new DuoServerException(404, "记录找不到或已被删除！");
             }
         }
 

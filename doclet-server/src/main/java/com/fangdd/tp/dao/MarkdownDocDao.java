@@ -1,6 +1,5 @@
 package com.fangdd.tp.dao;
 
-import com.fangdd.tp.doclet.pojo.Artifact;
 import com.fangdd.tp.doclet.pojo.entity.MarkdownDoc;
 import org.springframework.stereotype.Repository;
 
@@ -9,7 +8,7 @@ import org.springframework.stereotype.Repository;
  * @date 18/1/23
  */
 @Repository
-public class MarkdownDocDao extends TpDocBaseEntityDao<MarkdownDoc> {
+public class MarkdownDocDao extends BaseDuoDocEntityDao<MarkdownDoc> {
     @Override
     protected String getCollectionName() {
         return "markdown_doc";
