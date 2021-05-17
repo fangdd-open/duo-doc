@@ -1,5 +1,7 @@
 # 自动化文档说明
 
+# <span style="color:red; font-size:20px">本工程已经迁移，为了提供更好的服务，请移步新的仓库！</span> https://gitee.com/duoec/duo-doc
+
 ## 一、模块说明
 
 本项目分为两部分： doclet插件和文档展示模块
